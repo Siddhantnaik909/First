@@ -30,12 +30,19 @@ body.no-theme-overrides {
     font-family: 'Plus Jakarta Sans', sans-serif !important;
     background:
         radial-gradient(circle at top right, rgba(201, 111, 50, 0.14), transparent 26%),
-        radial-gradient(circle at bottom left, rgba(47, 156, 149, 0.1), transparent 20%),
+        radial-gradient(circle at bottom left, rgba(47, 156, 149, 0.12), transparent 20%),
         linear-gradient(180deg, #efd8ab 0%, #d8b77a 100%) !important;
     color: #2d2116 !important;
     min-height: 100vh;
     overflow-x: hidden;
     width: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+body.admin-shell {
     align-items: stretch;
     display: flex;
 }
