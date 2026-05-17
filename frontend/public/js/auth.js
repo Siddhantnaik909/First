@@ -3,6 +3,15 @@
  * Centralized logic for multi-page authentication and UI synchronization.
  */
 
+// Intercept client logs to silence console output in production
+(function() {
+    if (localStorage.getItem('debug') !== 'true') {
+        console.log = function() {};
+        console.info = function() {};
+        console.debug = function() {};
+    }
+})();
+
 const AuthSystem = {
     // 1. Storage Keys
     KEYS: {

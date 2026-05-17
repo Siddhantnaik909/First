@@ -526,8 +526,45 @@
                                                 <div class="slider"></div>
                                             </label>
                                         </div>
-                                    </div>
-                                </section>
+                                        <div class="md:col-span-2 flex flex-col p-6 bg-slate-50/50 rounded-3xl border border-slate-100 group hover:border-primary/20 transition-colors space-y-4">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg transition-transform group-hover:scale-105" id="keepalive-icon-container">
+                                                        <i class="fa-solid fa-signal" id="keepalive-icon"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h4 class="font-bold text-[#1f2937]">24/7 Keep-Alive Uptime Engine</h4>
+                                                        <p class="text-xs text-slate-500 font-medium">Self-ping container loop prevents hosting sleeping/idling cycles.</p>
+                                                     </div>
+                                                 </div>
+                                                 <label class="toggle-switch">
+                                                     <input type="checkbox" id="setting-keepalive" onchange="saveGlobalSettings()">
+                                                     <div class="slider"></div>
+                                                 </label>
+                                             </div>
+                                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+                                                 <div class="p-3 bg-white rounded-2xl border border-slate-100 flex flex-col justify-between">
+                                                     <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Loop Status</span>
+                                                     <span class="text-xs font-black text-slate-700 mt-1 flex items-center gap-1.5" id="ka-status-text">
+                                                         <span class="w-2 h-2 rounded-full bg-slate-300"></span> Stopped
+                                                     </span>
+                                                 </div>
+                                                 <div class="p-3 bg-white rounded-2xl border border-slate-100 flex flex-col justify-between">
+                                                     <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Total Pings</span>
+                                                     <span class="text-xs font-black text-slate-700 mt-1" id="ka-total-pings">0</span>
+                                                 </div>
+                                                 <div class="p-3 bg-white rounded-2xl border border-slate-100 flex flex-col justify-between">
+                                                     <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Avg Latency</span>
+                                                     <span class="text-xs font-black text-slate-700 mt-1" id="ka-avg-latency">0 ms</span>
+                                                 </div>
+                                                 <div class="p-3 bg-white rounded-2xl border border-slate-100 flex flex-col justify-between">
+                                                     <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Last Ping</span>
+                                                     <span class="text-xs font-black text-slate-700 mt-1 truncate" id="ka-last-time">Never</span>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </section>
 
                                 <!-- BRANDING & IDENTITY -->
                                 <section>
@@ -1742,7 +1779,7 @@ async function secureAuditFetch(endpoint, options = {}) {
                             <div class="flex items-center gap-4">
                                 <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active</span>
                                 <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" ${isAllEnabled ? 'checked' : ''} onchange="toggleCategoryGroup(this, '${catId}')">
+                                    <input type="checkbox" id="cat-toggle-${catId}" class="sr-only peer" ${isAllEnabled ? 'checked' : ''} onchange="toggleCategoryGroup(this, '${catId}')">
                                     <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                                 </label>
                             </div>
@@ -1764,7 +1801,7 @@ async function secureAuditFetch(endpoint, options = {}) {
                                             <span class="material-symbols-outlined text-lg">edit</span>
                                         </button>
                                         <label class="relative inline-flex items-center cursor-pointer">
-                                            <input type="checkbox" class="sr-only peer tool-toggle" data-path="${tool.path}" ${isEnabled ? 'checked' : ''}>
+                                            <input type="checkbox" class="sr-only peer tool-toggle cat-tool-${catId}" data-path="${tool.path}" ${isEnabled ? 'checked' : ''} onchange="checkCategoryState('${catId}'); saveGlobalSettings();">
                                             <div class="w-8 h-4 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-primary"></div>
                                         </label>
                                     </div>
@@ -2010,6 +2047,7 @@ async function secureAuditFetch(endpoint, options = {}) {
             const payload = {
                 darkMode: document.getElementById('setting-dark-mode')?.checked || false,
                 maintenanceMode: document.getElementById('setting-maintenance')?.checked || false,
+                keepAliveEnabled: document.getElementById('setting-keepalive')?.checked || false,
                 siteName: document.getElementById('setting-site-name')?.value || 'SMART HUB',
                 layoutMode: document.getElementById('admin-layout-select')?.value || 'left',
                 themePreset: document.getElementById('setting-theme-preset')?.value || 'forest',
@@ -2120,6 +2158,7 @@ async function secureAuditFetch(endpoint, options = {}) {
 
                     setVal('setting-dark-mode', s.darkMode);
                     setVal('setting-maintenance', s.maintenanceMode);
+                    setVal('setting-keepalive', s.keepAliveEnabled);
                     setVal('setting-site-name', s.siteName);
                     setVal('admin-layout-select', s.layoutMode);
                     setVal('setting-theme-preset', s.themePreset || 'forest');

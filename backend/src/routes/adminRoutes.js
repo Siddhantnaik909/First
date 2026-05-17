@@ -27,6 +27,13 @@ router.get('/settings', async (req, res) => {
 // GET /api/admin/client/settings — Public client settings (used by frontend)
 router.get('/client/settings', async (req, res) => {
     try {
+        if (req.app.locals.dbReady) {
+            const UIState = require('../models/UIState');
+            const state = await UIState.findOne({ key: 'global' });
+            if (state) {
+                return res.json(state);
+            }
+        }
         res.json({
             theme: 'light',
             features: ['calculators', 'games', 'profile'],
@@ -35,6 +42,20 @@ router.get('/client/settings', async (req, res) => {
         });
     } catch (err) {
         res.status(500).json({ error: 'Failed to fetch client settings' });
+    }
+});
+
+// GET /api/admin/keep-alive/stats — Fetch current server uptime / self-ping statistics
+router.get('/keep-alive/stats', verifyToken, isAdmin, async (req, res) => {
+    try {
+        res.json(memoryStore.keepAliveStats || {
+            lastPingTime: null,
+            lastPingStatus: 'stopped',
+            latencyMs: null,
+            error: null
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch keep alive statistics' });
     }
 });
 
@@ -57,6 +78,15 @@ router.post('/settings', verifyToken, isAdmin, async (req, res) => {
             { $set: req.body },
             { upsert: true, setDefaultsOnInsert: true }
         );
+
+        // Re-initialize keep alive state dynamically
+        try {
+            const { initKeepAlive } = require('../services/keepAliveService');
+            await initKeepAlive(req.app.locals.dbReady);
+        } catch (kaErr) {
+            console.error('Failed to trigger keep alive re-initialization:', kaErr);
+        }
+
         res.json({ message: 'Settings updated successfully' });
     } catch (err) {
         console.error(err);
@@ -280,10 +310,13 @@ router.delete('/users/:id', verifyToken, isAdmin, async (req, res) => {
 });
 
 // File Manager endpoints
-const fs = require('fs').promises;
-const path = require('path');
-
-const { listFiles } = require('../services/fileService');
+const { 
+    listFiles,
+    createDirectory,
+    rename,
+    copyFile,
+    deleteFile
+} = require('../services/fileService');
 
 router.get('/files', verifyToken, isAdmin, async (req, res) => {
     try {
@@ -308,7 +341,7 @@ router.get('/files/content', verifyToken, isAdmin, async (req, res) => {
 router.post('/files/save', verifyToken, isAdmin, async (req, res) => {
     try {
         await writeFile(req.body.path, req.body.content);
-        res.json({ message: 'File saved' });
+        res.json({ message: 'File saved successfully' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to save file' });
@@ -317,46 +350,40 @@ router.post('/files/save', verifyToken, isAdmin, async (req, res) => {
 
 router.post('/files/folder', verifyToken, isAdmin, async (req, res) => {
     try {
-        const fullPath = path.join(__dirname, '../../../frontend/public', req.body.path);
-        await fs.mkdir(fullPath, { recursive: true });
-        res.json({ message: 'Folder created' });
+        await createDirectory(req.body.path);
+        res.json({ message: 'Folder created successfully' });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to create folder' });
     }
 });
 
 router.post('/files/move', verifyToken, isAdmin, async (req, res) => {
     try {
-        const oldPath = path.join(__dirname, '../../../frontend/public', req.body.oldPath);
-        const newPath = path.join(__dirname, '../../../frontend/public', req.body.newPath);
-        await fs.rename(oldPath, newPath);
-        res.json({ message: 'File moved' });
+        await rename(req.body.oldPath, req.body.newPath);
+        res.json({ message: 'File moved successfully' });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to move file' });
     }
 });
 
 router.post('/files/copy', verifyToken, isAdmin, async (req, res) => {
     try {
-        const source = path.join(__dirname, '../../../frontend/public', req.body.source);
-        const target = path.join(__dirname, '../../../frontend/public', req.body.target);
-        await fs.copyFile(source, target);
-        res.json({ message: 'File copied' });
+        await copyFile(req.body.source, req.body.target);
+        res.json({ message: 'File copied successfully' });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to copy file' });
     }
 });
 
 router.delete('/files/delete', verifyToken, isAdmin, async (req, res) => {
     try {
-        const fullPath = path.join(__dirname, '../../../frontend/public', req.body.path);
-        if ((await fs.stat(fullPath)).isDirectory()) {
-            await fs.rm(fullPath, { recursive: true, force: true });
-        } else {
-            await fs.unlink(fullPath);
-        }
-        res.json({ message: 'File deleted' });
+        await deleteFile(req.body.path);
+        res.json({ message: 'File deleted successfully' });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to delete' });
     }
 });

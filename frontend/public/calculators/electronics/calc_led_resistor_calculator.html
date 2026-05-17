@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -107,7 +107,7 @@
                         </div>
                         <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]">Awaiting specifications...</div>
                         <div id="calc-display" class="text-7xl font-black tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden leading-tight font-mono">
-                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0 Î©
+                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0 Ω
                         </div>
                     </div>
 
@@ -218,7 +218,7 @@
             }
             // If the calculated value is slightly above the nearest E12, we might want to round up for safety
             // But standard "nearest" is usually fine.
-            return Math.round(nearest * Math.pow(10, exp)) + " Î©";
+            return Math.round(nearest * Math.pow(10, exp)) + " Ω";
         }
 
         function calculateLED() {
@@ -235,7 +235,7 @@
             const tip = document.getElementById('pro-tip');
 
             if (isNaN(vin) || isNaN(vled) || isNaN(ima) || vin <= vled || ima <= 0) {
-                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0 Î©`;
+                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0 Ω`;
                 statusText.innerText = vin <= vled && vin > 0 ? "Source voltage too low" : "Awaiting specifications...";
                 wattageTag.innerText = "0.00W RATING";
                 powerEl.innerText = "0.00 mW";
@@ -249,7 +249,7 @@
             const resistance = vDrop / iA;
             const power = vDrop * iA;
 
-            display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${Math.ceil(resistance)} Î©`;
+            display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${Math.ceil(resistance)} Ω`;
             statusText.innerText = "Limiting resistance established";
             
             let suggestedWattage = 0.125;
@@ -262,7 +262,7 @@
             vdropEl.innerText = `${vDrop.toFixed(2)} V`;
             e12El.innerText = getNearestE12(resistance);
 
-            tip.innerText = `To drive the LED safely at ${ima}mA, you'll need at least a ${Math.ceil(resistance)}Î© resistor rated for ${suggestedWattage}W.`;
+            tip.innerText = `To drive the LED safely at ${ima}mA, you'll need at least a ${Math.ceil(resistance)}Ω resistor rated for ${suggestedWattage}W.`;
         }
 
         function resetInputs() {
@@ -274,7 +274,7 @@
 
         async function saveLEDLog() {
             const val = document.getElementById('calc-display').innerText.trim();
-            if (val === '0 Î©') return;
+            if (val === '0 Ω') return;
 
             const btn = document.getElementById('saveBtn');
             const orig = btn.innerText;

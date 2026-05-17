@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -107,7 +107,7 @@
                         </div>
                         <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]">Awaiting 3-digit code...</div>
                         <div id="calc-display" class="text-7xl font-black tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden leading-tight font-mono">
-                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0.00 ÂµF
+                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0.00 µF
                         </div>
                     </div>
 
@@ -166,7 +166,7 @@
 
                         <div class="flex items-center justify-between pt-8 border-t border-surface-container-high">
                             <p class="text-[10px] font-mono text-on-surface-variant font-bold max-w-xs uppercase tracking-widest leading-loose">
-                                Formula: AB Ã— 10^C [pF]
+                                Formula: AB × 10^C [pF]
                             </p>
                             <button onclick="saveCapLog()" id="saveBtn" class="bg-primary text-white px-10 py-5 rounded-xl font-bold text-[10px] tracking-widest hover:shadow-xl transition-all uppercase hover:scale-[1.02] active:scale-95">Save to History</button>
                         </div>
@@ -175,7 +175,7 @@
 
                 <!-- Info Block -->
                 <div class="bg-surface-container p-10 rounded-2xl border border-surface-container-high italic text-[11px] text-on-surface-variant leading-relaxed text-center opacity-70">
-                    "Tolerance Letter Guide: J = Â±5%, K = Â±10%, M = Â±20%. Ceramic capacitors often use these letters after the 3-digit code."
+                    "Tolerance Letter Guide: J = ±5%, K = ±10%, M = ±20%. Ceramic capacitors often use these letters after the 3-digit code."
                 </div>
             </div>
         </div>
@@ -190,7 +190,7 @@
     <script src="/js/calc-utils.js"></script>
     <script>
         const toleranceMap = {
-            'F': 'Â±1%', 'G': 'Â±2%', 'H': 'Â±3%', 'J': 'Â±5%', 'K': 'Â±10%', 'M': 'Â±20%', 'Z': '+80%/-20%'
+            'F': '±1%', 'G': '±2%', 'H': '±3%', 'J': '±5%', 'K': '±10%', 'M': '±20%', 'Z': '+80%/-20%'
         };
 
         function decodeCap() {
@@ -219,9 +219,9 @@
                 const nf = pf / 1000;
                 const uf = pf / 1000000;
 
-                const tol = toleranceMap[tChar] || "Â±20% Low";
+                const tol = toleranceMap[tChar] || "±20% Low";
 
-                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${uf < 0.001 ? nf.toFixed(2) + ' nF' : uf.toFixed(4) + ' ÂµF'}`;
+                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${uf < 0.001 ? nf.toFixed(2) + ' nF' : uf.toFixed(4) + ' µF'}`;
                 statusText.innerText = "Component logic resolved";
                 tolTag.innerText = tol.toUpperCase();
                 
@@ -239,7 +239,7 @@
 
                 tip.innerText = `Code ${code}${tChar || ''} translates to ${pf.toLocaleString()} picofarads. Tolerance: ${tol}.`;
             } else {
-                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0.00 ÂµF`;
+                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0.00 µF`;
                 statusText.innerText = input.length > 0 ? "Invalid code format" : "Awaiting 3-digit code...";
                 tolTag.innerText = "--- TOLERANCE";
                 nfEl.innerText = "0 nF";
@@ -256,7 +256,7 @@
 
         async function saveCapLog() {
             const val = document.getElementById('calc-display').innerText.trim();
-            if (val === '0.00 ÂµF') return;
+            if (val === '0.00 µF') return;
 
             const btn = document.getElementById('saveBtn');
             const orig = btn.innerText;

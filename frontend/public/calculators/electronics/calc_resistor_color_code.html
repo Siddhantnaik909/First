@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -141,9 +141,9 @@
 
                     <!-- Display -->
                     <div class="bg-surface-container-lowest m-4 rounded-xl p-8 text-right flex flex-col justify-end min-h-[160px] shadow-inner relative">
-                        <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]">1.00 kÎ©</div>
+                        <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]">1.00 kΩ</div>
                         <div id="calc-display" class="text-6xl font-black tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden leading-tight font-mono">
-                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>Â±5% TOL
+                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>±5% TOL
                         </div>
                     </div>
 
@@ -179,7 +179,7 @@
 
                 <!-- Info Block -->
                 <div class="bg-surface-container p-10 rounded-2xl border border-surface-container-high italic text-[11px] text-on-surface-variant leading-relaxed text-center opacity-70">
-                    "Accuracy Tip: The tolerance band (usually Gold or Silver) is always located on the right side of the resistor when reading. Gold means Â±5% and Silver means Â±10%."
+                    "Accuracy Tip: The tolerance band (usually Gold or Silver) is always located on the right side of the resistor when reading. Gold means ±5% and Silver means ±10%."
                 </div>
             </div>
         </div>
@@ -250,13 +250,13 @@
             const tol = colors[ct].tol;
 
             const ohms = (b1 * 10 + b2) * mult;
-            let displayVal = ohms >= 1e9 ? (ohms/1e9).toFixed(2) + ' GÎ©' :
-                             ohms >= 1e6 ? (ohms/1e6).toFixed(2) + ' MÎ©' :
-                             ohms >= 1e3 ? (ohms/1e3).toFixed(2) + ' kÎ©' :
-                             ohms.toFixed(2) + ' Î©';
+            let displayVal = ohms >= 1e9 ? (ohms/1e9).toFixed(2) + ' GΩ' :
+                             ohms >= 1e6 ? (ohms/1e6).toFixed(2) + ' MΩ' :
+                             ohms >= 1e3 ? (ohms/1e3).toFixed(2) + ' kΩ' :
+                             ohms.toFixed(2) + ' Ω';
 
             document.getElementById('calc-status').innerText = displayVal;
-            document.getElementById('calc-display').innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>Â±${tol}% TOL`;
+            document.getElementById('calc-display').innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>±${tol}% TOL`;
         }
 
         async function saveResistorLog() {

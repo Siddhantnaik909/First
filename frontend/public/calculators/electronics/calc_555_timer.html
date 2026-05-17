@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -131,22 +131,22 @@
                                 <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Core Components</h4>
                                 <div class="space-y-5">
                                     <div class="space-y-2">
-                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Resistor R1 (Î©)</label>
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Resistor R1 (Ω)</label>
                                         <div class="relative group">
                     <input type="number" id="r1" value="" oninput="calculate555()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-5 py-4 font-bold text-on-surface focus:ring-2 focus:ring-primary transition-all outline-none" placeholder="10000">
                                         </div>
                                     </div>
                                     <div class="space-y-2" id="r2-box">
-                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Resistor R2 (Î©)</label>
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Resistor R2 (Ω)</label>
                                         <div class="relative group">
                                             <input type="number" id="r2" value="" oninput="calculate555()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-5 py-4 font-bold text-on-surface focus:ring-2 focus:ring-primary transition-all outline-none" placeholder="10000">
                                         </div>
                                     </div>
                                     <div class="space-y-2">
-                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Capacitor C1 (ÂµF)</label>
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Capacitor C1 (µF)</label>
                                         <div class="relative group">
                                             <input type="number" id="c1" value="" oninput="calculate555()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-5 py-4 font-bold text-on-surface focus:ring-2 focus:ring-primary transition-all outline-none" placeholder="1">
-                                            <span class="absolute right-5 top-1/2 -translate-y-1/2 text-xs font-black text-on-surface-variant opacity-40">ÂµF</span>
+                                            <span class="absolute right-5 top-1/2 -translate-y-1/2 text-xs font-black text-on-surface-variant opacity-40">µF</span>
                                         </div>
                                     </div>
                                 </div>
@@ -241,7 +241,7 @@
                 return;
             }
 
-            const c = cuf * 1e-6; // Convert ÂµF to F
+            const c = cuf * 1e-6; // Convert µF to F
 
             if (currentMode === 'astable') {
                 if (r2 <= 0) {
@@ -291,7 +291,7 @@
 
             const inputs = [
                 { label: 'Mode', val: currentMode.toUpperCase() },
-                { label: 'R1/C1', val: `${document.getElementById('r1').value}Î© / ${document.getElementById('c1').value}ÂµF` }
+                { label: 'R1/C1', val: `${document.getElementById('r1').value}Ω / ${document.getElementById('c1').value}µF` }
             ];
             const results = [
                 { label: 'Value', val: val, highlight: true },

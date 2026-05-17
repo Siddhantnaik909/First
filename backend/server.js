@@ -9,6 +9,13 @@ const rateLimit = require('express-rate-limit');
 const { Server } = require('socket.io');
 const { config } = require('./src/config/env');
 
+if (process.env.DISABLE_CONSOLE_LOGS === 'true') {
+    console.log('🔇 Console logs disabled globally by env configuration.');
+    console.log = () => {};
+    console.info = () => {};
+    console.debug = () => {};
+}
+
 console.time('startup');
 console.log('🚀 Server starting...');
 
@@ -166,6 +173,12 @@ const connectWithRetry = (retries = 10) => {
     console.log('✅ MongoDB connected');
     app.locals.dbReady = mongoose.connection;
     app.locals.db = mongoose.connection.db;
+    try {
+        const { initKeepAlive } = require('./src/services/keepAliveService');
+        initKeepAlive(mongoose.connection);
+    } catch (kaErr) {
+        console.error('Failed to boot keep alive service:', kaErr);
+    }
   }).catch(err => {
     console.error(`❌ MongoDB Attempt ${11-retries} failed:`, err.message);
     if (retries > 0) {
@@ -186,6 +199,7 @@ const uiRoutes = require('./src/routes/uiRoutes');
 const connectorRoutes = require('./src/routes/connectorRoutes');
 const gameRoutes = require('./src/routes/gameRoutes');
 const contactRoutes = require('./src/routes/contactRoutes');
+const saasRoutes = require('./src/routes/saasRoutes');
 
 // Public API for sidebar features (Fixes the ERR_CONNECTION_REFUSED)
 app.get('/api/admin/client/features', (req, res) => {
@@ -200,11 +214,23 @@ app.use('/api/ui', uiRoutes);
 app.use('/api/connectors', connectorRoutes);
 app.use('/api/games', gameRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/saas', saasRoutes);
 
 // ── Clean URL routes (no .html extension needed) ─────────────────────────────
 // Calculators hub — /calculators and /calculators/ both serve calculators.html
 app.get(['/calculators', '/calculators/'], (req, res) => {
     res.sendFile(path.join(publicPath, 'calculators.html'));
+});
+
+// Dynamic Clean URLs for Sub-calculators (e.g. /calculators/electronics/calc_555_timer)
+app.get(['/calculators/:category/:tool', '/calculators/:category/:tool/'], (req, res, next) => {
+    const { category, tool } = req.params;
+    if (tool.includes('.')) return next();
+    const filePath = path.join(publicPath, 'calculators', category, `${tool}.html`);
+    if (fs.existsSync(filePath)) {
+        return res.sendFile(filePath);
+    }
+    next();
 });
 
 // Game lobby pages

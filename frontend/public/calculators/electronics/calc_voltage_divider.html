@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -237,7 +237,7 @@
             p2El.innerText = `${p2.toFixed(2)} mW`;
             gainEl.innerText = gain.toFixed(4);
 
-            tip.innerText = `With R1=${r1}Î© and R2=${r2}Î©, you get ${gain.toFixed(3)}x the input voltage. Total power dissipation is ${(p1 + p2).toFixed(2)} mW.`;
+            tip.innerText = `With R1=${r1}Ω and R2=${r2}Ω, you get ${gain.toFixed(3)}x the input voltage. Total power dissipation is ${(p1 + p2).toFixed(2)} mW.`;
         }
 
         function resetInputs() {
@@ -258,7 +258,7 @@
 
             const inputs = [
                 { label: 'Voltage In', val: document.getElementById('vin').value + ' V' },
-                { label: 'R1/R2', val: `${document.getElementById('r1').value}/${document.getElementById('r2').value} Î©` }
+                { label: 'R1/R2', val: `${document.getElementById('r1').value}/${document.getElementById('r2').value} Ω` }
             ];
             const results = [
                 { label: 'Vout', val: val, highlight: true },

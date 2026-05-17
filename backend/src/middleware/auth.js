@@ -24,14 +24,16 @@ const authRequired = (req, res, next) => {
                 id: String(decoded.user.id || decoded.user._id),
                 role: decoded.user.role || 'user',
                 email: decoded.user.username || decoded.user.email || '',
-                name: decoded.user.name || decoded.user.username || ''
+                name: decoded.user.name || decoded.user.username || '',
+                tier: decoded.user.tier || 'free'
             };
         } else {
             req.user = {
                 id: String(decoded.id || decoded.sub),
                 role: decoded.role || 'user',
                 email: decoded.email || '',
-                name: decoded.name || ''
+                name: decoded.name || '',
+                tier: decoded.tier || 'free'
             };
         }
 

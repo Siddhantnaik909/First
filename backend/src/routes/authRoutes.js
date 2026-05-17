@@ -17,7 +17,8 @@ function signToken(user) {
             id: String(user._id || user.insertedId || user.id),
             role: user.role || 'user',
             email: user.email || '',
-            name: user.name || ''
+            name: user.name || '',
+            tier: user.tier || 'free'
         },
         config.jwtSecret,
         { expiresIn: '24h' }

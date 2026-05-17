@@ -2,14 +2,43 @@ const fs = require('fs').promises;
 const path = require('path');
 const { memoryStore } = require('../store/memoryStore');
 
-const PUBLIC_DIR = path.join(__dirname, '../../../frontend/public');
+const PUBLIC_DIR = path.resolve(__dirname, '../../../frontend/public');
+
+/**
+ * Robust Cross-Platform Path Security Helper
+ * Prevents directory traversal attacks by validating resolved boundaries.
+ */
+function safeResolve(filePath, allowRoot = false) {
+    if (!filePath) {
+        if (allowRoot) return PUBLIC_DIR;
+        throw new Error('Path cannot be empty');
+    }
+    
+    const resolvedPublic = path.resolve(PUBLIC_DIR);
+    const resolvedTarget = path.resolve(PUBLIC_DIR, filePath);
+    
+    // Relative path from PUBLIC_DIR to target
+    const relative = path.relative(resolvedPublic, resolvedTarget);
+    
+    // Verify target path remains nested inside PUBLIC_DIR
+    const isSafe = !relative.startsWith('..') && !path.isAbsolute(relative);
+    if (!isSafe) {
+        throw new Error('Invalid path: Directory traversal detected');
+    }
+    
+    if (!allowRoot && relative === '') {
+        throw new Error('Access to root directory is not allowed');
+    }
+    
+    return resolvedTarget;
+}
 
 /**
  * List files in directory
  */
 async function listFiles(dir = '.') {
     try {
-        const fullPath = path.join(PUBLIC_DIR, dir);
+        const fullPath = safeResolve(dir, true);
         const items = await fs.readdir(fullPath, { withFileTypes: true });
         const fileList = [];
         for (const item of items) {
@@ -38,11 +67,7 @@ async function listFiles(dir = '.') {
  */
 async function readFile(filePath) {
     try {
-        const fullPath = path.join(PUBLIC_DIR, filePath);
-        // Security: prevent directory traversal
-        if (fullPath.indexOf(PUBLIC_DIR) !== 0) {
-            throw new Error('Invalid path');
-        }
+        const fullPath = safeResolve(filePath);
         return await fs.readFile(fullPath, 'utf8');
     } catch (err) {
         console.error('File read error:', err);
@@ -55,13 +80,9 @@ async function readFile(filePath) {
  */
 async function writeFile(filePath, content) {
     try {
-        const fullPath = path.join(PUBLIC_DIR, filePath);
-        if (fullPath.indexOf(PUBLIC_DIR) !== 0) {
-            throw new Error('Invalid path');
-        }
+        const fullPath = safeResolve(filePath);
         await fs.mkdir(path.dirname(fullPath), { recursive: true });
         await fs.writeFile(fullPath, content, 'utf8');
-        // Log the change
         memoryStore.serverLogs.unshift(`[ADMIN] File saved: ${filePath}`);
         return { message: 'File saved successfully' };
     } catch (err) {
@@ -75,10 +96,7 @@ async function writeFile(filePath, content) {
  */
 async function createDirectory(dirPath) {
     try {
-        const fullPath = path.join(PUBLIC_DIR, dirPath);
-        if (fullPath.indexOf(PUBLIC_DIR) !== 0) {
-            throw new Error('Invalid path');
-        }
+        const fullPath = safeResolve(dirPath);
         await fs.mkdir(fullPath, { recursive: true });
         memoryStore.serverLogs.unshift(`[ADMIN] Directory created: ${dirPath}`);
         return { message: 'Directory created' };
@@ -93,11 +111,8 @@ async function createDirectory(dirPath) {
  */
 async function rename(oldPath, newPath) {
     try {
-        const oldFull = path.join(PUBLIC_DIR, oldPath);
-        const newFull = path.join(PUBLIC_DIR, newPath);
-        if (oldFull.indexOf(PUBLIC_DIR) !== 0 || newFull.indexOf(PUBLIC_DIR) !== 0) {
-            throw new Error('Invalid path');
-        }
+        const oldFull = safeResolve(oldPath);
+        const newFull = safeResolve(newPath);
         await fs.rename(oldFull, newFull);
         memoryStore.serverLogs.unshift(`[ADMIN] Renamed: ${oldPath} → ${newPath}`);
         return { message: 'File moved/renamed' };
@@ -112,11 +127,8 @@ async function rename(oldPath, newPath) {
  */
 async function copyFile(sourcePath, targetPath) {
     try {
-        const sourceFull = path.join(PUBLIC_DIR, sourcePath);
-        const targetFull = path.join(PUBLIC_DIR, targetPath);
-        if (sourceFull.indexOf(PUBLIC_DIR) !== 0 || targetFull.indexOf(PUBLIC_DIR) !== 0) {
-            throw new Error('Invalid path');
-        }
+        const sourceFull = safeResolve(sourcePath);
+        const targetFull = safeResolve(targetPath);
         await fs.copyFile(sourceFull, targetFull);
         memoryStore.serverLogs.unshift(`[ADMIN] Copied: ${sourcePath} → ${targetPath}`);
         return { message: 'File copied' };
@@ -127,20 +139,18 @@ async function copyFile(sourcePath, targetPath) {
 }
 
 /**
- * Delete file or directory
+ * Delete file or directory (dynamically checks FS node type)
  */
-async function deleteFile(filePath, isDir = false) {
+async function deleteFile(filePath) {
     try {
-        const fullPath = path.join(PUBLIC_DIR, filePath);
-        if (fullPath.indexOf(PUBLIC_DIR) !== 0) {
-            throw new Error('Invalid path');
-        }
-        if (isDir) {
+        const fullPath = safeResolve(filePath);
+        const stat = await fs.stat(fullPath);
+        if (stat.isDirectory()) {
             await fs.rm(fullPath, { recursive: true, force: true });
         } else {
             await fs.unlink(fullPath);
         }
-        memoryStore.serverLogs.unshift(`[ADMIN] Deleted: ${filePath} (${isDir ? 'dir' : 'file'})`);
+        memoryStore.serverLogs.unshift(`[ADMIN] Deleted: ${filePath}`);
         return { message: 'File deleted' };
     } catch (err) {
         console.error('Delete error:', err);
@@ -157,4 +167,3 @@ module.exports = {
     copyFile,
     deleteFile
 };
-

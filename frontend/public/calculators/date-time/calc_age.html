@@ -244,7 +244,7 @@
             const nextB = new Date(target.getFullYear(), birth.getMonth(), birth.getDate());
             if (nextB < target) nextB.setFullYear(target.getFullYear() + 1);
             const diffNext = Math.ceil((nextB - target) / (1000 * 60 * 60 * 24));
-            nextBdayEl.innerText = diffNext === 365 || diffNext === 0 ? "Birthday Today! Ã°Å¸Å½â€°" : diffNext;
+            nextBdayEl.innerText = diffNext === 365 || diffNext === 0 ? "Birthday Today! 🎉" : diffNext;
         }
 
         function getZodiac(m, d) {

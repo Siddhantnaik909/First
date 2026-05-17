@@ -35,7 +35,13 @@ const memoryStore = {
     '[2024-01-15T10:30:02Z] Admin panel APIs initialized',
     '[ADMIN] FileService loaded - File manager active'
   ],
-  activeSessions: []
+  activeSessions: [],
+  keepAliveStats: {
+    lastPingTime: null,
+    lastPingStatus: 'never_run',
+    latencyMs: null,
+    error: null
+  }
 };
 
 function createId() {

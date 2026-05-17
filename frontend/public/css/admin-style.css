@@ -43,11 +43,20 @@ body.admin-shell {
     padding: 0 !important;
     margin-top: 0 !important;
     padding-top: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
 }
 
-body.admin-shell {
-    align-items: stretch;
-    display: flex;
+body.no-theme-overrides {
+    background:
+        radial-gradient(circle at top right, rgba(201, 111, 50, 0.08), transparent 26%),
+        radial-gradient(circle at bottom left, rgba(47, 156, 149, 0.06), transparent 20%),
+        linear-gradient(180deg, #fcf6eb 0%, #f7ecd8 100%) !important;
+    color: #2d2116 !important;
+    min-height: 100vh;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 h1, h2, h3, h4 {
@@ -245,8 +254,8 @@ body.dark-mode {
     flex-direction: column;
     transition: transform 0.3s ease, left 0.3s ease;
     z-index: 999;
-    position: fixed;
-    height: 100vh;
+    position: fixed !important;
+    height: 100vh !important;
     left: 0;
     top: 0;
     overflow-y: auto;
@@ -1202,4 +1211,8 @@ body::-webkit-scrollbar-thumb {
 .admin-content-area::-webkit-scrollbar-thumb:hover,
 body::-webkit-scrollbar-thumb:hover {
     background: rgba(201, 111, 50, 0.5);
+}
+
+.main-with-navbar {
+    padding-top: 6rem !important;
 }

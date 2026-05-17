@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -119,17 +119,17 @@
                         <button onclick="calc.appendNum('7')" class="bg-surface-container-lowest text-on-surface py-8 rounded-xl font-bold text-2xl hover:bg-surface-bright shadow-sm transition-all">7</button>
                         <button onclick="calc.appendNum('8')" class="bg-surface-container-lowest text-on-surface py-8 rounded-xl font-bold text-2xl hover:bg-surface-bright shadow-sm transition-all">8</button>
                         <button onclick="calc.appendNum('9')" class="bg-surface-container-lowest text-on-surface py-8 rounded-xl font-bold text-2xl hover:bg-surface-bright shadow-sm transition-all">9</button>
-                        <button onclick="calc.chooseOp('/')" class="bg-secondary-fixed text-on-secondary-fixed py-8 rounded-xl font-bold text-2xl hover:bg-secondary-fixed-dim shadow-sm transition-all">Ã·</button>
+                        <button onclick="calc.chooseOp('/')" class="bg-secondary-fixed text-on-secondary-fixed py-8 rounded-xl font-bold text-2xl hover:bg-secondary-fixed-dim shadow-sm transition-all">÷</button>
                         <!-- Row 3 -->
                         <button onclick="calc.appendNum('4')" class="bg-surface-container-lowest text-on-surface py-8 rounded-xl font-bold text-2xl hover:bg-surface-bright shadow-sm transition-all">4</button>
                         <button onclick="calc.appendNum('5')" class="bg-surface-container-lowest text-on-surface py-8 rounded-xl font-bold text-2xl hover:bg-surface-bright shadow-sm transition-all">5</button>
                         <button onclick="calc.appendNum('6')" class="bg-surface-container-lowest text-on-surface py-8 rounded-xl font-bold text-2xl hover:bg-surface-bright shadow-sm transition-all">6</button>
-                        <button onclick="calc.chooseOp('*')" class="bg-secondary-fixed text-on-secondary-fixed py-8 rounded-xl font-bold text-2xl hover:bg-secondary-fixed-dim shadow-sm transition-all">Ã—</button>
+                        <button onclick="calc.chooseOp('*')" class="bg-secondary-fixed text-on-secondary-fixed py-8 rounded-xl font-bold text-2xl hover:bg-secondary-fixed-dim shadow-sm transition-all">×</button>
                         <!-- Row 4 -->
                         <button onclick="calc.appendNum('1')" class="bg-surface-container-lowest text-on-surface py-8 rounded-xl font-bold text-2xl hover:bg-surface-bright shadow-sm transition-all">1</button>
                         <button onclick="calc.appendNum('2')" class="bg-surface-container-lowest text-on-surface py-8 rounded-xl font-bold text-2xl hover:bg-surface-bright shadow-sm transition-all">2</button>
                         <button onclick="calc.appendNum('3')" class="bg-surface-container-lowest text-on-surface py-8 rounded-xl font-bold text-2xl hover:bg-surface-bright shadow-sm transition-all">3</button>
-                        <button onclick="calc.chooseOp('-')" class="bg-secondary-fixed text-on-secondary-fixed py-8 rounded-xl font-bold text-2xl hover:bg-secondary-fixed-dim shadow-sm transition-all">Ã¢Ë†â€™</button>
+                        <button onclick="calc.chooseOp('-')" class="bg-secondary-fixed text-on-secondary-fixed py-8 rounded-xl font-bold text-2xl hover:bg-secondary-fixed-dim shadow-sm transition-all">−</button>
                         <!-- Row 5 -->
                         <button onclick="calc.appendNum('.')" class="bg-surface-container-lowest text-on-surface py-8 rounded-xl font-bold text-2xl hover:bg-surface-bright shadow-sm transition-all">.</button>
                         <button onclick="calc.appendNum('0')" class="bg-surface-container-lowest text-on-surface py-8 rounded-xl font-bold text-2xl hover:bg-surface-bright shadow-sm transition-all">0</button>
@@ -222,7 +222,7 @@
                 }
 
                 if (save && res !== 'Error') {
-                    const inputs = [{ label: 'Expr', val: `${prev} ${this.op.replace('*','Ã—').replace('/','Ã·')} ${cur}` }];
+                    const inputs = [{ label: 'Expr', val: `${prev} ${this.op.replace('*','×').replace('/','÷')} ${cur}` }];
                     const results = [{ label: 'Result', val: res.toString(), highlight: true }];
                     await window.saveCalcToHistory('Standard Calculator', inputs, results);
                     if (typeof initSidebarHistory === 'function') {
@@ -244,7 +244,7 @@
                 }
                 if (this.expressionEl) {
                     if (this.op != null) {
-                        this.expressionEl.innerText = `${this.prev} ${this.op.replace('*','Ã—').replace('/','Ã·')} `;
+                        this.expressionEl.innerText = `${this.prev} ${this.op.replace('*','×').replace('/','÷')} `;
                     } else {
                         this.expressionEl.innerText = '';
                     }

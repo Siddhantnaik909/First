@@ -30,7 +30,7 @@ const UIStateSchema = new mongoose.Schema(
     globalOverrides: { type: mongoose.Schema.Types.Mixed, default: {} },
     snapshots: { type: [SnapshotSchema], default: [] },
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 module.exports = mongoose.model("UIState", UIStateSchema);
