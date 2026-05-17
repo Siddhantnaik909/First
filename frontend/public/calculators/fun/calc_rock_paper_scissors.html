@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -191,9 +191,9 @@
         let playMode = 'cpu';
 
         const emojiMap = {
-            rock: '✓Š',
-            paper: '✓‹',
-            scissors: '✓Œï¸'
+            rock: '✊',
+            paper: '✋',
+            scissors: '✌️'
         };
 
         function loadStats() {
@@ -282,7 +282,7 @@
             const opponentDisplay = document.getElementById('c-display');
 
             playerDisplay.textContent = emojiMap[playerChoice];
-            opponentDisplay.textContent = '✓Š';
+            opponentDisplay.textContent = '✊';
             opponentDisplay.classList.add('battle-shake');
 
             setTimeout(() => {
