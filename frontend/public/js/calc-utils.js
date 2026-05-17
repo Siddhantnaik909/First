@@ -362,6 +362,7 @@ window.restoreCalcHistoryItem = function (id) {
 window.initSidebarHistory = function (toolName, containerId, partialMatch = false) {
     window.currentToolName = toolName;
     window.historyContainerId = containerId;
+    window.sidebarHistoryLimit = 5;
     
     window.renderSidebarHistory = function () {
         const container = document.getElementById(containerId);
@@ -372,14 +373,17 @@ window.initSidebarHistory = function (toolName, containerId, partialMatch = fals
             const hName = h.name || h.toolName || '';
             if (partialMatch) return hName.includes(toolName);
             return hName === toolName;
-        }).slice(0, 12);
+        });
         
         if (toolHistory.length === 0) {
             container.innerHTML = `<p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent ${toolName} records.</p>`;
             return;
         }
+
+        const limit = window.sidebarHistoryLimit || 5;
+        const slicedHistory = toolHistory.slice(0, limit);
         
-        container.innerHTML = toolHistory.map((item, idx) => {
+        let html = slicedHistory.map((item, idx) => {
             const opacity = idx === 0 ? '' : 'opacity-60';
             const border = idx === 0 ? 'border-primary' : 'border-surface-container-high';
             const time = new Date(item.timestamp || Date.now()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
@@ -394,6 +398,16 @@ window.initSidebarHistory = function (toolName, containerId, partialMatch = fals
                     <p class="text-[9px] font-black text-primary tracking-tighter uppercase font-mono">${subLabel}</p>
                 </div>`;
         }).join('');
+
+        if (toolHistory.length > limit) {
+            html += `
+                <div class="mt-4 flex justify-center">
+                    <button onclick="window.sidebarHistoryLimit += 5; window.renderSidebarHistory()" class="text-xs font-bold text-primary hover:text-on-surface transition-colors py-2 px-4 rounded bg-primary/10">Load More</button>
+                </div>
+            `;
+        }
+        
+        container.innerHTML = html;
     };
 
     window.clearSidebarHistory = async function () {
