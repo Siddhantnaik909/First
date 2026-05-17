@@ -43,7 +43,8 @@ window.FeatureToggles = {
 
   async init() {
     try {
-      const API_URL = window.API_URL || 'http://localhost:3000';
+      const API_URL = window.API_URL ||
+          (window.location.protocol === 'file:' ? 'http://localhost:3000' : window.location.origin);
       const res = await fetch(`${API_URL}/ui/features`);
       if (res.ok) {
         const flags = await res.json();

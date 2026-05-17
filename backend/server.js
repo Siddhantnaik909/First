@@ -27,16 +27,11 @@ app.locals.io = io;
 // Security Middleware
 app.use(require('helmet')({ contentSecurityPolicy: false }));
 
-// Skip logging for screenshot automation
-app.use((req, res, next) => {
-    if (req.query.screenshot === 'true') {
-        req.skipLog = true;
-    }
-    next();
-});
+
+// Only log errors (4xx/5xx) — suppress noisy 200/304 access logs
 
 app.use(require('morgan')('combined', {
-    skip: (req) => req.skipLog === true
+    skip: (req, res) => res.statusCode < 400
 }));
 
 
@@ -171,16 +166,42 @@ app.use('/api/connectors', connectorRoutes);
 app.use('/api/games', gameRoutes);
 app.use('/api/contact', contactRoutes);
 
-// Explicit routes for game pages (fix 404 on navbar links without .html)
-app.get('/GameLobby', (req, res) => {
-    res.sendFile(path.join(publicPath, 'GameLobby.html'));
+// ── Clean URL routes (no .html extension needed) ─────────────────────────────
+// Calculators hub — /calculators and /calculators/ both serve calculators.html
+app.get(['/calculators', '/calculators/'], (req, res) => {
+    res.sendFile(path.join(publicPath, 'calculators.html'));
 });
-app.get('/CreateGameLobby', (req, res) => {
-    res.sendFile(path.join(publicPath, 'CreateGameLobby.html'));
+
+// Game lobby pages
+app.get('/GameLobby', (req, res) => res.sendFile(path.join(publicPath, 'GameLobby.html')));
+app.get('/CreateGameLobby', (req, res) => res.sendFile(path.join(publicPath, 'CreateGameLobby.html')));
+app.get('/JoinGameLobby', (req, res) => res.sendFile(path.join(publicPath, 'JoinGameLobby.html')));
+
+// Other top-level pages
+app.get('/login',    (req, res) => res.sendFile(path.join(publicPath, 'login.html')));
+app.get('/signup',   (req, res) => res.sendFile(path.join(publicPath, 'signup.html')));
+app.get('/profile',  (req, res) => res.sendFile(path.join(publicPath, 'profile.html')));
+app.get('/history',  (req, res) => res.sendFile(path.join(publicPath, 'history.html')));
+app.get('/settings', (req, res) => res.sendFile(path.join(publicPath, 'settings.html')));
+app.get('/contact',  (req, res) => res.sendFile(path.join(publicPath, 'contact.html')));
+app.get('/about',    (req, res) => res.sendFile(path.join(publicPath, 'about.html')));
+app.get('/admin',    (req, res) => res.sendFile(path.join(publicPath, 'admin.html')));
+
+// ── Misrouted page redirect (stale browser cache safety net) ─────────────────
+// If a top-level .html page is requested under /calculators/ (e.g. /calculators/GameLobby.html),
+// redirect it to the correct root path (/GameLobby.html).
+const fs = require('fs');
+app.get('/calculators/:page', (req, res, next) => {
+    const page = req.params.page;
+    // Only handle .html files; let actual calculator subdirs pass through
+    if (!page.endsWith('.html')) return next();
+    const rootFile = path.join(publicPath, page);
+    if (fs.existsSync(rootFile)) {
+        return res.redirect(301, `/${page}`);
+    }
+    next();
 });
-app.get('/JoinGameLobby', (req, res) => {
-    res.sendFile(path.join(publicPath, 'JoinGameLobby.html'));
-});
+
 
 // --- RDAP/Whois Proxy (Bypass CORS) ---
 const rdapLimiter = rateLimit({

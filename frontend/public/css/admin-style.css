@@ -1,29 +1,296 @@
-/* =========================================
-   ADMIN DASHBOARD STYLES
-========================================= */
+/* =============================================================
+   SMART HUB - UNIFIED ADMINISTRATIVE STYLESHEET (admin-style.css)
+   ============================================================= */
 
-.admin-body {
-    background-color: var(--bg-main);
-    color: var(--text-body);
-    height: 100vh;
-    overflow-x: hidden;
-    overflow-y: auto;
+/* --- 1. GLOBAL VARIABLES & BRAND TOKENS --- */
+:root {
+    --admin-modal-bg: rgba(15, 23, 42, 0.95);
+    --primary-color: #c96f32;
+    --primary-rgb: 201, 111, 50;
+    --accent-purple: #f97316;
+    --accent-cyan: #2f9c95;
+    --bg-main: #efd8ab;
+    --bg-card: #fbe9cd;
+    --border-color: #e7cda9;
+    --text-header: #1f2937;
+    --text-body: #7a614d;
+    --shadow-card: 0 4px 8px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.08);
 }
 
-.admin-container {
+/* --- 2. BASE STYLES & RESET --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body.admin-shell, 
+body.no-theme-overrides {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    background:
+        radial-gradient(circle at top right, rgba(201, 111, 50, 0.14), transparent 26%),
+        radial-gradient(circle at bottom left, rgba(47, 156, 149, 0.1), transparent 20%),
+        linear-gradient(180deg, #efd8ab 0%, #d8b77a 100%) !important;
+    color: #2d2116 !important;
+    min-height: 100vh;
+    overflow-x: hidden;
+    width: 100%;
+    align-items: stretch;
     display: flex;
-    height: 100%;
+}
+
+h1, h2, h3, h4 {
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.025em;
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+p, label {
+    color: #7a614d;
+    font-weight: 500;
+}
+
+/* Material Icons setting */
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease forwards;
+}
+
+/* --- 3. UNIFIED DARK MODE SPECIFIC OVERRIDES --- */
+.dark, 
+html.dark body.admin-shell,
+html.dark body.no-theme-overrides,
+body.dark-mode {
+    --bg-main: #0f172a;
+    --bg-card: #1e293b;
+    --surface: #1f2937;
+    --border-color: #334155;
+    --text-header: #f8fafc;
+    --text-body: #cbd5e1;
+    background:
+        radial-gradient(circle at top right, rgba(201, 111, 50, 0.16), transparent 26%),
+        radial-gradient(circle at bottom left, rgba(47, 156, 149, 0.12), transparent 20%),
+        linear-gradient(180deg, #0f172a 0%, #090d16 100%) !important;
+    color: #cbd5e1 !important;
+}
+
+.dark h1, .dark h2, .dark h3, .dark h4,
+.dark-mode h1, .dark-mode h2, .dark-mode h3, .dark-mode h4 {
+    color: #f8fafc !important;
+}
+
+.dark p, .dark label, .dark span:not(.material-symbols-outlined),
+.dark-mode p, .dark-mode label {
+    color: #cbd5e1 !important;
+}
+
+.dark .text-slate-900, 
+.dark .text-slate-800,
+.dark .text-slate-700,
+.dark .text-slate-600,
+.dark .text-on-surface,
+.dark .text-on-surface-variant,
+.dark-mode .text-slate-900,
+.dark-mode .text-slate-800 {
+    color: #f8fafc !important;
+}
+
+.dark .text-slate-500, 
+.dark .text-slate-400,
+.dark-mode .text-slate-500 {
+    color: #94a3b8 !important;
+}
+
+/* Dark mode inputs and forms */
+.dark input, .dark select, .dark textarea,
+.dark-mode input, .dark-mode select, .dark-mode textarea {
+    background-color: #1f2937 !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+.dark input::placeholder, .dark textarea::placeholder,
+.dark-mode input::placeholder {
+    color: #64748b !important;
+}
+
+/* Adaptive containers dark mode overrides */
+.dark .bg-white,
+.dark .bg-slate-50,
+.dark .bg-slate-100,
+.dark .bg-surface-container,
+.dark .bg-surface-container-low,
+.dark .bg-surface-container-lowest,
+.dark-mode .bg-white,
+.dark-mode .bg-slate-50 {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
+}
+
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .divide-slate-100,
+.dark-mode .border-slate-200 {
+    border-color: #334155 !important;
+}
+
+/* Glassmorphism containers in dark mode */
+.dark .glass-card,
+.dark .glass-header,
+.dark .search-glass {
+    background: rgba(15, 23, 42, 0.7) !important;
+    border-color: rgba(201, 111, 50, 0.2) !important;
+}
+
+/* Tables in dark mode */
+.dark table, .dark-mode table {
+    background-color: #1e293b !important;
+}
+.dark table thead, .dark-mode table thead {
+    background-color: #1f2937 !important;
+}
+.dark table tbody, .dark-mode table tbody {
+    background-color: #1e293b !important;
+}
+.dark table tr, .dark-mode table tr {
+    background-color: #1e293b !important;
+}
+.dark table th, .dark-mode table th {
+    color: #94a3b8 !important;
+    background-color: #1f2937 !important;
+}
+.dark table td, .dark-mode table td {
+    color: #cbd5e1 !important;
+    background-color: #1e293b !important;
+}
+
+/* Custom recursive elements for dark mode */
+.dark .bg-slate-50 p, .dark .bg-slate-50 span, .dark .bg-slate-50 div {
+    color: #cbd5e1 !important;
+}
+.dark .bg-slate-50 h3, .dark .bg-slate-50 h4 {
+    color: #f8fafc !important;
+}
+.dark .theme-preset-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+.dark .theme-preset-title {
+    color: #f8fafc !important;
+}
+
+.dark .cat-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark .bg-indigo-50, 
+.dark .bg-primary\/10 {
+    background-color: rgba(201, 111, 50, 0.1) !important;
+}
+
+.dark [style*="background: white"],
+.dark [style*="background:white"],
+.dark [style*="background-color: white"] {
+    background-color: #1e293b !important;
+    background: #1e293b !important;
+}
+
+/* --- 4. LAYOUT COMPONENTS --- */
+.admin-shell {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
 }
 
 /* --- SIDEBAR --- */
 .admin-sidebar {
-    width: 260px;
-    background: var(--sidebar-bg, #111827);
-    color: #fff;
+    width: 16rem;
+    background: #0f172a;
+    color: #e2e8f0;
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s ease;
-    z-index: 300 !important;
+    transition: transform 0.3s ease, left 0.3s ease;
+    z-index: 999;
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    overflow-y: auto;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-sidebar h1,
+.admin-sidebar .admin-display-name,
+.admin-sidebar #sidebar-admin-name {
+    color: #fff !important;
+}
+
+.admin-sidebar .admin-profile-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+}
+
+.admin-sidebar .admin-nav-link,
+.admin-tab, 
+.admin-tab-link {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    color: #cbd5e1;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.admin-sidebar .admin-nav-link:hover,
+.admin-sidebar .admin-nav-link.active,
+.admin-tab:hover,
+.admin-tab.active {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.admin-tab.active {
+    border-right: 3px solid var(--primary-color);
+}
+
+.admin-tab i, 
+.admin-tab-link i,
+.admin-sidebar .admin-nav-link i {
+    width: 24px;
+    margin-right: 10px;
+    flex-shrink: 0;
 }
 
 .admin-brand {
@@ -33,8 +300,8 @@
     padding: 0 20px;
     font-size: 1.2rem;
     font-weight: 700;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    color: var(--primary-color, #c96f32);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--primary-color);
 }
 
 .admin-nav {
@@ -43,40 +310,9 @@
     overflow-y: auto;
 }
 
-.admin-tab, .admin-tab-link {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 12px 20px;
-    background: none;
-    border: none;
-    color: #9ca3af;
-    cursor: pointer;
-    text-align: left;
-    font-size: 0.95rem;
-    transition: all 0.2s;
-    text-decoration: none;
-}
-
-.admin-tab:hover, .admin-tab-link:hover {
-    background: rgba(255,255,255,0.05);
-    color: #fff;
-}
-
-.admin-tab.active {
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--primary-color, #c96f32);
-    border-right: 3px solid var(--primary-color, #c96f32);
-}
-
-.admin-tab i, .admin-tab-link i {
-    width: 24px;
-    margin-right: 10px;
-}
-
 .nav-divider {
     height: 1px;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     margin: 10px 20px;
 }
 
@@ -85,40 +321,118 @@
     background: rgba(239, 68, 68, 0.1);
 }
 
-/* --- MAIN CONTENT --- */
-.admin-main {
+/* --- SIDEBAR BACKDROP --- */
+.admin-sidebar-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.55);
+    z-index: 70;
+    border: none;
+    cursor: pointer;
+}
+
+body.admin-sidebar-open .admin-sidebar-backdrop {
+    display: block;
+}
+
+/* --- MAIN WRAPPER --- */
+.admin-main,
+main {
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    background: var(--bg-main);
+    min-height: 100vh;
+    margin-left: 16rem;
+    width: calc(100% - 16rem);
+    background: transparent;
 }
 
-.admin-header {
-    height: 60px;
-    background: var(--bg-card);
-    border-bottom: 1px solid var(--border-color);
+/* --- TOPBAR --- */
+.admin-topbar {
+    background: rgba(15, 23, 42, 0.96);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: #fff;
+    position: sticky;
+    top: 0;
+    height: 4rem;
+    z-index: 20;
+    backdrop-filter: blur(24px);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 2rem;
 }
 
-.admin-header h2 {
-    font-size: 1.2rem;
-    margin: 0;
-    color: var(--text-header);
+.admin-topbar h1,
+.admin-topbar h2,
+.admin-topbar h3,
+.admin-topbar p,
+.admin-topbar span {
+    color: inherit;
+}
+
+.admin-mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    color: #fff;
+    transition: all 0.2s;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-mobile-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* --- CONTENT CONTAINERS --- */
+.admin-content {
+    padding: 2.5rem !important;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+    flex: 1;
 }
 
 .admin-content-area {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
 }
 
-/* --- TABS & PANELS --- */
-.tab-content { display: none; animation: fadeIn 0.3s ease; }
-.tab-content.active { display: block; }
+.panel {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 1.5rem;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+}
+
+.panel h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    color: var(--text-header);
+}
+
+/* --- 5. TABS & PANELS --- */
+.tab-content {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
 
 .stats-grid {
     display: grid;
@@ -133,11 +447,750 @@
     gap: 20px;
 }
 
-.panel { background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); }
-.panel h3 { margin-top: 0; margin-bottom: 15px; font-size: 1.1rem; color: var(--text-header); }
+.admin-nav-scroll {
+    background: transparent;
+    padding: 10px 0;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
 
+.admin-nav-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+/* --- 6. MAIN DASHBOARD COMPONENTS --- */
+.glass-header {
+    background: rgba(249, 233, 200, 0.84);
+    backdrop-filter: blur(20px);
+}
+
+.indigo-gradient {
+    background: linear-gradient(135deg, #c96f32 0%, #2f9c95 100%);
+}
+
+.tonal-shadow {
+    box-shadow: 0px 20px 40px rgba(166, 112, 57, 0.12);
+}
+
+.hover\:bg-slate-50\/50:hover,
+.hover\:bg-slate-200:hover,
+.hover\:bg-slate-200\/50:hover {
+    background: rgba(201, 111, 50, 0.10) !important;
+}
+
+.text-indigo-700,
+.text-indigo-600,
+.text-indigo-300 {
+    color: #c96f32 !important;
+}
+
+.bg-indigo-600\/10,
+.bg-primary\/10,
+.bg-secondary-fixed {
+    background: rgba(201, 111, 50, 0.14) !important;
+}
+
+#dashboard-notif-dropdown,
+#avatar-dropdown {
+    background: rgba(249, 233, 200, 0.96) !important;
+    border-color: rgba(185, 146, 94, 0.28) !important;
+}
+
+.admin-data-table tr:hover {
+    background: rgba(201, 111, 50, 0.08) !important;
+}
+
+.dashboard-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.dashboard-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(320px, 0.9fr);
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+.dashboard-hero-card {
+    border-radius: 2rem;
+    padding: 2rem;
+    box-shadow: 0 24px 54px rgba(166, 112, 57, 0.12);
+}
+
+.dashboard-hero-main {
+    background: linear-gradient(145deg, #5e3023 0%, #c96f32 58%, #2f9c95 100%);
+    color: #fff6e8;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-hero-main::after {
+    content: "";
+    position: absolute;
+    inset: auto -70px -70px auto;
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    filter: blur(4px);
+}
+
+.dashboard-hero-side {
+    background: linear-gradient(180deg, rgba(249, 233, 200, 0.96) 0%, rgba(246, 228, 191, 0.92) 100%);
+    border: 1px solid rgba(185, 146, 94, 0.28);
+}
+
+.dashboard-action-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.dashboard-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 42px;
+    padding: 0.75rem 1rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.22s ease;
+}
+
+.dashboard-btn-primary {
+    background: linear-gradient(135deg, #c96f32 0%, #2f9c95 100%);
+    color: #fff;
+    box-shadow: 0 16px 28px rgba(166, 112, 57, 0.18);
+}
+
+.dashboard-btn-primary:hover {
+    transform: translateY(-1px);
+}
+
+.dashboard-btn-secondary {
+    background: rgba(249, 233, 200, 0.9);
+    color: #7a614d;
+    border: 1px solid rgba(185, 146, 94, 0.28);
+}
+
+.dashboard-btn-secondary:hover {
+    color: #2d2116;
+    border-color: rgba(201, 111, 50, 0.28);
+}
+
+.dashboard-table-action {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(249, 233, 200, 0.9);
+    transition: all 0.2s ease;
+}
+
+.dashboard-table-action:hover {
+    background: rgba(201, 111, 50, 0.12);
+}
+
+/* --- 7. COMMAND CENTER COMPONENTS --- */
+.cat-card {
+    background: #f7f2e8;
+    border-radius: 2rem;
+    padding: 2rem;
+    box-shadow: 0px 20px 40px rgba(201, 111, 50, 0.08);
+    border: 1px solid #fbe9cd;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 30px 60px rgba(201, 111, 50, 0.14);
+    border-color: rgba(201, 111, 50, 0.24);
+}
+
+.btn-calc, .btn-save, .btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-purple) 100%);
+    color: white;
+    border-radius: 1rem;
+    font-weight: 800;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(201, 111, 50, 0.2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 46px;
+}
+
+.btn-calc:hover, .btn-save:hover, .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(201, 111, 50, 0.3);
+    color: white;
+    filter: saturate(1.05) brightness(0.98);
+}
+
+.btn-calc:focus-visible, .btn-save:focus-visible, .btn-primary:focus-visible,
+.btn-secondary:focus-visible, .btn-danger:focus-visible {
+    outline: 3px solid rgba(201, 111, 50, 0.22);
+    outline-offset: 2px;
+}
+
+.btn-secondary {
+    background: linear-gradient(180deg, #f7f2e8 0%, #f7f2e8 100%);
+    color: #7a614d;
+    border: 1px solid #dbe5f0;
+    border-radius: 1rem;
+    padding: 0.8rem 1.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 46px;
+}
+
+.btn-secondary:hover {
+    background: #fbe9cd;
+    color: #1f2937;
+    border-color: rgba(201, 111, 50, 0.22);
+    transform: translateY(-1px);
+}
+
+.btn-danger {
+    background: linear-gradient(180deg, #fff1f2 0%, #ffe4e6 100%);
+    color: #e11d48;
+    border: 1px solid #ffe4e6;
+    border-radius: 1rem;
+    padding: 0.8rem 1.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 46px;
+}
+
+.btn-danger:hover {
+    background: #ffe4e6;
+    transform: translateY(-1px);
+}
+
+.admin-nav-scroll button {
+    background: transparent;
+    color: #64748b;
+    border: none;
+    border-radius: 1rem;
+    padding: 0.6rem 1.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.7rem;
+    transition: all 0.2s ease;
+}
+
+.admin-nav-scroll button.active-tab {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-purple) 100%) !important;
+    color: #f7f2e8 !important;
+    box-shadow: 0 10px 20px rgba(201, 111, 50, 0.2);
+}
+
+.admin-nav-scroll button:hover:not(.active-tab) {
+    background: #fbe9cd;
+    color: #1f2937;
+}
+
+.theme-preset-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    padding: 18px;
+    border-radius: 1.5rem;
+    border: 1px solid #e7cda9;
+    background: #f7f2e8;
+    text-align: left;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.theme-preset-card:hover {
+    border-color: rgba(201, 111, 50, 0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(201, 111, 50, 0.12);
+}
+
+.theme-preset-card.active {
+    border-color: var(--primary-color);
+    box-shadow: 0 16px 30px rgba(201, 111, 50, 0.18);
+    background: linear-gradient(180deg, rgba(201, 111, 50, 0.08), #f7f2e8 45%);
+}
+
+.theme-preset-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #1f2937;
+}
+
+.theme-preset-chip-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.theme-preset-chip {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    border-radius: 9999px;
+    border: 2px solid rgba(255,255,255,0.9);
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.12);
+}
+
+.action-btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.admin-panel-accent {
+    background: linear-gradient(135deg, rgba(201, 111, 50, 0.12) 0%, rgba(249, 115, 22, 0.08) 100%) !important;
+    border: 1px solid rgba(201, 111, 50, 0.12) !important;
+    box-shadow: 0 18px 40px rgba(201, 111, 50, 0.08) !important;
+}
+
+/* Modal for Editor */
+#editor-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.9);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+#editor-modal.active {
+    display: flex;
+}
+
+.editor-container {
+    width: 95%;
+    height: 90%;
+    background: #1f2937;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(201, 111, 50, 0.22);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+}
+
+.CodeMirror {
+    flex: 1;
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+}
+
+/* Tool Drag & Drop Styles */
+.tool-row[draggable="true"] {
+    cursor: grab;
+}
+.tool-row.dragging-tool {
+    opacity: 0.4;
+    background: var(--primary-color) !important;
+}
+.category-content.drop-zone-active {
+    background: rgba(201, 111, 50, 0.1) !important;
+    border: 2px dashed var(--primary-color);
+}
+
+/* --- 8. MOBILE TRACE SPECIFIC COMPONENTS --- */
+.main-with-navbar {
+    padding-top: 6rem;
+}
+
+.trace-grid {
+    grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+    display: grid;
+    gap: 1.5rem;
+}
+
+/* --- 9. COMPREHENSIVE RESPONSIVE DESIGN --- */
+
+@media (max-width: 1100px) {
+    .dashboard-hero {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 1024px) {
+    .trace-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- TABLET (768px and below) --- */
 @media (max-width: 768px) {
-    .admin-sidebar { position: fixed; left: -260px; height: 100%; }
-    .admin-sidebar.show { left: 0; }
-    .dashboard-split { grid-template-columns: 1fr; }
+    .admin-sidebar {
+        position: fixed !important;
+        left: -16rem !important;
+        top: 0 !important;
+        height: 100vh !important;
+        width: 16rem !important;
+        transition: left 0.3s ease-in-out !important;
+        z-index: 999 !important;
+    }
+
+    body.admin-sidebar-open .admin-sidebar,
+    .admin-sidebar.show {
+        left: 0 !important;
+    }
+
+    .admin-sidebar-backdrop.active,
+    body.admin-sidebar-open .admin-sidebar-backdrop {
+        display: block !important;
+    }
+
+    .admin-main,
+    main {
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
+
+    .admin-mobile-toggle {
+        display: flex !important;
+    }
+
+    .admin-content {
+        max-width: 100% !important;
+        padding: 1rem !important;
+    }
+
+    .admin-content-area {
+        padding: 1rem;
+    }
+
+    .dashboard-split {
+        grid-template-columns: 1fr !important;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .grid.grid-cols-1.xl\\:grid-cols-2 {
+        grid-template-columns: 1fr !important;
+    }
+
+    .admin-data-table {
+        font-size: 0.875rem;
+    }
+
+    .admin-nav-scroll {
+        overflow-x: auto !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    .admin-nav-scroll::-webkit-scrollbar {
+        height: 4px;
+        display: block;
+    }
+
+    .admin-nav-scroll::-webkit-scrollbar-thumb {
+        background: rgba(201, 111, 50, 0.2);
+        border-radius: 2px;
+    }
+}
+
+/* --- SMALL TABLET (640px and below) --- */
+@media (max-width: 640px) {
+    .main-with-navbar {
+        padding-top: 5.5rem;
+    }
+
+    .trace-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-hero-card {
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+    }
+
+    .dashboard-hero-main {
+        padding: 1.5rem;
+    }
+
+    .admin-content {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+        gap: 1.5rem !important;
+    }
+
+    .admin-content-area {
+        padding: 0.75rem;
+    }
+
+    .dashboard-shell {
+        gap: 1.5rem;
+    }
+
+    .grid.grid-cols-1.md\\:grid-cols-3 {
+        grid-template-columns: 1fr !important;
+    }
+
+    .grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4 {
+        grid-template-columns: 1fr !important;
+    }
+
+    .grid.gap-6 {
+        gap: 1rem !important;
+    }
+
+    h2, h3 {
+        font-size: 1.1rem !important;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    .cat-card {
+        padding: 1rem !important;
+    }
+
+    .admin-nav-scroll button {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.75rem !important;
+    }
+
+    .admin-topbar {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+        height: 3.5rem !important;
+    }
+
+    .admin-topbar h2 {
+        font-size: 1rem !important;
+    }
+
+    .admin-data-table {
+        font-size: 0.75rem;
+    }
+
+    .admin-data-table th, .admin-data-table td {
+        padding: 0.5rem !important;
+    }
+}
+
+/* --- MOBILE (480px and below) --- */
+@media (max-width: 480px) {
+    .admin-sidebar {
+        width: 100% !important;
+        left: -100% !important;
+    }
+
+    body.admin-sidebar-open .admin-sidebar,
+    .admin-sidebar.show {
+        left: 0 !important;
+    }
+
+    .admin-content {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+        gap: 1rem !important;
+    }
+
+    .admin-content-area {
+        padding: 0.5rem;
+    }
+
+    .dashboard-shell {
+        gap: 1rem;
+    }
+
+    .dashboard-hero-card {
+        padding: 1rem;
+        border-radius: 1rem;
+    }
+
+    .dashboard-hero-main {
+        padding: 1rem;
+    }
+
+    .dashboard-hero-main::after {
+        width: 150px;
+        height: 150px;
+        right: -50px;
+        bottom: -50px;
+    }
+
+    .cat-card {
+        padding: 0.75rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+
+    .cat-card h3 {
+        font-size: 1rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .cat-card p {
+        font-size: 0.75rem !important;
+    }
+
+    .admin-nav-scroll {
+        gap: 0.5rem !important;
+        padding: 0.25rem !important;
+    }
+
+    .admin-nav-scroll button {
+        padding: 0.375rem 0.5rem !important;
+        font-size: 0.65rem !important;
+    }
+
+    .btn-calc, .btn-save, .btn-primary {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.7rem !important;
+        min-height: 40px !important;
+    }
+
+    .admin-topbar {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+        height: 3rem !important;
+    }
+
+    .admin-topbar h2 {
+        font-size: 0.875rem !important;
+    }
+
+    .admin-header {
+        padding: 0.75rem !important;
+        height: 3.5rem !important;
+    }
+
+    .grid.grid-cols-1.md\\:grid-cols-3,
+    .grid.md\\:grid-cols-2 {
+        grid-template-columns: 1fr !important;
+    }
+
+    .flex.md\\:flex-row {
+        flex-direction: column !important;
+    }
+
+    .action-btn-row {
+        gap: 0.5rem !important;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .tab-content {
+        padding: 0;
+    }
+
+    .panel {
+        padding: 0.75rem;
+        border-radius: 8px;
+    }
+
+    .panel h3 {
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+    }
+}
+
+/* --- EXTRA SMALL MOBILE (360px and below) --- */
+@media (max-width: 360px) {
+    .admin-sidebar {
+        width: 85vw;
+    }
+
+    .admin-sidebar .admin-display-name,
+    .admin-sidebar .admin-display-role,
+    .admin-sidebar #sidebar-admin-name {
+        font-size: 0.75rem !important;
+    }
+
+    .admin-nav-scroll button {
+        font-size: 0.6rem !important;
+        padding: 0.25rem 0.375rem !important;
+    }
+
+    .btn-calc, .btn-save, .btn-primary {
+        padding: 0.25rem 0.5rem !important;
+        font-size: 0.65rem !important;
+        min-height: 2.25rem !important;
+    }
+
+    .cat-card {
+        padding: 0.5rem !important;
+    }
+}
+
+/* --- SCROLLBAR STYLING --- */
+.admin-content-area::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.admin-content-area::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.admin-content-area::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+    background: rgba(201, 111, 50, 0.3);
+    border-radius: 4px;
+}
+
+.admin-content-area::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+    background: rgba(201, 111, 50, 0.5);
 }

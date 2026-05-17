@@ -320,16 +320,32 @@
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
+            const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
             const submitBtn = e.target.querySelector('button[type="submit"]');
+
+            // ── Client-side validation ────────────────────────────────────
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailRegex.test(email)) {
+                document.getElementById('loginEmail').focus();
+                document.getElementById('loginEmail').classList.add('ring-2', 'ring-rose-400');
+                return;
+            }
+            document.getElementById('loginEmail').classList.remove('ring-2', 'ring-rose-400');
+
+            if (!password || password.length < 6) {
+                document.getElementById('loginPassword').focus();
+                document.getElementById('loginPassword').classList.add('ring-2', 'ring-rose-400');
+                return;
+            }
+            document.getElementById('loginPassword').classList.remove('ring-2', 'ring-rose-400');
+
             submitBtn.innerHTML = '<span class="animate-spin material-symbols-outlined text-lg">progress_activity</span> Logging In';
             submitBtn.disabled = true;
 
             try {
-                const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
-                    ? (window.location.port === '3001' ? 'http://localhost:3001' : 'http://localhost:3000')
-                    : 'https://smart-hub-f5gw.onrender.com';
+                const API_URL = window.API_URL ||
+                    (window.location.protocol === 'file:' ? 'http://localhost:3000' : window.location.origin);
 
                 const res = await fetch(`${API_URL}/api/auth/login`, {
                     method: 'POST',
@@ -342,15 +358,16 @@
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('smart_hub_user', JSON.stringify(data.user));
                     localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('smart_hub_login_time', String(Date.now()));
                     window.location.href = 'index.html';
                 } else {
                     alert(data.message || 'Login failed. Please check your email and password.');
-                    submitBtn.innerHTML = '<span class="material-symbols-outlined text-lg">login</span> Login';
+                    submitBtn.innerHTML = '<span class="material-symbols-outlined text-lg">login</span> Secure Login';
                     submitBtn.disabled = false;
                 }
             } catch (err) {
-                alert('Server is down or unconfigured. Please check your localhost backend and try again.');
-                submitBtn.innerHTML = '<span class="material-symbols-outlined text-lg">login</span> Login';
+                alert('Server is down or unconfigured. Please check your backend and try again.');
+                submitBtn.innerHTML = '<span class="material-symbols-outlined text-lg">login</span> Secure Login';
                 submitBtn.disabled = false;
             }
         });

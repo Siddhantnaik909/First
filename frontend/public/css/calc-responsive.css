@@ -1,0 +1,283 @@
+/**
+ * calc-responsive.css — Smart Hub
+ * Universal mobile-responsive overrides for all calculator & game pages.
+ * Applied across 90+ calculator HTML files via shared link injection.
+ *
+ * Breakpoints:
+ *   ≤ 360px  — extra-small mobile
+ *   ≤ 480px  — mobile
+ *   ≤ 640px  — small tablet
+ *   ≤ 768px  — tablet
+ *   ≥ 1024px — desktop (no overrides needed)
+ */
+
+/* ============================================================
+   BASE: Touch-friendly inputs & selects (all sizes)
+   ============================================================ */
+input,
+select,
+textarea,
+button {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+input[type="number"],
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select,
+textarea {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+}
+
+/* ============================================================
+   TABLET & BELOW — ≤ 768px
+   ============================================================ */
+@media (max-width: 768px) {
+
+    /* ── Main content wrapper ── */
+    .main-content-wrapper {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        padding-top: 1rem !important;
+    }
+
+    /* ── Page headings ── */
+    h1 {
+        font-size: 2.25rem !important;
+        line-height: 1.15 !important;
+    }
+
+    h2 {
+        font-size: 1.75rem !important;
+    }
+
+    h3 {
+        font-size: 1.35rem !important;
+    }
+
+    /* ── Tailwind 12-col grid → single column ── */
+    .grid.grid-cols-12 {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+    }
+
+    /* Move sidebar (col-span-4) below content on mobile */
+    .grid.grid-cols-12 > [class*="col-span-4"],
+    .grid.grid-cols-12 > [class*="lg:col-span-4"] {
+        order: 2;
+    }
+
+    .grid.grid-cols-12 > [class*="col-span-8"],
+    .grid.grid-cols-12 > [class*="lg:col-span-8"] {
+        order: 1;
+    }
+
+    /* ── 2/3-col grids → 1-col ── */
+    .grid.grid-cols-2,
+    .grid.grid-cols-3,
+    .grid.md\:grid-cols-2,
+    .grid.md\:grid-cols-3 {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* ── Fixed-height hero cards (game lobby) ── */
+    .h-96 {
+        height: auto !important;
+        min-height: 14rem !important;
+    }
+
+    /* ── Calc display: shrink giant result number ── */
+    #calc-display {
+        font-size: 2.75rem !important;
+        line-height: 1.1 !important;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    /* ── Action button row: wrap & stack ── */
+    .flex.flex-col.md\:flex-row,
+    .flex.md\:flex-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    /* ── Table overflow ── */
+    table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+    }
+
+    /* ── Pro-tips / info card grid ── */
+    .grid.grid-cols-1.md\:grid-cols-2 {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* ── Section margin reduction ── */
+    .mb-12 { margin-bottom: 2rem !important; }
+    .mb-16 { margin-bottom: 2.5rem !important; }
+    .mt-12 { margin-top: 2rem !important; }
+}
+
+/* ============================================================
+   MOBILE — ≤ 480px
+   ============================================================ */
+@media (max-width: 480px) {
+
+    /* ── Page headings ── */
+    h1 {
+        font-size: 1.875rem !important;
+        letter-spacing: -0.03em !important;
+    }
+
+    h2 { font-size: 1.5rem !important; }
+    h3 { font-size: 1.2rem !important; }
+
+    /* ── Buttons: min touch target 44px, full width in button groups ── */
+    button,
+    .btn,
+    a[class*="rounded-xl"][class*="px-"] {
+        min-height: 44px;
+    }
+
+    /* Make action buttons in calc full-width on mobile */
+    .flex.gap-4 > button,
+    .flex.gap-4 > a {
+        flex: 1 1 auto;
+        text-align: center;
+        justify-content: center;
+    }
+
+    /* ── Inner calculator padding ── */
+    .p-8 {
+        padding: 1.25rem !important;
+    }
+
+    .p-10 {
+        padding: 1.25rem !important;
+    }
+
+    /* ── Calc display panel ── */
+    #calc-display {
+        font-size: 2.25rem !important;
+    }
+
+    #calc-status {
+        font-size: 0.9rem !important;
+    }
+
+    /* ── Input grids inside calculator controls ── */
+    .grid.grid-cols-2 {
+        grid-template-columns: 1fr !important;
+        gap: 0.75rem !important;
+    }
+
+    /* ── Game lobby action cards ── */
+    .rounded-3xl.p-10 {
+        padding: 1.5rem !important;
+    }
+
+    /* ── Game card hover lift: disable on touch ── */
+    .game-card:hover {
+        transform: none !important;
+    }
+
+    /* ── Navigation quick-links: stack ── */
+    .space-y-4 > a.flex {
+        min-height: 56px;
+    }
+}
+
+/* ============================================================
+   EXTRA-SMALL MOBILE — ≤ 360px
+   ============================================================ */
+@media (max-width: 360px) {
+
+    h1 {
+        font-size: 1.6rem !important;
+    }
+
+    .main-content-wrapper {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+
+    /* ── Reduce inner card padding further ── */
+    .p-8,
+    .p-10 {
+        padding: 1rem !important;
+    }
+
+    /* ── Shrink display result ── */
+    #calc-display {
+        font-size: 1.875rem !important;
+    }
+
+    /* ── Shrink label tag ── */
+    .text-7xl {
+        font-size: 2rem !important;
+    }
+}
+
+/* ============================================================
+   GAME PAGES: Touch controls & canvas sizing
+   ============================================================ */
+@media (max-width: 768px) {
+
+    /* ── Game canvas: max full-width ── */
+    canvas {
+        max-width: 100% !important;
+        height: auto !important;
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* ── CreateGameLobby / JoinGameLobby forms ── */
+    .join-form,
+    .create-form,
+    form {
+        padding: 1.25rem !important;
+    }
+
+    /* ── Game option buttons (touch-friendly) ── */
+    .game-btn,
+    button[class*="game"] {
+        min-height: 52px;
+        font-size: 1rem;
+    }
+}
+
+/* ============================================================
+   GLOBAL: Prevent horizontal scroll on all pages
+   ============================================================ */
+body {
+    overflow-x: hidden;
+}
+
+/* ============================================================
+   PRINT: Clean calc pages for print
+   ============================================================ */
+@media print {
+    #header-placeholder,
+    #footer-placeholder,
+    #mobile-menu,
+    #mobile-menu-toggle,
+    #sidebar-history-container,
+    button[onclick*="print"] {
+        display: none !important;
+    }
+
+    body {
+        font-size: 12pt;
+        background: white !important;
+        color: black !important;
+    }
+
+    #calc-display {
+        font-size: 24pt !important;
+    }
+}

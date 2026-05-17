@@ -162,10 +162,79 @@
 
 
     <script>
-        window.API_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://smart-hub-f5gw.onrender.com';
+        // Use window.API_URL from api-client.js if loaded, else same-origin
+        window.API_URL = window.API_URL ||
+            (window.location.protocol === 'file:' ? 'http://localhost:3000' : window.location.origin);
+
+        // ── XSS sanitizer ────────────────────────────────────────────────
+        function sanitizeInput(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#x27;');
+        }
+
+        // ── Inline validation helpers ─────────────────────────────────────
+        function showFieldError(id, msg) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.classList.add('ring-2', 'ring-rose-400');
+            let err = el.parentElement.querySelector('.field-error');
+            if (!err) {
+                err = document.createElement('p');
+                err.className = 'field-error text-[10px] font-bold text-rose-500 mt-1 ml-2';
+                el.parentElement.appendChild(err);
+            }
+            err.textContent = msg;
+        }
+
+        function clearFieldError(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.classList.remove('ring-2', 'ring-rose-400');
+            const err = el.parentElement.querySelector('.field-error');
+            if (err) err.remove();
+        }
+
+        function validateContactForm() {
+            let valid = true;
+
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const message = document.getElementById('contact-message').value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            clearFieldError('contact-name');
+            clearFieldError('contact-email');
+            clearFieldError('contact-message');
+
+            if (!name || name.length < 2) {
+                showFieldError('contact-name', 'Please enter your name (at least 2 characters).');
+                valid = false;
+            }
+            if (!email || !emailRegex.test(email)) {
+                showFieldError('contact-email', 'Please enter a valid email address.');
+                valid = false;
+            }
+            if (!message || message.length < 10) {
+                showFieldError('contact-message', 'Message must be at least 10 characters.');
+                valid = false;
+            }
+            return valid;
+        }
+
+        // Live validation on blur
+        ['contact-name', 'contact-email', 'contact-message'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('blur', () => validateContactForm());
+        });
 
         document.getElementById('contact-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            if (!validateContactForm()) return;
 
             const btn = e.target.querySelector('button');
             const originalHTML = btn.innerHTML;
@@ -173,9 +242,9 @@
             btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> SENDING...';
 
             const payload = {
-                name: document.getElementById('contact-name').value,
-                email: document.getElementById('contact-email').value,
-                message: document.getElementById('contact-message').value
+                name: sanitizeInput(document.getElementById('contact-name').value.trim()),
+                email: sanitizeInput(document.getElementById('contact-email').value.trim()),
+                message: sanitizeInput(document.getElementById('contact-message').value.trim())
             };
 
             try {
@@ -186,17 +255,31 @@
                 });
 
                 if (response.ok) {
-                    alert("Message sent successfully! We will get back to you soon.");
+                    btn.innerHTML = '<span class="material-symbols-outlined text-sm">check_circle</span> MESSAGE SENT!';
+                    btn.classList.remove('bg-primary');
+                    btn.classList.add('bg-emerald-600');
                     e.target.reset();
+                    setTimeout(() => {
+                        btn.innerHTML = originalHTML;
+                        btn.classList.remove('bg-emerald-600');
+                        btn.classList.add('bg-primary');
+                        btn.disabled = false;
+                    }, 3000);
                 } else {
                     const data = await response.json();
                     throw new Error(data.error || "Failed to send message. Please try again.");
                 }
             } catch (err) {
-                alert(err.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = originalHTML;
+                btn.innerHTML = '<span class="material-symbols-outlined text-sm">error</span> FAILED — RETRY?';
+                btn.classList.add('bg-rose-600');
+                btn.classList.remove('bg-primary');
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.classList.remove('bg-rose-600');
+                    btn.classList.add('bg-primary');
+                    btn.disabled = false;
+                }, 3000);
+                console.warn('[Contact] Submit error:', err.message);
             }
         });
     </script>

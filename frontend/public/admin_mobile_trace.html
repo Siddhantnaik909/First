@@ -33,34 +33,13 @@
     <script>
         (function () {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            const user = JSON.parse(localStorage.getItem('smart_hub_user') || '{}');
             if (!isLoggedIn || String(user.role || '').toLowerCase() !== 'admin') {
                 window.location.href = '/login.html';
             }
         })();
     </script>
-    <style>
-        body {
-            background:
-                radial-gradient(circle at top left, rgba(15, 118, 110, 0.14), transparent 28%),
-                radial-gradient(circle at top right, rgba(249, 115, 22, 0.12), transparent 20%),
-                linear-gradient(180deg, #f7f2e8 0%, #eef6f5 100%);
-        }
-
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
-        }
-
-        .trace-grid {
-            grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
-        }
-
-        @media (max-width: 1024px) {
-            .trace-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+        <link rel="stylesheet" href="/css/admin-style.css">
 </head>
 
 <body class="no-theme-overrides min-h-screen text-ink antialiased">

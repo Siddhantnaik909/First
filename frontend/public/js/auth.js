@@ -8,8 +8,12 @@ const AuthSystem = {
     KEYS: {
         USER: 'smart_hub_user',
         LOGGED_IN: 'isLoggedIn',
-        HISTORY: 'calc_history'
+        HISTORY: 'calc_history',
+        LOGIN_TIME: 'smart_hub_login_time'
     },
+
+    // Session duration: 24 hours in ms
+    SESSION_DURATION: 24 * 60 * 60 * 1000,
 
     // 2. Auth State Management
     getUser() {
@@ -22,19 +26,34 @@ const AuthSystem = {
         }
     },
 
+    isSessionExpired() {
+        const loginTime = parseInt(localStorage.getItem(this.KEYS.LOGIN_TIME) || '0', 10);
+        if (!loginTime) return false; // No timestamp = legacy session, don't force logout
+        return (Date.now() - loginTime) > this.SESSION_DURATION;
+    },
+
     isLoggedIn() {
-        return localStorage.getItem(this.KEYS.LOGGED_IN) === 'true' && this.getUser() !== null;
+        if (localStorage.getItem(this.KEYS.LOGGED_IN) !== 'true') return false;
+        if (this.getUser() === null) return false;
+        if (this.isSessionExpired()) {
+            console.warn('[Auth] Session expired — logging out.');
+            this.logout();
+            return false;
+        }
+        return true;
     },
 
     login(userData) {
         if (!userData || !userData.email) return;
         localStorage.setItem(this.KEYS.USER, JSON.stringify(userData));
         localStorage.setItem(this.KEYS.LOGGED_IN, 'true');
+        localStorage.setItem(this.KEYS.LOGIN_TIME, String(Date.now()));
         this.syncUI();
     },
 
     logout() {
         localStorage.removeItem(this.KEYS.USER);
+        localStorage.removeItem(this.KEYS.LOGIN_TIME);
         localStorage.setItem(this.KEYS.LOGGED_IN, 'false');
         window.location.href = '/login.html';
     },

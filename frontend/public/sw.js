@@ -2,7 +2,8 @@
 // Strategy: Network-first for HTML/JS/CSS. Cache-first for images/fonts only.
 // ⚠️ BUMP CACHE_VERSION on every production deploy to bust old caches.
 
-const CACHE_VERSION = 'v3-purge-csp';
+const CACHE_VERSION = 'v4-path-fix';
+
 const CACHE_NAME = `smarthub-${CACHE_VERSION}`;
 
 // Minimal pre-cache — only truly static, rarely-changing assets

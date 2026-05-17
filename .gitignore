@@ -1,4 +1,4 @@
-﻿node_modules/
+node_modules/
 backend/node_modules/
 *.env
 .env
@@ -15,3 +15,9 @@ logs/
 dist/
 .DS_Store
 Thumbs.db
+
+# User-uploaded content (profile images, etc.)
+frontend/public/uploads/
+frontend/public/uploads/profiles/
+uploads/
+

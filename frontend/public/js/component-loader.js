@@ -62,17 +62,20 @@
         return [...new Set([absolutePath, relativePath])];
     }
 
-    // Convert absolute component links to depth-safe relative links.
+    // Absolute paths (starting with /) are served correctly by Express — do NOT rewrite them.
+    // Only fix truly relative paths (./something) that exist in component HTML.
     function adjustPaths(container, basePath) {
-        const elements = container.querySelectorAll('a[href^="/"], img[src^="/"], script[src^="/"], link[href^="/"]');
-        elements.forEach(el => {
+        // Leave absolute links alone — the server handles /path correctly from any depth
+        const relativeElements = container.querySelectorAll('a[href^="./"], img[src^="./"], script[src^="./"], link[href^="./"]');
+        relativeElements.forEach(el => {
             const attr = el.hasAttribute('href') ? 'href' : 'src';
             const val = el.getAttribute(attr);
-            if (val && val.startsWith('/') && !val.startsWith('//')) {
-                el.setAttribute(attr, basePath + val.substring(1));
+            if (val && val.startsWith('./')) {
+                el.setAttribute(attr, basePath + val.substring(2));
             }
         });
     }
+
 
     function runPostLoadTasks() {
         const yearSpan = document.getElementById('current-year');
@@ -133,15 +136,8 @@
             const basePath = getBasePath();
             adjustPaths(temp, basePath);
 
-            const relativeElements = temp.querySelectorAll('a[href^="./"], img[src^="./"], script[src^="./"], link[href^="./"]');
-            relativeElements.forEach(el => {
-                const attr = el.hasAttribute('href') ? 'href' : 'src';
-                const val = el.getAttribute(attr);
-                if (val && val.startsWith('./')) {
-                    el.setAttribute(attr, basePath + val.substring(2));
-                }
-            });
-            
+
+
             // Move all children from temp to fragment
             const fragment = document.createDocumentFragment();
             while (temp.firstChild) {
@@ -184,7 +180,7 @@
 
     function getStoredUser() {
         try {
-            return JSON.parse(localStorage.getItem('user') || '{}') || {};
+            return JSON.parse(localStorage.getItem('smart_hub_user') || localStorage.getItem('user') || '{}') || {};
         } catch {
             return {};
         }
