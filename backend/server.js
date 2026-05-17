@@ -23,7 +23,21 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { 
     cors: { 
-        origin: process.env.FRONTEND_URL || ['http://localhost:3000', 'http://127.0.0.1:3000'],
+        origin: (origin, callback) => {
+            const allowed = [
+                'http://localhost:3000',
+                'http://127.0.0.1:3000',
+                `http://${LOCAL_IP}:3000`,
+                process.env.FRONTEND_URL,
+                process.env.RENDER_EXTERNAL_URL,
+                process.env.NGROK_URL,
+                process.env.LOCALTUNNEL_URL
+            ].filter(Boolean);
+            if (!origin || allowed.includes(origin) || origin.endsWith('.onrender.com')) {
+                return callback(null, true);
+            }
+            return callback(new Error('Not allowed by CORS'));
+        },
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true 
     } 
@@ -68,11 +82,15 @@ app.use(cors({
             'http://127.0.0.1:3000',
             `http://${LOCAL_IP}:3000`,
             process.env.FRONTEND_URL,
+            process.env.RENDER_EXTERNAL_URL, // Live Render production URL
             process.env.NGROK_URL,
             process.env.LOCALTUNNEL_URL
         ].filter(Boolean);
-        // Allow requests with no origin (server-to-server calls, Postman) or whitelisted origins
-        if (!origin || allowed.includes(origin)) return callback(null, true);
+        
+        // Allow same-origin requests, whitelisted origins, or any subdomain on Render
+        if (!origin || allowed.includes(origin) || origin.endsWith('.onrender.com')) {
+            return callback(null, true);
+        }
         return callback(new Error(`CORS: origin '${origin}' not allowed`));
     },
     credentials: true,
