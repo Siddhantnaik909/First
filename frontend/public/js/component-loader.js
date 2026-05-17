@@ -155,8 +155,8 @@
             // Show fallback content or remove placeholder
             if (placeholderId === 'footer-placeholder') {
                 placeholder.innerHTML = `
-                    <footer class="w-full py-8 border-t border-[#e7cda9] bg-[#f4dfbe]">
-                        <div class="max-w-[1440px] mx-auto px-4 text-center text-sm text-[#7a614d]">
+                    <footer class="w-full py-8 border-t border-slate-800 bg-slate-900">
+                        <div class="max-w-[1440px] mx-auto px-4 text-center text-sm text-slate-400">
                             &copy; ${new Date().getFullYear()} Smart Hub. All rights reserved.
                         </div>
                     </footer>
