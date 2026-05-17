@@ -388,7 +388,7 @@ window.confirmLogout = function() {
 function updateUserInterface() {
     const API_URL = window.API_URL || ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
         ? (window.location.port === '3001' ? 'http://localhost:3001' : 'http://localhost:3000')
-        : 'https://smart-hub-f5gw.onrender.com');
+        : window.location.origin);
 
     // Consistent User Data Retrieval
     const userJson = localStorage.getItem('user');

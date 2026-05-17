@@ -48,6 +48,7 @@ export function getToken() {
 export function saveAuth(token, user) {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('smart_hub_user', JSON.stringify(user));
     localStorage.setItem('isLoggedIn', 'true');
     window.dispatchEvent(new Event('authStateChanged'));
 }
@@ -55,6 +56,7 @@ export function saveAuth(token, user) {
 export function clearAuth() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('smart_hub_user');
     localStorage.removeItem('isLoggedIn');
     window.dispatchEvent(new Event('authStateChanged'));
 }

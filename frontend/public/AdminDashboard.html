@@ -186,6 +186,12 @@
                     <input
                         class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all"
                         placeholder="Search system logs, tools, or users..." type="text" />
+                    <!-- Search Results Dropdown -->
+                    <div id="search-results-dropdown" class="hidden absolute top-12 left-0 w-full bg-white/95 backdrop-blur-xl border border-slate-200 rounded-2xl shadow-2xl p-4 z-[9999] max-h-[480px] overflow-y-auto font-plus-jakarta transition-all duration-200">
+                        <div id="search-results-content" class="space-y-4">
+                            <!-- Category Results Populated Via JS -->
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="flex items-center gap-4 ml-8">
@@ -626,7 +632,7 @@
                    } catch (e) { console.error('Perf sync failed:', e.message); }
                 };
                 updatePerformance();
-
+ 
                 // ===== 4. CALCULATOR TOOLS INVENTORY =====
                 window.loadToolsInventory = async () => {
                     const tbody = document.getElementById('tools-body');
@@ -635,6 +641,7 @@
                         const res = await fetch(`${API}/api/admin/calculators`, { headers: { 'Authorization': `Bearer ${token}` } });
                         if (!res.ok) throw new Error('Re-login required');
                         const tools = await res.json();
+                        window.dashboardTools = tools; // Cache tools globally for search
                         const countEl = document.getElementById('stat-total-tools');
                         if (countEl) countEl.innerText = tools.length.toLocaleString();
                         tbody.innerHTML = tools.slice(0, 5).map(tool => `
@@ -659,7 +666,7 @@
                     } catch (err) { tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-10 text-center text-error italic font-bold uppercase tracking-widest text-[10px]">${err.message}</td></tr>`; }
                 };
                 loadToolsInventory();
-
+ 
                 // ===== 5. CONTACT / SUPPORT MESSAGES =====
                 window.loadContactMessages = async () => {
                     const tbody = document.getElementById('contact-messages-body');
@@ -670,6 +677,7 @@
                         const res = await fetch(`${API}/api/admin/contact-messages`, { headers: { 'Authorization': `Bearer ${token}` } });
                         if (!res.ok) throw new Error('Auth failed');
                         const messages = await res.json();
+                        window.dashboardMessages = messages; // Cache messages globally for search
                         if (btn) btn.innerHTML = '<span class="material-symbols-outlined text-sm">refresh</span> Refresh';
                         
                         if (!messages || messages.length === 0) { tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-10 text-center text-on-surface-variant italic font-bold uppercase tracking-widest text-[10px]">No messages received yet.</td></tr>'; return; }
@@ -696,7 +704,7 @@
                     }
                 };
                 loadContactMessages();
-
+ 
                 // ===== 6. GAME LOBBY (Dynamic with Backend API) =====
                 window.createGameLobby = async () => {
                     const name = await customPrompt('Create Game Lobby', 'Enter lobby name (e.g., "Chess Arena [IN-1]")');
@@ -713,7 +721,7 @@
                         }
                     } catch (e) { await customAlert('Error', 'Failed to create lobby: ' + e.message, 'error'); }
                 };
-
+ 
                 window.deleteGameLobby = async (code) => {
                     if (!await customConfirm('Confirm Deletion', 'Close this lobby and disconnect players?', 'warning')) return;
                     try {
@@ -724,19 +732,20 @@
                         if (res.ok) renderGameLobbies();
                     } catch (e) { await customAlert('Error', 'Action failed', 'error'); }
                 };
-
+ 
                 window.manageGameLobby = async (code) => {
                     await customAlert('Engaged', `Management protocol for node ${code} engaged. Directing traffic to core...`, 'info');
                 };
-
+ 
                 const renderGameLobbies = async () => {
                     const container = document.getElementById('game-lobby-grid');
                     const countEl = document.getElementById('game-lobby-count');
                     if (!container) return;
-
+ 
                     try {
                         const res = await fetch(`${API}/api/admin/rooms`, { headers: { 'Authorization': `Bearer ${token}` } });
                         const active = await res.json();
+                        window.dashboardLobbies = active; // Cache lobbies globally for search
                         
                         if (countEl) countEl.innerText = active.length + ' Active Rooms';
                         if (active.length === 0) { 
@@ -774,14 +783,243 @@
                     if (dropdown && avatar && !dropdown.contains(e.target) && e.target !== avatar && !avatar.parentElement.contains(e.target)) dropdown.classList.add('hidden');
                 });
 
-                // ===== 8. SEARCH FILTER =====
+                // ===== 8. ENHANCED SEARCH ENGINE =====
+                const highlight = (text, term) => {
+                    if (!term) return text;
+                    const regex = new RegExp(`(${term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi');
+                    return text.replace(regex, '<mark class="bg-primary/20 text-on-surface font-semibold rounded-[2px] px-0.5">$1</mark>');
+                };
+
                 const searchInput = document.querySelector('input[placeholder*="Search system logs"]');
-                if (searchInput) {
+                const searchDropdown = document.getElementById('search-results-dropdown');
+                const searchContent = document.getElementById('search-results-content');
+
+                if (searchInput && searchDropdown && searchContent) {
                     searchInput.addEventListener('input', (e) => {
-                        const term = e.target.value.toLowerCase();
-                        document.querySelectorAll('#tools-body tr').forEach(row => { row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
+                        const term = e.target.value.toLowerCase().trim();
+                        if (!term) {
+                            searchDropdown.classList.add('hidden');
+                            // Reset page filters
+                            document.querySelectorAll('#tools-body tr').forEach(row => row.style.display = '');
+                            document.querySelectorAll('#contact-messages-body tr').forEach(row => row.style.display = '');
+                            document.querySelectorAll('#game-lobby-grid > div').forEach(card => card.style.display = '');
+                            document.querySelectorAll('#alerts-container > div').forEach(alert => alert.style.display = '');
+                            return;
+                        }
+
+                        // Perform search across cached arrays
+                        const matchedTools = (window.dashboardTools || []).filter(t => 
+                            (t.name || '').toLowerCase().includes(term) || 
+                            (t.category || '').toLowerCase().includes(term) || 
+                            (t.path || '').toLowerCase().includes(term)
+                        );
+
+                        const matchedMessages = (window.dashboardMessages || []).filter(m => 
+                            (m.name || '').toLowerCase().includes(term) || 
+                            (m.email || '').toLowerCase().includes(term) || 
+                            (m.message || '').toLowerCase().includes(term)
+                        );
+
+                        const matchedLobbies = (window.dashboardLobbies || []).filter(l => 
+                            (l.id || '').toLowerCase().includes(term) || 
+                            (l.type || '').toLowerCase().includes(term) || 
+                            (l.status || '').toLowerCase().includes(term)
+                        );
+
+                        const matchedAlerts = (window.dashboardAlerts || []).filter(a => 
+                            (a.title || '').toLowerCase().includes(term) || 
+                            (a.body || '').toLowerCase().includes(term)
+                        );
+
+                        const totalMatches = matchedTools.length + matchedMessages.length + matchedLobbies.length + matchedAlerts.length;
+                        searchDropdown.classList.remove('hidden');
+
+                        if (totalMatches === 0) {
+                            searchContent.innerHTML = `
+                                <div class="py-10 text-center flex flex-col items-center">
+                                    <span class="material-symbols-outlined text-5xl text-slate-300 mb-3 animate-pulse">search_off</span>
+                                    <h4 class="text-sm font-bold text-on-surface mb-1">No Results Found</h4>
+                                    <p class="text-xs text-on-surface-variant max-w-[280px]">We couldn't find any tools, messages, lobbies, or system alerts matching "${term}".</p>
+                                </div>
+                            `;
+                            return;
+                        }
+
+                        // Build categorized popover
+                        let html = `
+                            <div class="flex justify-between items-center pb-2 border-b border-slate-100 mb-2">
+                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">${totalMatches} matches found</span>
+                                <button onclick="window.applyDashboardSearchFilters('${term.replace(/'/g, "\\'")}')" class="text-[10px] font-black text-primary hover:underline uppercase tracking-wider">Apply to Dashboard</button>
+                            </div>
+                        `;
+
+                        // 🧮 Calculator Tools
+                        if (matchedTools.length > 0) {
+                            html += `
+                                <div class="space-y-2">
+                                    <div class="flex items-center gap-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                        <span class="material-symbols-outlined text-sm">calculate</span> Tools (${matchedTools.length})
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        ${matchedTools.map(t => `
+                                            <div class="p-2 rounded-xl hover:bg-slate-50 transition-colors flex justify-between items-center group">
+                                                <div>
+                                                    <span class="text-xs font-bold text-on-surface block">${highlight(t.name || '', term)}</span>
+                                                    <span class="text-[8px] text-slate-400 font-bold uppercase tracking-wider">${highlight(t.category || '', term)}</span>
+                                                </div>
+                                                <div class="flex gap-1.5 opacity-60 group-hover:opacity-100 transition-opacity">
+                                                    <a href="/${t.path}" target="_blank" class="px-2 py-0.5 bg-primary/10 text-primary text-[9px] font-black rounded uppercase hover:bg-primary hover:text-white transition-all">Open</a>
+                                                    <a href="/admin.html?edit=${encodeURIComponent(t.path)}" class="px-2 py-0.5 bg-slate-100 text-slate-600 text-[9px] font-black rounded uppercase hover:bg-slate-200 transition-all">Edit</a>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        // ✉️ Support Messages
+                        if (matchedMessages.length > 0) {
+                            html += `
+                                <div class="space-y-2 pt-2 border-t border-slate-50">
+                                    <div class="flex items-center gap-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                        <span class="material-symbols-outlined text-sm">chat</span> Support Messages (${matchedMessages.length})
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        ${matchedMessages.map(m => {
+                                            const safeName = (m.name || 'Unknown').replace(/['"`]/g, '');
+                                            const safeEmail = (m.email || 'No email').replace(/['"`]/g, '');
+                                            const safeMsg = (m.message || '').replace(/['"`]/g, '').replace(/(\r\n|\n|\r)/gm, ' ');
+                                            return `
+                                                <div class="p-2 rounded-xl hover:bg-slate-50 transition-colors flex justify-between items-center group">
+                                                    <div class="min-w-0 flex-1 pr-4">
+                                                        <span class="text-xs font-bold text-on-surface block">${highlight(m.name || '', term)} <span class="font-mono text-[9px] font-medium text-slate-400">(${highlight(m.email || '', term)})</span></span>
+                                                        <p class="text-[11px] text-on-surface-variant truncate">${highlight(m.message || '', term)}</p>
+                                                    </div>
+                                                    <button onclick="customAlert('From: ${safeName}', 'Email: ${safeEmail}<br><br>${safeMsg}')" class="px-2 py-0.5 bg-primary/10 text-primary text-[9px] font-black rounded uppercase hover:bg-primary hover:text-white transition-all shrink-0">View</button>
+                                                </div>
+                                            `;
+                                        }).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        // 🎮 Game Lobbies
+                        if (matchedLobbies.length > 0) {
+                            html += `
+                                <div class="space-y-2 pt-2 border-t border-slate-50">
+                                    <div class="flex items-center gap-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                        <span class="material-symbols-outlined text-sm">sports_esports</span> Game Lobbies (${matchedLobbies.length})
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        ${matchedLobbies.map(l => `
+                                            <div class="p-2 rounded-xl hover:bg-slate-50 transition-colors flex justify-between items-center group">
+                                                <div>
+                                                    <span class="text-xs font-bold text-on-surface block">${highlight(l.id || '', term)}</span>
+                                                    <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">${highlight(l.type || '', term)} · ${l.players}/${l.maxPlayers} players</span>
+                                                </div>
+                                                <div class="flex gap-1.5">
+                                                    <span class="text-[10px] font-bold self-center mr-1">${highlight(l.status || '', term)}</span>
+                                                    <button onclick="manageGameLobby('${l.id}')" class="px-2 py-0.5 bg-slate-100 text-slate-600 text-[9px] font-black rounded uppercase hover:bg-slate-200 transition-all">Analyze</button>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        // ⚠️ System Alerts
+                        if (matchedAlerts.length > 0) {
+                            html += `
+                                <div class="space-y-2 pt-2 border-t border-slate-50">
+                                    <div class="flex items-center gap-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                        <span class="material-symbols-outlined text-sm">warning</span> System Alerts (${matchedAlerts.length})
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        ${matchedAlerts.map(a => `
+                                            <div class="p-2 rounded-xl hover:bg-slate-50 transition-colors">
+                                                <div class="flex justify-between items-start">
+                                                    <span class="text-xs font-bold text-on-surface">${highlight(a.title || '', term)}</span>
+                                                    <span class="text-[9px] text-slate-400 font-semibold">${a.time || ''}</span>
+                                                </div>
+                                                <p class="text-[11px] text-on-surface-variant leading-snug mt-0.5">${highlight(a.body || '', term)}</p>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        searchContent.innerHTML = html;
+                    });
+
+                    // Close dropdown when clicking outside search container
+                    document.addEventListener('click', (e) => {
+                        const searchContainer = searchInput.closest('.relative');
+                        if (searchContainer && !searchContainer.contains(e.target)) {
+                            searchDropdown.classList.add('hidden');
+                        }
+                    });
+
+                    // Escape key dismisses search
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape') {
+                            searchDropdown.classList.add('hidden');
+                            searchInput.blur();
+                        }
+                    });
+
+                    // Open dropdown on focus if not empty
+                    searchInput.addEventListener('focus', () => {
+                        if (searchInput.value.trim()) {
+                            searchDropdown.classList.remove('hidden');
+                        }
                     });
                 }
+
+                // Global function to apply search queries to entire dashboard view
+                window.applyDashboardSearchFilters = (term) => {
+                    const dropdown = document.getElementById('search-results-dropdown');
+                    if (dropdown) dropdown.classList.add('hidden');
+                    
+                    term = term.toLowerCase().trim();
+
+                    // 1. Filter Tools
+                    let toolMatches = 0;
+                    document.querySelectorAll('#tools-body tr').forEach(row => {
+                        const isMatch = row.innerText.toLowerCase().includes(term);
+                        row.style.display = isMatch ? '' : 'none';
+                        if (isMatch) toolMatches++;
+                    });
+
+                    // 2. Filter Messages
+                    let msgMatches = 0;
+                    document.querySelectorAll('#contact-messages-body tr').forEach(row => {
+                        const isMatch = row.innerText.toLowerCase().includes(term);
+                        row.style.display = isMatch ? '' : 'none';
+                        if (isMatch) msgMatches++;
+                    });
+
+                    // 3. Filter Lobbies
+                    let lobbyMatches = 0;
+                    document.querySelectorAll('#game-lobby-grid > div').forEach(card => {
+                        const isMatch = card.innerText.toLowerCase().includes(term);
+                        card.style.display = isMatch ? '' : 'none';
+                        if (isMatch) lobbyMatches++;
+                    });
+
+                    // 4. Filter Alerts
+                    let alertMatches = 0;
+                    document.querySelectorAll('#alerts-container > div').forEach(alert => {
+                        const isMatch = alert.innerText.toLowerCase().includes(term);
+                        alert.style.display = isMatch ? '' : 'none';
+                        if (isMatch) alertMatches++;
+                    });
+
+                    customAlert('Dashboard Filter Applied', `Filtered modules. Matched ${toolMatches} Tools, ${msgMatches} Messages, ${lobbyMatches} Lobbies, and ${alertMatches} Alerts.`, 'success');
+                };
             });
 
             async function confirmAdminLogout() {

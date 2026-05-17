@@ -10,6 +10,7 @@
     "socket.io-client": "^4.8.3"
   },
   "scripts": {
+    "postinstall": "npm install --prefix backend",
     "start": "cd backend && npm start",
     "dev": "cd backend && npm run dev",
     "fix-users": "npm run fix-users --prefix backend",

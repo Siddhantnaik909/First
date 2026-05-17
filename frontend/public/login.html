@@ -150,7 +150,7 @@
         <div class="bg-blob blob-2"></div>
     </div>
 
-    <main class="flex min-h-screen items-center justify-center p-6 sm:p-12">
+    <main class="flex min-h-screen items-center justify-center p-6 sm:p-12 pt-24 sm:pt-32 pb-12 sm:pb-16">
         <div class="mx-auto w-full max-w-[1100px]">
             <div class="glass-card flex flex-col overflow-hidden lg:flex-row">
 
@@ -400,7 +400,7 @@
 
             const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
                 ? (window.location.port === '3001' ? 'http://localhost:3001' : 'http://localhost:3000')
-                : 'https://smart-hub-f5gw.onrender.com';
+                : window.location.origin;
 
             try {
                 const res = await fetch(`${API_URL}/api/auth/forgot-password`, {

@@ -22,7 +22,7 @@
 
         const API_URL = window.API_URL || ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
             ? (window.location.port === '3001' ? 'http://localhost:3001' : 'http://localhost:3000')
-            : 'https://smart-hub-f5gw.onrender.com');
+            : window.location.origin);
 
         // 1. Handle Navigation Buttons (Login/Signup vs Profile)
         const authContainers = document.querySelectorAll('.auth-nav-container, #auth-actions, nav .flex.items-center.gap-4');

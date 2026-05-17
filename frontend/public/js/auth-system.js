@@ -75,6 +75,7 @@ class AuthSystem {
       localStorage.setItem('authToken', data.token);
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('smart_hub_user', JSON.stringify(data.user));
       localStorage.setItem('isLoggedIn', 'true');
 
       this._user = data.user;
@@ -97,7 +98,7 @@ class AuthSystem {
 
   _clearStorage() {
     [
-      'authToken', 'token', 'user', 'isLoggedIn',
+      'authToken', 'token', 'user', 'smart_hub_user', 'isLoggedIn',
       'smart_hub_session' // legacy key from old auth system
     ].forEach(k => localStorage.removeItem(k));
   }
