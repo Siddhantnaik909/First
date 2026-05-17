@@ -388,20 +388,17 @@ router.delete('/files/delete', verifyToken, isAdmin, async (req, res) => {
     }
 });
 
-// Contact Messages (from backend/data/contact-messages.json)
+// Contact Messages (from MongoDB)
 router.get('/contact-messages', verifyToken, isAdmin, async (req, res) => {
     try {
-        const fs = require('fs');
-        const path = require('path');
-        const filePath = path.join(__dirname, '../../data/contact-messages.json');
-        if (fs.existsSync(filePath)) {
-            const data = fs.readFileSync(filePath, 'utf8');
-            res.json(JSON.parse(data));
-        } else {
-            res.json([]);
+        const db = req.app.locals.db;
+        if (!db) {
+            return res.status(503).json({ error: 'Database not ready' });
         }
+        const messages = await db.collection('contact_messages').find().sort({ createdAt: -1 }).limit(100).toArray();
+        res.json(messages);
     } catch (err) {
-        console.error(err);
+        console.error('[Admin] Error fetching contact messages:', err);
         res.json([]);
     }
 });
