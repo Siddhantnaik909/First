@@ -1,0 +1,253 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Placeholder Text Generator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        #loremResult { line-height: 1.8; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Dummy Text.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Generate professional "Lorem Ipsum" text for your designs, websites, or documents. Choose between words, sentences, or paragraphs.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Generation History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent text generated.</p>
+                    </div>
+                </div>
+
+                <div class="bg-indigo-900 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">format_paint</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">history_edu</span> Meaning
+                     </h4>
+                     <p class="text-indigo-100 text-[11px] leading-relaxed mb-4 opacity-80">
+                        "Lorem Ipsum" is derived from a 1st-century BC Latin text by Cicero. It's been the industry standard dummy text since the 1500s!
+                     </p>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="tool_case_converter.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Text Tool</div>
+                            </div>
+                        </a>
+                        <a href="tool_password.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Safe Token</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">What to generate?</label>
+                            <select id="loremType" class="w-full bg-white border border-slate-100 rounded-2xl px-6 py-4 font-bold text-sm outline-none focus:ring-2 focus:ring-primary shadow-sm appearance-none">
+                                <option value="paragraphs">Full Paragraphs</option>
+                                <option value="sentences">Short Sentences</option>
+                                <option value="words">Single Words</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">How many?</label>
+                            <input type="number" id="loremCount" value="3" min="1" max="50" class="w-full bg-white border border-slate-100 rounded-2xl px-6 py-4 font-bold text-sm outline-none focus:ring-2 focus:ring-primary shadow-sm">
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4">
+                         <button onclick="generate()" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">GENERATE TEXT</button>
+                         <button onclick="resetForms()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined">restart_alt</span>
+                         </button>
+                    </div>
+
+                    <div id="results" class="hidden space-y-6">
+                        <div class="bg-white p-8 rounded-3xl border border-slate-50 shadow-sm space-y-4">
+                             <div class="flex justify-between items-center text-on-surface-variant">
+                                <span class="text-[10px] font-black uppercase tracking-widest" id="result-status">Ready</span>
+                                <div class="flex gap-2">
+                                    <button onclick="copyToClipboard()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                        <span id="copy-icon" class="material-symbols-outlined text-sm">content_copy</span>
+                                    </button>
+                                    <button onclick="window.print()" class="p-3 bg-slate-50 rounded-xl text-slate-400 hover:text-primary transition-all shadow-sm">
+                                        <span class="material-symbols-outlined text-sm">print</span>
+                                    </button>
+                                </div>
+                             </div>
+                             <textarea id="loremResult" readonly class="w-full h-80 bg-slate-50 border-none rounded-2xl px-8 py-6 font-serif text-sm focus:ring-0 outline-none transition-all resize-none"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Actions -->
+                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-end items-center gap-4">
+                        <div class="flex gap-3">
+                            <button onclick="saveToHistory()" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Save Result</button>
+                            <button onclick="window.print()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined">print</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        const library = [
+            "lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit", "sed", "do", "eiusmod", "tempor", "incididunt", "ut", "labore", "et", "dolore", "magna", "aliqua", "ut", "enim", "ad", "minim", "veniam", "quis", "nostrud", "exercitation", "ullamco", "laboris", "nisi", "ut", "aliquip", "ex", "ea", "commodo", "consequat", "duis", "aute", "irure", "dolor", "in", "reprehenderit", "in", "voluptate", "velit", "esse", "cillum", "dolore", "eu", "fugiat", "nulla", "pariatur", "excepteur", "sint", "occaecat", "cupidatat", "non", "proident", "sunt", "in", "culpa", "qui", "officia", "deserunt", "mollit", "anim", "id", "est", "laborum"
+        ];
+        let lastResult = "";
+        let lastType = "";
+        let lastCount = 0;
+
+        function generate() {
+            const count = parseInt(document.getElementById('loremCount').value);
+            const type = document.getElementById('loremType').value;
+            if (isNaN(count) || count < 1) return alert("Please enter a valid amount.");
+
+            let result = "";
+            if (type === 'words') {
+                result = Array.from({ length: count }, () => library[Math.floor(Math.random() * library.length)]).join(' ') + '.';
+            } else if (type === 'sentences') {
+                result = Array.from({ length: count }, () => {
+                    const len = 5 + Math.floor(Math.random() * 10);
+                    const s = Array.from({ length: len }, () => library[Math.floor(Math.random() * library.length)]).join(' ');
+                    return s.charAt(0).toUpperCase() + s.slice(1) + '.';
+                }).join(' ');
+            } else {
+                result = Array.from({ length: count }, () => {
+                    const sCount = 4 + Math.floor(Math.random() * 3);
+                    return Array.from({ length: sCount }, () => {
+                        const wLen = 8 + Math.floor(Math.random() * 10);
+                        const s = Array.from({ length: wLen }, () => library[Math.floor(Math.random() * library.length)]).join(' ');
+                        return s.charAt(0).toUpperCase() + s.slice(1) + '.';
+                    }).join(' ');
+                }).join('
+
+');
+            }
+
+            lastResult = result;
+            lastType = type;
+            lastCount = count;
+            document.getElementById('loremResult').value = result;
+            document.getElementById('results').classList.remove('hidden');
+            document.getElementById('result-status').textContent = `Generated ${count} ${type}`;
+        }
+
+        function copyToClipboard() {
+            const area = document.getElementById('loremResult');
+            area.select();
+            document.execCommand('copy');
+            const icon = document.getElementById('copy-icon');
+            icon.textContent = 'check';
+            setTimeout(() => icon.textContent = 'content_copy', 2000);
+        }
+
+        async function saveToHistory() {
+            if (!lastResult) return;
+            const inputs = [{ label: 'Format', val: `${lastCount} ${lastType}` }];
+            const results = [
+                { label: 'Length', val: lastResult.length + ' chars', highlight: true }
+            ];
+            const ok = await window.saveCalcToHistory('Dummy Text Generator', inputs, results);
+            if (ok) initSidebarHistory('Dummy Text Generator', 'sidebar-history-container');
+        }
+
+        function resetForms() {
+            document.getElementById('loremCount').value = '3';
+            document.getElementById('results').classList.add('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('Dummy Text Generator', 'sidebar-history-container');
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

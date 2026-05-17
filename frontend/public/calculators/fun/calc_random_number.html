@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Random Number Generator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; } 
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { 
+            font-family: 'Material Symbols Outlined'; 
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; 
+        } 
+        .capsule-pop { 
+            animation: capsule-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+        } 
+        @keyframes capsule-in { 0% { transform: scale(0.5) translateY(20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="pt-24 pb-20 px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Random Hub.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Quickly generate one or many random numbers within any range. Great for raffles, board games, or making choices.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Past Results</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent numbers.</p>
+                    </div>
+                </div>
+
+                <div class="bg-indigo-950 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">grain</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">stars</span> Fun Idea
+                     </h4>
+                     <p class="text-indigo-400 text-[11px] leading-relaxed mb-4 opacity-80">
+                        Need to pick a winner? Use this tool to generate a unique random number for your next contest or giveaway!
+                     </p>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="calc_number_guesser.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Dice Lab</div>
+                            </div>
+                        </a>
+                        <a href="calc_coin_flipper.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Coin Studio</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-8">
+                    <!-- Display -->
+                    <div class="bg-white rounded-2xl p-8 text-right flex flex-col justify-end min-h-[220px] border border-slate-100 shadow-sm relative overflow-hidden">
+                        <div class="absolute top-8 left-8 flex gap-2">
+                            <span class="px-3 py-1 rounded-lg bg-secondary-fixed text-on-secondary-fixed text-[10px] font-bold tracking-widest uppercase">Result Ready</span>
+                            <span class="px-3 py-1 rounded-lg bg-slate-100 text-[#7a614d] text-[10px] font-bold tracking-widest uppercase" id="sync-tag">Choose Range</span>
+                        </div>
+                        <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-4 min-h-[28px]">Primary Output</div>
+                        <div id="number-output" class="flex flex-wrap items-center justify-end gap-3 max-h-[140px] overflow-y-auto pr-2">
+                            <span class="text-on-surface-variant/30 text-sm font-bold uppercase tracking-widest italic">Waiting for numbers...</span>
+                        </div>
+                    </div>
+
+                    <!-- Inputs -->
+                    <div class="p-8 space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-4">
+                                <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-4 ml-1">Range Settings</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-2">
+                                        <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1 block">Min Value</label>
+                                        <input type="number" id="min-num" value="1" class="w-full bg-white border border-slate-100 rounded-xl px-4 py-3 font-bold focus:ring-2 focus:ring-primary outline-none transition-all shadow-sm">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1 block">Max Value</label>
+                                        <input type="number" id="max-num" value="100" class="w-full bg-white border border-slate-100 rounded-xl px-4 py-3 font-bold focus:ring-2 focus:ring-primary outline-none transition-all shadow-sm">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-4 ml-1">Sample Settings</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-2">
+                                        <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1 block">How Many?</label>
+                                        <input type="number" id="qty" value="1" min="1" max="50" class="w-full bg-white border border-slate-100 rounded-xl px-4 py-3 font-bold focus:ring-2 focus:ring-primary outline-none transition-all shadow-sm">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1 block">Unique?</label>
+                                        <select id="unique-toggle" class="w-full bg-white border border-slate-100 rounded-xl px-4 py-3 font-bold focus:ring-2 focus:ring-primary outline-none transition-all shadow-sm cursor-pointer">
+                                            <option value="true">Only Once</option>
+                                            <option value="false">Allow Repeats</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Actions -->
+                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-end items-center gap-4">
+                        <div class="flex gap-3">
+                                <button onclick="generateRandomness()" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-xs tracking-widest uppercase hover:shadow-xl transition-all">Generate Now</button>
+                                <button onclick="window.print()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined">print</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metrics Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 text-center shadow-sm">
+                        <div class="flex items-center justify-center gap-3 mb-2">
+                             <span class="material-symbols-outlined text-primary text-sm">analytics</span>
+                             <h5 class="font-black uppercase tracking-widest text-[8px] text-slate-400">Total Sum</h5>
+                        </div>
+                        <p id="resSum" class="text-lg font-black text-on-surface uppercase tracking-tight">--</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 text-center shadow-sm">
+                        <div class="flex items-center justify-center gap-3 mb-2">
+                             <span class="material-symbols-outlined text-emerald-500 text-sm">offline_bolt</span>
+                             <h5 class="font-black uppercase tracking-widest text-[8px] text-slate-400">In-Range Luck</h5>
+                        </div>
+                        <p id="resProb" class="text-lg font-black text-on-surface uppercase tracking-tight">--</p>
+                    </div>
+                </div>
+
+                <div class="mt-8 bg-surface-container-low p-6 rounded-2xl border border-slate-100 flex flex-col justify-center gap-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Complexity Level</span>
+                        <span id="entropy-tag" class="px-2 py-1 rounded bg-slate-100 text-primary text-[8px] font-black tracking-widest uppercase">DONE</span>
+                    </div>
+                    <div class="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <div id="entropy-bar" class="h-full bg-primary w-0 transition-all duration-1000"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let lastSequence = [];
+
+        function generateRandomness() {
+            const min = parseInt(document.getElementById('min-num').value);
+            const max = parseInt(document.getElementById('max-num').value);
+            const qty = parseInt(document.getElementById('qty').value);
+            const unique = document.getElementById('unique-toggle').value === 'true';
+
+            if (isNaN(min) || isNaN(max) || isNaN(qty)) {
+                alert("Please fill in all settings!");
+                return;
+            }
+            if (min >= max) {
+                alert("Minimum value must be smaller than Maximum!");
+                return;
+            }
+            if (unique && (max - min + 1) < qty) {
+                alert("Not enough unique numbers in this range!");
+                return;
+            }
+
+            let numbers = [];
+            while(numbers.length < qty) {
+                let r = Math.floor(Math.random() * (max - min + 1)) + min;
+                if(unique && numbers.includes(r)) continue;
+                numbers.push(r);
+            }
+            lastSequence = numbers;
+
+            const output = document.getElementById('number-output');
+            output.innerHTML = numbers.map((n, i) => `
+                <div class="capsule-pop bg-primary text-white font-black px-4 py-2 rounded-xl text-lg shadow-lg shadow-primary/20" style="animation-delay: ${i * 0.05}s">
+                    ${n}
+                </div>
+            `).join('');
+
+            const sum = numbers.reduce((a, b) => a + b, 0);
+            const prob = ((1 / (max - min + 1)) * 100).toFixed(4);
+
+            const tag = document.getElementById('sync-tag');
+            tag.innerText = "Numbers Ready";
+            tag.className = "px-3 py-1 rounded-lg bg-emerald-100 text-emerald-700 text-[10px] font-bold tracking-widest uppercase";
+            
+            document.getElementById('resSum').innerText = sum;
+            document.getElementById('resProb').innerText = prob + "%";
+            document.getElementById('entropy-bar').style.width = Math.min(qty * 10, 100) + "%";
+            
+            saveSequenceToRegistry(qty, min, max, numbers, sum);
+        }
+
+        async function saveSequenceToRegistry(qty, min, max, numbers, sum) {
+            const inputs = [
+                { label: 'Range', val: `${min} to ${max}` },
+                { label: 'Amount', val: qty }
+            ];
+            const results = [
+                { label: 'Final Set', val: numbers.join(', '), highlight: true },
+                { label: 'Total Sum', val: sum }
+            ];
+            const ok = await window.saveCalcToHistory('Random Hub', inputs, results);
+            if (ok) initSidebarHistory('Random Hub', 'sidebar-history-container');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('Random Hub', 'sidebar-history-container');
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

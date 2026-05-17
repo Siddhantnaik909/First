@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Ohm's Law Lab</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+        <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+    <!-- Core Scripts -->
+    <script src="/js/app.js"></script>
+    <script src="/js/buttons.js"></script>
+    <script src="/js/calc-utils.js"></script>
+    <script type="module" src="/js/script.js"></script>
+
+    <h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Ohm's Studio.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">The golden rule of electronics! Find the missing value in your circuit (Voltage, Current, or Resistance) plus Power usage instantly.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent records.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="/calculators/electronics/calc_power.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">bolt</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Related</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Power Studio</div>
+                            </div>
+                        </a>
+                        <a href="/calculators/electronics/calc_voltage_divider.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Voltage Lab</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-amber-900 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">science</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">emoji_objects</span> Student Guide
+                     </h4>
+                     <p class="text-amber-100 text-[11px] leading-relaxed mb-4 opacity-80">
+                        Think of Voltage as water pressure, Current as the flow rate, and Resistance as the pipe size. Power is the energy used per second!
+                     </p>
+                     <div class="space-y-2">
+                        <div class="flex items-center gap-2 text-[10px] font-bold text-amber-200">
+                            <span class="w-1 h-1 bg-amber-400 rounded-full"></span> V = I × R (Volts)
+                        </div>
+                        <div class="flex items-center gap-2 text-[10px] font-bold text-amber-200">
+                            <span class="w-1 h-1 bg-amber-400 rounded-full"></span> I = V / R (Amps)
+                        </div>
+                        <div class="flex items-center gap-2 text-[10px] font-bold text-amber-200">
+                            <span class="w-1 h-1 bg-amber-400 rounded-full"></span> R = V / I (Ohms)
+                        </div>
+                     </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-2xl p-2 shadow-2xl overflow-hidden mb-8">
+                    <!-- Display -->
+                    <div class="bg-surface-container-lowest m-4 rounded-xl p-12 text-right flex flex-col justify-end min-h-[300px] shadow-inner relative overflow-hidden group border border-slate-100">
+                        <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                        <div class="absolute top-8 left-8 flex gap-2">
+                             <span class="px-3 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase" id="solve-tag">OHM'S Complete</span>
+                             <span class="px-3 py-1 rounded bg-slate-100 text-slate-600 text-[10px] font-black tracking-widest uppercase" id="power-tag">0W POWER</span>
+                        </div>
+                        <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]">Enter values above...</div>
+                        <div id="calc-display" class="text-7xl md:text-8xl font-black tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden leading-tight font-mono">
+                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0.00
+                        </div>
+                        <div id="unit-display" class="text-xl font-bold text-on-surface-variant uppercase tracking-[0.2em] opacity-40">RESULTS</div>
+                    </div>
+
+                    <!-- Inputs -->
+                    <div class="p-8 space-y-12">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <div class="space-y-6">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Input Parameters</h4>
+                                <div class="space-y-5">
+                                    <div class="space-y-2 group">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1">Voltage (Volts - V)</label>
+                                            <div class="flex gap-1">
+                                                <button onclick="setVal('voltage', 3.3)" class="text-[8px] font-bold bg-slate-100 px-2 py-0.5 rounded hover:bg-primary/10 transition-colors">3.3V</button>
+                                                <button onclick="setVal('voltage', 5)" class="text-[8px] font-bold bg-slate-100 px-2 py-0.5 rounded hover:bg-primary/10 transition-colors">5V</button>
+                                                <button onclick="setVal('voltage', 12)" class="text-[8px] font-bold bg-slate-100 px-2 py-0.5 rounded hover:bg-primary/10 transition-colors">12V</button>
+                                            </div>
+                                        </div>
+                                        <input type="number" id="voltage" oninput="solveOhm('V')" placeholder="Source Pressure" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-4 py-3 font-bold text-on-surface outline-none transition-all">
+                                    </div>
+                                    <div class="space-y-2 group">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1">Current (Amps - I)</label>
+                                            <div class="flex gap-1">
+                                                <button onclick="setVal('current', 0.02)" class="text-[8px] font-bold bg-slate-100 px-2 py-0.5 rounded hover:bg-primary/10 transition-colors">20mA</button>
+                                                <button onclick="setVal('current', 1)" class="text-[8px] font-bold bg-slate-100 px-2 py-0.5 rounded hover:bg-primary/10 transition-colors">1A</button>
+                                            </div>
+                                        </div>
+                                        <input type="number" id="current" oninput="solveOhm('I')" placeholder="Flow Rate" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-4 py-3 font-bold text-on-surface outline-none transition-all">
+                                    </div>
+                                    <div class="space-y-2 group">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1">Resistance (Ohms - Ω)</label>
+                                            <div class="flex gap-1">
+                                                 <button onclick="setVal('resistance', 220)" class="text-[8px] font-bold bg-slate-100 px-2 py-0.5 rounded hover:bg-primary/10 transition-colors">220Ω</button>
+                                                <button onclick="setVal('resistance', 1000)" class="text-[8px] font-bold bg-slate-100 px-2 py-0.5 rounded hover:bg-primary/10 transition-colors">1k</button>
+                                            </div>
+                                        </div>
+                                        <input type="number" id="resistance" oninput="solveOhm('R')" placeholder="Pipe Restriction" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-4 py-3 font-bold text-on-surface outline-none transition-all">
+                                    </div>
+                                </div>
+                                <button onclick="resetInputs()" class="w-full py-4 bg-surface-container text-on-surface-variant rounded-xl font-bold text-[10px] tracking-widest uppercase hover:bg-slate-200 transition-all">Clear Circuit</button>
+                            </div>
+
+                            <div class="space-y-6">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Circuit Analysis</h4>
+                                <div class="bg-indigo-50/50 border border-indigo-100 rounded-2xl p-8 space-y-6">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center shadow-lg">
+                                            <span class="material-symbols-outlined">bolt</span>
+                                        </div>
+                                        <div>
+                                            <span id="loadRating" class="text-2xl font-black text-on-surface">Idle</span>
+                                            <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest block opacity-60">Circuit Load Warning</span>
+                                        </div>
+                                    </div>
+                                    <div class="pt-4 border-t border-indigo-200/50">
+                                        <div class="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
+                                            <span class="text-on-surface-variant">Power Burned:</span>
+                                            <span id="powerValue" class="text-primary">0.00 Watts</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-6 bg-surface-container rounded-xl">
+                                    <p class="text-[10px] font-bold text-on-surface-variant opacity-60 leading-relaxed uppercase tracking-[0.05em]">
+                                        How it works: This tool solves for any field if you provide at least two others. It auto-updates Power (Wattage) for any valid pair.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-8 border-t border-surface-container-high">
+                            <p class="text-[10px] font-mono text-on-surface-variant font-bold max-w-xs uppercase tracking-widest leading-loose">
+                                Formula: V=IR, P=VI | Precision: 3 DECIMAL PLACES
+                            </p>
+                            <button onclick="saveCircuitLog()" id="saveBtn" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest hover:shadow-xl transition-all uppercase">Save Result</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Block -->
+                <div class="bg-surface-container p-10 rounded-2xl border border-surface-container-high italic text-[11px] text-on-surface-variant leading-relaxed text-center opacity-70">
+                    "Circuit Tip: For most handheld electronics, current (I) is measured in mA (milliamps). 1A = 1000mA. Always ensure your components can handle the calculated Power wattage!"
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let fields = { V: null, I: null, R: null };
+        let history = []; 
+
+        function setVal(id, val) {
+            document.getElementById(id).value = val;
+            solveOhm(id.charAt(0).toUpperCase());
+        }
+
+        function solveOhm(type) {
+            const vIn = document.getElementById('voltage');
+            const iIn = document.getElementById('current');
+            const rIn = document.getElementById('resistance');
+            
+            const display = document.getElementById('calc-display');
+            const unitEl = document.getElementById('unit-display');
+            const solveTag = document.getElementById('solve-tag');
+            const powerTag = document.getElementById('power-tag');
+            const powerVal = document.getElementById('powerValue');
+            const loadEl = document.getElementById('loadRating');
+            const statusText = document.getElementById('calc-status');
+
+            // Track inputs
+            const V = parseFloat(vIn.value);
+            const I = parseFloat(iIn.value);
+            const R = parseFloat(rIn.value);
+
+            const hasV = !isNaN(V);
+            const hasI = !isNaN(I);
+            const hasR = !isNaN(R);
+
+            let res = 0;
+            let solvedType = '';
+            let unit = '';
+
+            // Accurate Logic: Prioritize the latest pair
+            if (hasV && hasI && type !== 'R') {
+                res = V / I;
+                if (type === 'V' || type === 'I') {
+                    rIn.value = res.toFixed(3);
+                    solvedType = 'RESISTANCE';
+                    unit = 'OHMS (Ω)';
+                }
+            } else if (hasV && hasR && type !== 'I') {
+                res = V / R;
+                if (type === 'V' || type === 'R') {
+                    iIn.value = res.toFixed(3);
+                    solvedType = 'CURRENT';
+                    unit = 'AMPS (I)';
+                }
+            } else if (hasI && hasR && type !== 'V') {
+                res = I * R;
+                if (type === 'I' || type === 'R') {
+                    vIn.value = res.toFixed(3);
+                    solvedType = 'VOLTAGE';
+                    unit = 'VOLTS (V)';
+                }
+            }
+
+            const finalV = parseFloat(vIn.value);
+            const finalI = parseFloat(iIn.value);
+            const finalR = parseFloat(rIn.value);
+
+            if (isNaN(finalV) || isNaN(finalI) || isNaN(finalR)) {
+                statusText.innerText = "Enter at least 2 values...";
+                return;
+            }
+
+            const P = finalV * finalI;
+            
+            // Value to display depends on what was just changed or solved
+            let displayValue = 0;
+            if (solvedType === 'RESISTANCE') displayValue = finalR;
+            else if (solvedType === 'CURRENT') displayValue = finalI;
+            else if (solvedType === 'VOLTAGE') displayValue = finalV;
+            else displayValue = parseFloat(document.getElementById(type === 'V' ? 'voltage' : (type === 'I' ? 'current' : 'resistance')).value);
+
+            display.innerText = displayValue.toFixed(2);
+            unitEl.innerText = solvedType ? solvedType : "Complete";
+            solveTag.innerText = solvedType ? `Calculated FOR ${solvedType}` : "Manual Complete";
+            powerTag.innerText = `${P.toFixed(2)}W POWER`;
+            powerVal.innerText = `${P.toFixed(3)} Watts`;
+            statusText.innerText = "Calculated successfully";
+
+            // Load Warning
+            if (finalI < 0.1) {
+                loadEl.innerText = "LIGHT";
+                loadEl.className = "text-2xl font-black text-emerald-600";
+            } else if (finalI < 1) {
+                loadEl.innerText = "MEDIUM";
+                loadEl.className = "text-2xl font-black text-amber-500";
+            } else {
+                loadEl.innerText = "High";
+                loadEl.className = "text-2xl font-black text-rose-600";
+            }
+        }
+
+        function resetInputs() {
+            document.getElementById('voltage').value = "";
+            document.getElementById('current').value = "";
+            document.getElementById('resistance').value = "";
+            document.getElementById('calc-display').innerText = "0.00";
+            document.getElementById('unit-display').innerText = "RESULTS";
+            document.getElementById('solve-tag').innerText = "OHM'S Complete";
+            document.getElementById('power-tag').innerText = "0W POWER";
+            document.getElementById('calc-status').innerText = "Enter values above...";
+            document.getElementById('loadRating').innerText = "Idle";
+            document.getElementById('loadRating').className = "text-2xl font-black text-on-surface";
+        }
+
+        async function saveCircuitLog() {
+            const val = document.getElementById('calc-display').innerText.trim();
+            if (val === '0.00' || val === 'NaN') return;
+
+            const btn = document.getElementById('saveBtn');
+            const orig = btn.innerText;
+            btn.innerText = 'SAVING...';
+            btn.disabled = true;
+
+            const inputs = [
+                { label: 'V', val: document.getElementById('voltage').value + 'V' },
+                { label: 'I', val: document.getElementById('current').value + 'A' },
+                { label: 'R', val: document.getElementById('resistance').value + 'Ω' }
+            ];
+            const results = [
+                { label: 'Power', val: document.getElementById('powerValue').innerText, highlight: true }
+            ];
+
+            try {
+                const ok = await window.saveCalcToHistory("Ohm's Studio", inputs, results);
+                if (ok) {
+                    btn.innerText = 'SAVED';
+                    btn.classList.add('bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.classList.remove('bg-emerald-600');
+                        btn.disabled = false;
+                        if (typeof initSidebarHistory === 'function') {
+                            initSidebarHistory("Ohm's Studio", 'sidebar-history-container');
+                        }
+                    }, 2000);
+                } else {
+                    btn.innerText = orig;
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                btn.innerText = orig;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                if (typeof initSidebarHistory === 'function') {
+                    initSidebarHistory("Ohm's Studio", 'sidebar-history-container');
+                }
+            } catch(e){}
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <div id="footer-placeholder"></div>
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>

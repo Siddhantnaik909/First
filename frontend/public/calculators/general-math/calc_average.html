@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Average & Statistics Calculator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Average Studio.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Quickly find the average (mean) of any list of numbers. Perfect for calculating grades, sales averages, or any group of data!</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Dataset Log</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent analyses.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl border border-surface-container-high">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="/calculators/general-math/calc_percentage.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Percentage Studio</div>
+                            </div>
+                        </a>
+                        <a href="/calculators/general-math/calc_fractions.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Fraction Lab</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Input Section -->
+                    <div class="bg-surface-container-low rounded-xl p-8 shadow-2xl space-y-6">
+                        <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em]">Raw Data Input</h4>
+                        <div class="space-y-4">
+                            <textarea id="dataInput" oninput="analyzeData()" rows="10" placeholder="Paste numbers here... (Supports commas, spaces, or newlines)" class="w-full bg-surface-container-lowest border border-surface-container-high rounded-2xl p-6 text-sm font-bold focus:ring-2 focus:ring-primary outline-none transition-all placeholder:opacity-30 resize-none"></textarea>
+                            <div class="flex gap-4">
+                                <button onclick="clearData()" class="flex-1 p-4 bg-surface-container rounded-xl text-[10px] font-black uppercase text-on-surface-variant hover:text-rose-600 transition-colors">Clear Data</button>
+                                <button onclick="saveStatsProject()" id="saveBtn" class="flex-[2] p-4 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">Save Analysis</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Result Section -->
+                    <div class="space-y-6">
+                        <div class="bg-surface-container p-8 rounded-xl border border-surface-container-high relative overflow-hidden h-full">
+                            <div class="flex items-center gap-3 mb-8">
+                                <span class="material-symbols-outlined text-primary">analytics</span>
+                                <h5 class="font-bold uppercase tracking-widest text-[10px]">Statistical Profile</h5>
+                            </div>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="space-y-1">
+                                    <span class="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest block">Average (Mean)</span>
+                                    <span id="resMean" class="text-4xl font-black text-primary tracking-tight">0.00</span>
+                                </div>
+                                <div class="space-y-1 text-right">
+                                    <span class="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest block">Median</span>
+                                    <span id="resMedian" class="text-2xl font-black text-on-surface">0</span>
+                                </div>
+                                <div class="space-y-1">
+                                    <span class="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest block">Mode</span>
+                                    <span id="resMode" class="text-xs font-bold text-on-surface truncate block max-w-[120px]">None</span>
+                                </div>
+                                <div class="space-y-1 text-right">
+                                    <span class="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest block">Range</span>
+                                    <span id="resRange" class="text-2xl font-black text-on-surface">0</span>
+                                </div>
+                            </div>
+                            <div class="mt-8 pt-8 border-t border-surface-container-high space-y-4">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-on-surface-variant font-medium">Std Deviation (Ïƒ)</span>
+                                    <span id="resStd" class="font-bold text-primary">0.0000</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-on-surface-variant font-medium">Variance (ÏƒÂ²)</span>
+                                    <span id="resVar" class="font-bold">0.00</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-on-surface-variant font-medium">Sample Size (n)</span>
+                                    <span id="resCount" class="font-bold text-primary">0 Items</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategic Block -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                    <div class="bg-surface-container p-8 rounded-xl border border-surface-container-high flex flex-col justify-center gap-2 text-center">
+                        <span class="material-symbols-outlined text-primary text-3xl mb-2">insights</span>
+                        <p id="volatilityInsight" class="text-[10px] font-bold text-on-surface uppercase tracking-widest">Awaiting Data...</p>
+                        <p class="text-[9px] text-on-surface-variant leading-relaxed">Dynamic volatility assessment based on your number distribution.</p>
+                    </div>
+                    <div class="col-span-2 bg-surface-container p-8 rounded-xl border border-surface-container-high italic text-[11px] text-on-surface-variant leading-relaxed flex items-center justify-center text-center">
+                        "Pro Tip: Standard deviation measures how spread out your numbers are. A low value means most numbers are close to the average, while a high value means the numbers are widely spread."
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        function analyzeData() {
+            const input = document.getElementById('dataInput').value;
+            const nums = input.split(/[\s,; \r\n]+/).map(n => n.trim()).filter(n => n !== "" && !isNaN(n)).map(Number);
+
+            if (nums.length === 0) {
+                resetUI();
+                return;
+            }
+
+            // Central Tendencies
+            const count = nums.length;
+            const sum = nums.reduce((a, b) => a + b, 0);
+            const mean = sum / count;
+            const sorted = [...nums].sort((a, b) => a - b);
+            const mid = Math.floor(count / 2);
+            const median = count % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+
+            // Mode
+            const freq = {};
+            let maxFreq = 0;
+            nums.forEach(n => {
+                freq[n] = (freq[n] || 0) + 1;
+                if (freq[n] > maxFreq) maxFreq = freq[n];
+            });
+            const modes = Object.keys(freq).filter(n => freq[n] === maxFreq);
+            const modeStr = maxFreq > 1 ? modes.join(', ') : "None";
+
+            // Dispersion
+            const variance = nums.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / count;
+            const stdDev = Math.sqrt(variance);
+            const range = sorted[count - 1] - sorted[0];
+
+            // UI Update
+            const resMean = document.getElementById('resMean');
+            if (resMean) resMean.innerText = mean.toFixed(2);
+            
+            const resMedian = document.getElementById('resMedian');
+            if (resMedian) resMedian.innerText = median;
+            
+            const resMode = document.getElementById('resMode');
+            if (resMode) resMode.innerText = modeStr;
+            
+            const resRange = document.getElementById('resRange');
+            if (resRange) resRange.innerText = range;
+            
+            const resStd = document.getElementById('resStd');
+            if (resStd) resStd.innerText = stdDev.toFixed(4);
+            
+            const resVar = document.getElementById('resVar');
+            if (resVar) resVar.innerText = variance.toFixed(2);
+            
+            const resCount = document.getElementById('resCount');
+            if (resCount) resCount.innerText = `${count} Items`;
+
+            const insight = document.getElementById('volatilityInsight');
+            if (insight) {
+                if (stdDev > (range / 4) && range > 0) {
+                    insight.innerText = "High Variation";
+                    insight.className = "text-[10px] font-bold text-rose-600 uppercase tracking-widest";
+                } else if (range > 0) {
+                    insight.innerText = "Consistent Trend";
+                    insight.className = "text-[10px] font-bold text-emerald-600 uppercase tracking-widest";
+                } else {
+                    insight.innerText = "Identical Values";
+                    insight.className = "text-[10px] font-bold text-primary uppercase tracking-widest";
+                }
+            }
+        }
+
+        function resetUI() {
+            document.getElementById('resMean').innerText = '0.00';
+            document.getElementById('resMedian').innerText = '0';
+            document.getElementById('resMode').innerText = 'None';
+            document.getElementById('resRange').innerText = '0';
+            document.getElementById('resStd').innerText = '0.0000';
+            document.getElementById('resVar').innerText = '0.00';
+            document.getElementById('resCount').innerText = '0 Items';
+            
+            const insight = document.getElementById('volatilityInsight');
+            if (insight) {
+                insight.innerText = 'Awaiting Data...';
+                insight.className = 'text-[10px] font-bold text-on-surface uppercase tracking-widest';
+            }
+        }
+
+        function clearData() {
+            document.getElementById('dataInput').value = '';
+            resetUI();
+        }
+
+        async function saveStatsProject() {
+            const countStr = document.getElementById('resCount').innerText;
+            const count = parseInt(countStr);
+            if (!count || count === 0) return;
+
+            const btn = document.getElementById('saveBtn');
+            const orig = btn.innerText;
+            btn.innerText = 'SAVING...';
+            btn.disabled = true;
+
+            const inputs = [{ label: 'Sample Size', val: `${count} items` }];
+            const results = [
+                { label: 'Mean', val: document.getElementById('resMean').innerText, highlight: true },
+                { label: 'Standard Dev', val: document.getElementById('resStd').innerText }
+            ];
+
+            try {
+                const ok = await window.saveCalcToHistory('Average Calculator', inputs, results);
+                if (ok) {
+                    btn.innerText = 'SAVED';
+                    btn.classList.add('bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.classList.remove('bg-emerald-600');
+                        btn.disabled = false;
+                        if (typeof initSidebarHistory === 'function') {
+                            initSidebarHistory('Average Calculator', 'sidebar-history-container');
+                        }
+                    }, 2000);
+                } else {
+                    btn.innerText = orig;
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                btn.innerText = orig;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                if(typeof initSidebarHistory === 'function') {
+                    initSidebarHistory('Average Calculator', 'sidebar-history-container');
+                }
+            } catch(e){}
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

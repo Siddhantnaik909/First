@@ -1,0 +1,337 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Event Countdown</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Countdown Lab.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Keep track of your most important events! Whether it's a wedding, a project deadline, or New Year's Eve, our high-precision countdown keeps you informed down to the second.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent records.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="/calculators/date-time/calc_age.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Age Studio</div>
+                            </div>
+                        </a>
+                        <a href="/calculators/date-time/calc_date_diff.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Duration Lab</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-2xl p-2 shadow-2xl overflow-hidden mb-8">
+                    <!-- Display -->
+                    <div class="bg-surface-container-lowest m-4 rounded-xl p-12 text-center flex flex-col justify-center min-h-[300px] shadow-inner relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                        <div class="absolute top-8 left-8 flex gap-2">
+                             <span class="px-3 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase" id="status-tag">Medium TIMER</span>
+                             <span class="px-3 py-1 rounded bg-slate-100 text-[#7a614d] text-[10px] font-black tracking-widest uppercase" id="percent-tag">0% REMAINING</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-4 gap-4 md:gap-8 max-w-2xl mx-auto">
+                            <div class="space-y-2">
+                                <div id="days" class="text-6xl md:text-8xl font-black tracking-tighter text-on-surface font-mono">00</div>
+                                <span class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Days</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div id="hours" class="text-6xl md:text-8xl font-black tracking-tighter text-on-surface font-mono">00</div>
+                                <span class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Hours</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div id="minutes" class="text-6xl md:text-8xl font-black tracking-tighter text-on-surface font-mono text-primary">00</div>
+                                <span class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Mins</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div id="seconds" class="text-6xl md:text-8xl font-black tracking-tighter text-on-surface font-mono opacity-50">00</div>
+                                <span class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Secs</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-12 w-full h-1 bg-surface-container rounded-full overflow-hidden max-w-lg mx-auto">
+                            <div id="progressBar" class="h-full bg-primary w-0 transition-all duration-1000"></div>
+                        </div>
+                    </div>
+
+                    <!-- Inputs -->
+                    <div class="p-8 space-y-12">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <div class="space-y-6">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Event Configuration</h4>
+                                <div class="space-y-5">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Event Name</label>
+                                        <input type="text" id="eventName" value="My Big Event" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-4 py-3 font-bold text-on-surface outline-none transition-all">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Target Date & Time</label>
+                                        <input type="datetime-local" id="targetDate" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-4 py-3 font-bold text-on-surface outline-none transition-all">
+                                    </div>
+                                </div>
+                                <button onclick="resetCountdown()" class="w-full py-4 bg-surface-container text-on-surface-variant rounded-xl font-bold text-[10px] tracking-widest uppercase hover:bg-slate-200 transition-all">Stop Countdown</button>
+                            </div>
+
+                            <div class="space-y-6">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Quick Presets</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                     <button onclick="setPreset(1)" class="p-4 bg-surface-container rounded-xl text-center group hover:bg-primary/10 transition-all">
+                                         <span class="block text-xl font-black text-on-surface group-hover:text-primary transition-colors">24H</span>
+                                         <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">One Day</span>
+                                     </button>
+                                     <button onclick="setPreset(7)" class="p-4 bg-surface-container rounded-xl text-center group hover:bg-primary/10 transition-all">
+                                         <span class="block text-xl font-black text-on-surface group-hover:text-primary transition-colors">7D</span>
+                                         <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">One Week</span>
+                                     </button>
+                                     <button onclick="setPreset(30)" class="p-4 bg-surface-container rounded-xl text-center group hover:bg-primary/10 transition-all">
+                                         <span class="block text-xl font-black text-on-surface group-hover:text-primary transition-colors">30D</span>
+                                         <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">One Month</span>
+                                     </button>
+                                     <button onclick="setPreset(365)" class="p-4 bg-surface-container rounded-xl text-center group hover:bg-primary/10 transition-all">
+                                         <span class="block text-xl font-black text-on-surface group-hover:text-primary transition-colors">1Y</span>
+                                         <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">One Year</span>
+                                     </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-8 border-t border-surface-container-high">
+                            <p class="text-[10px] font-mono text-on-surface-variant font-bold max-w-xs uppercase tracking-widest leading-loose">
+                                SYNC: LOCAL SYSTEM TIME | RESOLUTION: 1000ms
+                            </p>
+                            <button onclick="saveCountdownLog()" id="saveBtn" class="bg-primary text-white px-10 py-5 rounded-xl font-bold text-[10px] tracking-widest hover:shadow-xl transition-all uppercase hover:scale-[1.02] active:scale-95">Save Timer</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Block -->
+                <div class="bg-surface-container p-10 rounded-2xl border border-surface-container-high italic text-[11px] text-on-surface-variant leading-relaxed text-center opacity-70">
+                    "Productivity Tip: Deadlines aren't just for pressure"â€they help your brain focus by creating a tangible finish line for your efforts."
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let interval;
+        let startTime = Date.now();
+
+        function solveCountdown() {
+            const targetStr = document.getElementById('targetDate').value;
+            const statusTag = document.getElementById('status-tag');
+            const percentTag = document.getElementById('percent-tag');
+            const progress = document.getElementById('progressBar');
+
+            if (!targetStr) return;
+
+            const target = new Date(targetStr).getTime();
+            
+            clearInterval(interval);
+            interval = setInterval(() => {
+                const now = Date.now();
+                const total = target - startTime;
+                const remaining = target - now;
+
+                if (remaining <= 0) {
+                    clearInterval(interval);
+                    updateDisplay(0, 0, 0, 0);
+                    statusTag.innerText = "TIME EXPIRED";
+                    statusTag.className = "px-3 py-1 rounded bg-rose-100 text-rose-600 text-[10px] font-black tracking-widest uppercase";
+                    percentTag.innerText = "100% ELAPSED";
+                    progress.style.width = "100%";
+                    return;
+                }
+
+                statusTag.innerText = "Medium TIMER";
+                statusTag.className = "px-3 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase";
+
+                const d = Math.floor(remaining / (1000 * 60 * 60 * 24));
+                const h = Math.floor((remaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((remaining % (1000 * 60)) / 1000);
+
+                updateDisplay(d, h, m, s);
+
+                const p = Math.max(0, Math.min(100, (1 - remaining / total) * 100));
+                percentTag.innerText = Math.floor(p) + "% ELAPSED";
+                progress.style.width = p + "%";
+            }, 1000);
+        }
+
+        function updateDisplay(d, h, m, s) {
+            document.getElementById('days').innerText = d.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = h.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = m.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = s.toString().padStart(2, '0');
+        }
+
+        function setPreset(days) {
+            const now = new Date();
+            now.setDate(now.getDate() + days);
+            // Format to YYYY-MM-DDTHH:MM
+            const str = now.getFullYear() + '-' + 
+                        (now.getMonth() + 1).toString().padStart(2, '0') + '-' + 
+                        now.getDate().toString().padStart(2, '0') + 'T' + 
+                        now.getHours().toString().padStart(2, '0') + ':' + 
+                        now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('targetDate').value = str;
+            startTime = Date.now();
+            solveCountdown();
+        }
+
+        function resetCountdown() {
+            clearInterval(interval);
+            document.getElementById('targetDate').value = "";
+            updateDisplay(0, 0, 0, 0);
+            document.getElementById('status-tag').innerText = "CALCULATOR READY";
+            document.getElementById('percent-tag').innerText = "0% REMAINING";
+            document.getElementById('progressBar').style.width = "0%";
+        }
+
+        async function saveCountdownLog() {
+            const target = document.getElementById('targetDate').value;
+            if (!target) return;
+
+            const btn = document.getElementById('saveBtn');
+            const orig = btn.innerText;
+            btn.innerText = 'SAVING...';
+            btn.disabled = true;
+
+            const inputs = [
+                { label: 'Event', val: document.getElementById('eventName').value },
+                { label: 'Target', val: target }
+            ];
+            const results = [
+                { label: 'Time Remaining', val: document.getElementById('days').innerText + 'D ' + document.getElementById('hours').innerText + 'H', highlight: true }
+            ];
+
+            try {
+                const ok = await window.saveCalcToHistory('Countdown Hub', inputs, results);
+                if (ok) {
+                    btn.innerText = 'SAVED';
+                    btn.classList.add('bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.classList.remove('bg-emerald-600');
+                        btn.disabled = false;
+                        if (typeof initSidebarHistory === 'function') {
+                            initSidebarHistory('Countdown Hub', 'sidebar-history-container');
+                        }
+                    }, 2000);
+                } else {
+                    btn.innerText = orig;
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                btn.innerText = orig;
+                btn.disabled = false;
+            }
+        }
+
+        document.getElementById('targetDate').addEventListener('change', () => {
+             startTime = Date.now();
+             solveCountdown();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                if (typeof initSidebarHistory === 'function') {
+                    initSidebarHistory('Countdown Hub', 'sidebar-history-container');
+                }
+            } catch(e){}
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

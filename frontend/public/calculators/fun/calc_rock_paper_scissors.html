@@ -1,0 +1,384 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Rock Paper Scissors</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .battle-shake { animation: battle-vibration 0.6s infinite; }
+        @keyframes battle-vibration { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @media (max-width: 768px) {
+            main { padding-left: 1rem; padding-right: 1rem; }
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+        <main class="pt-24 pb-20 px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2">Battle Arena.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Choose rock, paper, or scissors and play against the computer or a friend on one screen.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Match History</h3>
+                        <button type="button" onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" title="Clear History">delete_sweep</button>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No games played yet.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="calc_random_number.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Random Number</div>
+                            </div>
+                        </a>
+                        <a href="calc_zodiac.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Zodiac Sign</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-xl p-2 shadow-2xl overflow-hidden">
+                    <div class="bg-surface-container-lowest m-2 rounded-2xl p-8 flex items-center justify-center min-h-[300px] shadow-sm border border-slate-100 relative gap-8 lg:gap-12 overflow-hidden">
+                        <div id="game-overlay" class="absolute inset-0 z-20 bg-white/80 backdrop-blur-md flex flex-col items-center justify-center rounded-2xl opacity-0 pointer-events-none transition-all duration-500 scale-95 border-4 border-primary/20 shadow-2xl">
+                            <span id="overlay-status-icon" class="material-symbols-outlined text-6xl text-primary mb-2">military_tech</span>
+                            <h2 id="overlay-status-text" class="text-3xl font-black text-[#1f2937] tracking-tighter uppercase mb-6 leading-none text-center">Match Over</h2>
+                            <button onclick="hideOverlay()" class="bg-primary text-white px-10 py-4 rounded-xl font-bold text-xs tracking-widest hover:shadow-xl transition-all uppercase shadow-lg shadow-primary/20">Play Again</button>
+                        </div>
+
+                        <div class="absolute top-8 left-8 flex gap-2 flex-wrap">
+                            <span class="px-3 py-1 rounded-lg bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase">Play Area</span>
+                            <span class="px-3 py-1 rounded-lg bg-slate-100 text-[#7a614d] text-[10px] font-black tracking-widest uppercase" id="game-status">Ready</span>
+                        </div>
+
+                        <div class="text-center group">
+                            <div id="p-display" class="w-28 h-28 lg:w-32 lg:h-32 bg-slate-50 border-4 border-slate-200 rounded-3xl flex items-center justify-center text-5xl shadow-sm transition-all group-hover:border-primary/40">?</div>
+                            <p id="player-tag" class="mt-4 text-[9px] font-black tracking-widest text-on-surface-variant uppercase">You</p>
+                        </div>
+                        <div class="text-2xl font-black text-slate-200">VS</div>
+                        <div class="text-center group">
+                            <div id="c-display" class="w-28 h-28 lg:w-32 lg:h-32 bg-slate-50 border-4 border-slate-200 rounded-3xl flex items-center justify-center text-5xl shadow-sm transition-all group-hover:border-primary/40">?</div>
+                            <p id="opponent-tag" class="mt-4 text-[9px] font-black tracking-widest text-on-surface-variant uppercase">Computer</p>
+                        </div>
+                    </div>
+
+                    <div class="p-8 space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div onclick="startCPU()" id="mode-cpu" class="p-6 bg-primary/10 border-2 border-primary rounded-2xl cursor-pointer transition-all hover:scale-105 group">
+                                <span class="material-symbols-outlined text-primary mb-2 text-3xl">smart_toy</span>
+                                <h4 class="text-xs font-bold text-primary tracking-tight">Play Computer</h4>
+                                <p class="text-[10px] text-primary/60 font-medium mt-1">Play against the computer</p>
+                            </div>
+                            <div onclick="startLocal()" id="mode-local" class="p-6 bg-white border border-slate-200 rounded-2xl cursor-pointer transition-all hover:scale-105 group">
+                                <span class="material-symbols-outlined text-slate-400 mb-2 text-3xl group-hover:text-primary transition-colors">group</span>
+                                <h4 class="text-xs font-bold text-slate-800 tracking-tight">With a Friend</h4>
+                                <p class="text-[10px] text-slate-400 font-medium mt-1">Play together</p>
+                            </div>
+                            <div onclick="startOnline()" class="p-6 bg-white border border-slate-200 rounded-2xl cursor-pointer transition-all hover:scale-105 group opacity-50 grayscale hover:grayscale-0 hover:opacity-100">
+                                <span class="material-symbols-outlined text-slate-400 mb-2 text-3xl group-hover:text-primary transition-colors">hub</span>
+                                <h4 class="text-xs font-bold text-slate-800 tracking-tight">Online Match</h4>
+                                <p class="text-[10px] text-slate-400 font-medium mt-1">Available soon</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+                                <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Choice Selection</h4>
+                                <div id="cpu-settings" class="flex gap-4 items-center">
+                                    <select id="cpu-difficulty" class="bg-surface-container border-none rounded-xl text-xs font-bold px-4 py-2 outline-none focus:ring-2 focus:ring-primary transition-all">
+                                        <option value="easy">Easy</option>
+                                        <option value="med">Medium</option>
+                                        <option value="hard">Hard</option>
+                                        <option value="master" selected>Expert</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-6">
+                                <button onclick="playRPS('rock')" class="group relative bg-white border border-slate-100 p-8 rounded-2xl hover:border-primary transition-all hover:shadow-xl hover:-translate-y-1 active:scale-95"><span class="text-5xl">&#9994;</span></button>
+                                <button onclick="playRPS('paper')" class="group relative bg-white border border-slate-100 p-8 rounded-2xl hover:border-primary transition-all hover:shadow-xl hover:-translate-y-1 active:scale-95"><span class="text-5xl">&#9995;</span></button>
+                                <button onclick="playRPS('scissors')" class="group relative bg-white border border-slate-100 p-8 rounded-2xl hover:border-primary transition-all hover:shadow-xl hover:-translate-y-1 active:scale-95"><span class="text-5xl">&#9996;&#65039;</span></button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-4 pt-8 border-t border-slate-200/50">
+                            <div class="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 text-center shadow-sm">
+                                <span class="text-[10px] font-bold text-emerald-800 tracking-tight mb-1 block">Wins</span>
+                                <span id="stat-w" class="text-2xl font-black text-emerald-900">0</span>
+                            </div>
+                            <div class="bg-slate-100 p-6 rounded-2xl border border-slate-200 text-center shadow-sm">
+                                <span class="text-[10px] font-bold text-slate-500 tracking-tight mb-1 block">Ties</span>
+                                <span id="stat-d" class="text-2xl font-black text-slate-800">0</span>
+                            </div>
+                            <div class="bg-rose-50 p-6 rounded-2xl border border-rose-100 text-center shadow-sm">
+                                <span class="text-[10px] font-bold text-rose-800 tracking-tight mb-1 block">Losses</span>
+                                <span id="stat-l" class="text-2xl font-black text-rose-900">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        const STATS_KEY = 'sh_rps_stats_v1';
+        let stats = { w: 0, d: 0, l: 0 };
+        let isMoving = false;
+        let lastMoves = [];
+        let moveWeights = { rock: 0, paper: 0, scissors: 0 };
+        let playMode = 'cpu';
+
+        const emojiMap = {
+            rock: '✓Š',
+            paper: '✓‹',
+            scissors: '✓Œï¸'
+        };
+
+        function loadStats() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(STATS_KEY) || 'null');
+                if (saved && typeof saved === 'object') {
+                    stats = { w: Number(saved.w) || 0, d: Number(saved.d) || 0, l: Number(saved.l) || 0 };
+                }
+            } catch (e) {}
+            document.getElementById('stat-w').innerText = stats.w;
+            document.getElementById('stat-d').innerText = stats.d;
+            document.getElementById('stat-l').innerText = stats.l;
+        }
+
+        function saveStats() {
+            try {
+                localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+            } catch (e) {}
+        }
+
+        function getCPUMove() {
+            const diff = document.getElementById('cpu-difficulty').value;
+            const choices = ['rock', 'paper', 'scissors'];
+
+            if (diff === 'easy') {
+                return choices[Math.floor(Math.random() * choices.length)];
+            }
+
+            if (diff === 'med') {
+                const mostUsed = Object.keys(moveWeights).reduce((a, b) => moveWeights[a] > moveWeights[b] ? a : b);
+                return mostUsed === 'rock' ? 'paper' : (mostUsed === 'paper' ? 'scissors' : 'rock');
+            }
+
+            if (diff === 'hard' || diff === 'master') {
+                const recent = lastMoves[lastMoves.length - 1];
+                if (recent) {
+                    if (recent === 'rock') return 'paper';
+                    if (recent === 'paper') return 'scissors';
+                    if (recent === 'scissors') return 'rock';
+                }
+            }
+
+            return choices[Math.floor(Math.random() * choices.length)];
+        }
+
+        function resolveMatch(playerChoice, opponentChoice) {
+            const status = document.getElementById('game-status');
+            let resultText = '';
+            let resultIcon = 'military_tech';
+
+            if (playerChoice === opponentChoice) {
+                stats.d++;
+                resultText = "It's a tie!";
+                resultIcon = 'handshake';
+            } else if (
+                (playerChoice === 'rock' && opponentChoice === 'scissors') ||
+                (playerChoice === 'paper' && opponentChoice === 'rock') ||
+                (playerChoice === 'scissors' && opponentChoice === 'paper')
+            ) {
+                stats.w++;
+                resultText = 'You won!';
+                resultIcon = 'trophy';
+            } else {
+                stats.l++;
+                resultText = 'You lost!';
+                resultIcon = 'sentiment_dissatisfied';
+            }
+
+            status.innerText = resultText;
+            document.getElementById('stat-w').innerText = stats.w;
+            document.getElementById('stat-d').innerText = stats.d;
+            document.getElementById('stat-l').innerText = stats.l;
+            saveStats();
+            saveMatch(playerChoice, opponentChoice, resultText);
+            showOverlay(resultText, resultIcon);
+            isMoving = false;
+        }
+
+        function playRPS(playerChoice) {
+            if (isMoving) return;
+            isMoving = true;
+            lastMoves.push(playerChoice);
+            moveWeights[playerChoice]++;
+
+            const playerDisplay = document.getElementById('p-display');
+            const opponentDisplay = document.getElementById('c-display');
+
+            playerDisplay.textContent = emojiMap[playerChoice];
+            opponentDisplay.textContent = '✓Š';
+            opponentDisplay.classList.add('battle-shake');
+
+            setTimeout(() => {
+                opponentDisplay.classList.remove('battle-shake');
+                const opponentChoice = playMode === 'cpu' ? getCPUMove() : ['rock', 'paper', 'scissors'][Math.floor(Math.random() * 3)];
+                opponentDisplay.textContent = emojiMap[opponentChoice];
+                resolveMatch(playerChoice, opponentChoice);
+            }, 800);
+        }
+
+        function showOverlay(text, icon) {
+            const overlay = document.getElementById('game-overlay');
+            document.getElementById('overlay-status-text').innerText = text;
+            document.getElementById('overlay-status-icon').innerText = icon;
+            overlay.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+            overlay.classList.add('opacity-100', 'pointer-events-auto', 'scale-100');
+        }
+
+        function hideOverlay() {
+            const overlay = document.getElementById('game-overlay');
+            overlay.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+            overlay.classList.remove('opacity-100', 'pointer-events-auto', 'scale-100');
+            document.getElementById('p-display').textContent = '?';
+            document.getElementById('c-display').textContent = '?';
+            document.getElementById('game-status').innerText = 'Ready';
+        }
+
+        async function saveMatch(playerChoice, opponentChoice, resultText) {
+            if (window.saveCalcToHistory) {
+                await window.saveCalcToHistory(
+                    'Rock Paper Scissors',
+                    [
+                        { label: 'Mode', val: playMode.toUpperCase() },
+                        { label: 'Player Choice', val: playerChoice },
+                        { label: 'Opponent Choice', val: opponentChoice }
+                    ],
+                    [{ label: 'Result', val: resultText }]
+                );
+            }
+
+            if (window.initSidebarHistory) {
+                window.initSidebarHistory('Rock Paper Scissors', 'sidebar-history-container');
+            }
+        }
+
+        function updateModeUI(mode) {
+            const cpuCard = document.getElementById('mode-cpu');
+            const localCard = document.getElementById('mode-local');
+            cpuCard.className = `p-6 ${mode === 'cpu' ? 'bg-primary/10 border-2 border-primary' : 'bg-white border border-slate-200'} rounded-2xl cursor-pointer transition-all hover:scale-105 group`;
+            localCard.className = `p-6 ${mode === 'local' ? 'bg-primary/10 border-2 border-primary' : 'bg-white border border-slate-200'} rounded-2xl cursor-pointer transition-all hover:scale-105 group`;
+        }
+
+        function startCPU() {
+            playMode = 'cpu';
+            document.getElementById('player-tag').innerText = 'You';
+            document.getElementById('opponent-tag').innerText = 'Computer';
+            document.getElementById('cpu-settings').classList.remove('hidden');
+            updateModeUI('cpu');
+            hideOverlay();
+        }
+
+        function startLocal() {
+            playMode = 'local';
+            document.getElementById('player-tag').innerText = 'Player A';
+            document.getElementById('opponent-tag').innerText = 'Player B';
+            document.getElementById('cpu-settings').classList.add('hidden');
+            updateModeUI('local');
+            hideOverlay();
+        }
+
+        function startOnline() {
+            alert('Online Rock Paper Scissors is not available yet. Please use the Game Lobby for multiplayer updates.');
+            window.location.href = '/GameLobby.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initSidebarHistory) {
+                window.initSidebarHistory('Rock Paper Scissors', 'sidebar-history-container');
+            }
+            loadStats();
+            startCPU();
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    
+
+
+
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

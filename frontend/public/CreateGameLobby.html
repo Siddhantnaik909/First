@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Create Room | Smart Hub Games</title>
+    
+    <!-- Material Symbols & Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+        <link rel="stylesheet" href="/css/design-system.css">
+    <!-- Auth System -->
+    <script src="/js/auth.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(15, 23, 42, 0.08); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+
+        <!-- Unified Navbar Component Placeholder -->
+    <div id="header-placeholder"></div>
+
+<main class="main-content-wrapper flex flex-col items-center justify-center min-h-[calc(100vh-64px)] px-4 pb-20 bg-surface">
+        <div class="w-full max-w-2xl">
+            <div class="glass-card rounded-3xl shadow-xl overflow-hidden transition-all duration-300">
+                <!-- Header -->
+                <div class="p-10 pb-4 text-center">
+                    <h1 class="text-4xl font-black tracking-tighter text-on-surface mb-3">Create New Room</h1>
+                    <p class="text-on-surface-variant font-medium">Set up your lobby and invite players to join the action.</p>
+                </div>
+
+                <!-- Form Body -->
+                <form id="create-room-form" class="p-10 space-y-8">
+                    <div class="space-y-4">
+                        <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">Room Name</label>
+                        <div class="relative group">
+                            <input class="w-full px-6 py-5 bg-surface-container-low border-none rounded-2xl text-lg font-bold tracking-tight focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm" 
+                                   id="room-name" placeholder="Enter a cool name..." type="text" required/>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">Game Selection</label>
+                        <div class="relative">
+                            <select class="w-full appearance-none px-6 py-5 bg-surface-container-low border-none rounded-2xl text-lg font-bold tracking-tight focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm !bg-none" 
+                                    id="game-select">
+                                <option value="tic_tac_toe">Tic Tac Toe</option>
+                                <option value="connect4">Connect 4</option>
+                                <option value="rock_paper_scissors">Rock Paper Scissors</option>
+                                <option value="chess">Multiplayer Chess</option>
+                                <option value="arcade">Car Racing</option>
+                            </select>
+                            <span class="absolute right-6 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline pointer-events-none">expand_more</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button id="create-btn" class="w-full py-5 bg-gradient-to-r from-[#c96f32] to-[#2f9c95] text-white font-black text-lg rounded-2xl shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 uppercase tracking-widest">
+                            <span>Create Room</span>
+                            <span class="material-symbols-outlined font-black">rocket_launch</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Waiting Area (Hidden) -->
+                <div id="waiting-area" class="hidden p-10 space-y-10 text-center flex flex-col items-center">
+                    <div class="space-y-2">
+                        <h2 class="text-3xl font-black tracking-tighter text-on-surface">Room Created!</h2>
+                        <p class="text-on-surface-variant font-bold">Share this code with your friend</p>
+                    </div>
+                    
+                    <div class="bg-primary/5 p-8 rounded-3xl border border-primary/10 inline-block mx-auto min-w-[300px] shadow-inner">
+                        <span id="display-room-code" class="text-6xl font-black tracking-[0.3em] text-primary">------</span>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-4 text-on-surface-variant bg-surface-container-low px-8 py-4 rounded-full border border-slate-100 shadow-sm">
+                        <span id="spinner-icon" class="material-symbols-outlined animate-spin text-primary text-2xl">sync</span>
+                        <span id="waiting-status" class="font-black text-xs uppercase tracking-widest">Waiting for player...</span>
+                    </div>
+
+                    <button id="start-match-btn" class="hidden w-full py-5 bg-emerald-500 text-white font-black text-lg rounded-2xl shadow-2xl shadow-emerald-500/30 transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3 uppercase tracking-widest">
+                        <span>Start Match</span>
+                        <span class="material-symbols-outlined font-black">play_arrow</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    
+    
+
+
+
+
+
+
+    <!-- Scripts -->
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script type="module" src="/js/script.js"></script>
+    <script src="/js/multiplayerClient.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('create-room-form');
+            const waitingArea = document.getElementById('waiting-area');
+            const codeDisplay = document.getElementById('display-room-code');
+            const statusDisplay = document.getElementById('waiting-status');
+            const spinnerIcon = document.getElementById('spinner-icon');
+            const startBtn = document.getElementById('start-match-btn');
+            
+            if (window.MultiplayerClient && form) {
+                let client = null;
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const selectedGame = document.getElementById('game-select').value;
+                    const roomName = document.getElementById('room-name').value;
+                    
+                    client = new window.MultiplayerClient("GameLobby", (players) => {
+                        const opp = players.find(p => p.id !== client.socket.id);
+                        if (opp) {
+                            statusDisplay.textContent = `${opp.username} Joined!`;
+                            spinnerIcon.textContent = 'check_circle';
+                            spinnerIcon.classList.replace('animate-spin', 'text-emerald-500');
+                            startBtn.classList.remove('hidden');
+                        }
+                    });
+
+                    client.onRoomReady = (code) => {
+                        form.classList.add('hidden');
+                        waitingArea.classList.remove('hidden');
+                        codeDisplay.textContent = code;
+                    };
+
+                    client.createRoom(roomName);
+                    
+                    startBtn.addEventListener('click', () => {
+                        let gamePath = "/calculators/fun/game_tic_tac_toe.html";
+                        if (selectedGame === 'chess') gamePath = "/calculators/fun/game_chess.html";
+                        else if (selectedGame === 'arcade') gamePath = "/calculators/fun/game_car_racing.html";
+                        else if (selectedGame === 'connect4') gamePath = "/calculators/fun/game_connect4.html";
+                        else if (selectedGame === 'rock_paper_scissors') gamePath = "/calculators/fun/calc_rock_paper_scissors.html";
+                        client.launchGame(gamePath);
+                    });
+                });
+            }
+        });
+    </script>
+
+    <!-- Unified Footer -->
+    <footer class="w-full py-12 sm:py-16 border-t border-surface-container-high bg-surface-container-low dark:border-[#1e293b]/50 dark:bg-[#0f172a] font-['Plus_Jakarta_Sans'] text-on-surface">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 flex flex-col gap-8 lg:flex-row justify-between lg:items-center">
+            <div>
+                <span class="text-xl font-black tracking-tighter text-[#1f2937] dark:text-white">SMART HUB</span>
+                <p class="text-[10px] font-bold text-slate-500 dark:text-[#94a3b8] uppercase tracking-[0.3em] mt-2">© 2026 Simplifying your student life</p>
+            </div>
+            <div class="flex flex-wrap gap-6 sm:gap-12 text-[9px] font-black text-slate-500 dark:text-[#94a3b8] uppercase tracking-[0.3em]">
+                <a class="hover:text-primary transition-colors dark:hover:text-primary" href="/about.html">About</a>
+                <a class="hover:text-primary transition-colors dark:hover:text-primary" href="/contact.html">Contact</a>
+                <a class="hover:text-primary transition-colors dark:hover:text-primary" href="/history.html">History</a>
+                <a class="hover:text-primary transition-colors dark:hover:text-primary" href="/settings.html">Settings</a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="footer-placeholder"></div>
+    <script src="/js/component-loader.js"></script>
+
+</body>
+</html>

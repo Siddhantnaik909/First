@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Join Room | Smart Hub Games</title>
+    
+    <!-- Material Symbols & Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+        <link rel="stylesheet" href="/css/design-system.css">
+    <!-- Auth System -->
+    <script src="/js/auth.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(15, 23, 42, 0.08); }
+        .room-token:focus { letter-spacing: 0.8em; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+
+        <!-- Unified Navbar Component Placeholder -->
+    <div id="header-placeholder"></div>
+
+<main class="main-content-wrapper flex flex-col items-center justify-center min-h-[calc(100vh-64px)] px-4 pb-20 bg-surface">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start max-w-[1440px] mx-auto w-full">
+            
+            <!-- Join Section -->
+            <div class="lg:col-span-5 space-y-10">
+                <div class="space-y-4">
+                    <h1 class="text-5xl font-black tracking-tighter text-on-surface leading-tight">Join a Session</h1>
+                    <p class="text-on-surface-variant text-xl font-medium">Enter a unique code to jump into a private lobby with friends.</p>
+                </div>
+
+                <div class="glass-card p-12 rounded-[2.5rem] shadow-2xl space-y-10">
+                    <div class="space-y-6">
+                        <label class="block text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant opacity-70">6-digit Room Code</label>
+                        <input id="room-code-input" class="room-token w-full bg-slate-50 border-none rounded-2xl p-8 text-center text-4xl font-black tracking-[0.5em] uppercase focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all placeholder:text-slate-200 text-primary" maxlength="6" placeholder="------" type="text"/>
+                    </div>
+
+                    <button id="join-btn" class="w-full bg-gradient-to-r from-[#c96f32] to-[#2f9c95] text-white py-6 rounded-2xl font-black text-xl shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-95 transition-all flex justify-center items-center gap-4 uppercase tracking-widest">
+                        <span>Join Game</span>
+                        <span class="material-symbols-outlined font-black">login</span>
+                    </button>
+
+                    <div class="pt-12 flex items-center justify-center gap-3 text-on-surface-variant/40">
+                        <span class="material-symbols-outlined text-lg">shield</span>
+                        <span class="text-[10px] font-black uppercase tracking-[0.2em]">Encrypted Session</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Public Rooms Section -->
+            <div class="lg:col-span-7 space-y-8">
+                <div class="flex justify-between items-end px-4">
+                    <div class="space-y-2">
+                        <h2 class="text-3xl font-black tracking-tighter text-on-surface">Live Lobbies</h2>
+                        <p class="text-on-surface-variant font-bold text-sm">Active matches seeking players</p>
+                    </div>
+                    <button onclick="refreshRooms()" class="bg-primary/5 text-primary p-4 rounded-2xl font-black text-xs flex items-center gap-2 hover:bg-primary/10 transition-all border border-primary/10">
+                        REFRESH LIST <span class="material-symbols-outlined text-sm font-black">refresh</span>
+                    </button>
+                </div>
+
+                <div id="rooms-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Skeletons -->
+                    <div class="col-span-full py-20 text-center text-slate-300">
+                        <span class="material-symbols-outlined animate-spin text-5xl mb-4 block">sync</span>
+                        <p class="text-[10px] font-black uppercase tracking-[0.3em]">Scanning for active channels...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    
+    
+
+
+
+
+
+
+    <!-- Scripts -->
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script type="module" src="/js/script.js"></script>
+    <script src="/js/multiplayerClient.js"></script>
+    <script>
+        async function refreshRooms() {
+            const container = document.getElementById('rooms-container');
+            container.innerHTML = `
+                <div class="col-span-full py-20 text-center text-slate-300">
+                    <span class="material-symbols-outlined animate-spin text-5xl mb-4 block">sync</span>
+                    <p class="text-[10px] font-black uppercase tracking-[0.3em]">Updating Room List...</p>
+                </div>
+            `;
+            
+            try {
+                const res = await fetch('/api/games/rooms');
+                const rooms = await res.json();
+                
+                if (rooms.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-span-full py-20 flex flex-col items-center justify-center text-center space-y-6 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
+                            <span class="material-symbols-outlined text-6xl text-slate-200">sensors_off</span>
+                            <div>
+                                <h4 class="font-black text-on-surface">No active lobbies</h4>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-2">Start a new one to play with others</p>
+                            </div>
+                            <a href="/CreateGameLobby.html" class="bg-primary text-white px-8 py-3 rounded-xl font-black text-xs shadow-lg hover:scale-105 transition-all">CREATE ROOM</a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = rooms.map(room => `
+                    <div onclick="selectRoom('${room.roomCode}')" class="group glass-card p-8 rounded-3xl hover:shadow-2xl transition-all cursor-pointer border-transparent hover:border-primary/20">
+                        <div class="flex justify-between items-start mb-10">
+                            <span class="bg-emerald-50 text-emerald-600 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">Public Match</span>
+                            <div class="flex items-center gap-2 text-primary font-black">
+                                <span class="material-symbols-outlined text-lg">group</span>
+                                <span class="text-sm">${room.playerCount}/2</span>
+                            </div>
+                        </div>
+                        <h3 class="font-black text-2xl text-on-surface mb-1">${room.roomName || 'Room ' + room.roomCode}</h3>
+                        <p class="text-on-surface-variant font-bold text-sm mb-10">Hosted by <span class="text-primary">${room.host}</span></p>
+                        <div class="flex items-center justify-between pt-12 border-t border-slate-50">
+                             <span class="text-[10px] text-slate-300 font-bold uppercase tracking-widest">${new Date(room.createdAt).toLocaleTimeString()}</span>
+                             <span class="material-symbols-outlined text-primary group-hover:translate-x-2 transition-transform font-black">arrow_forward</span>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = `<p class="col-span-full text-center text-red-500 font-black p-20 uppercase tracking-widest">Signal loss: Failed to fetch rooms.</p>`;
+            }
+        }
+
+        function selectRoom(code) {
+            document.getElementById('room-code-input').value = code;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshRooms();
+            const joinBtn = document.getElementById('join-btn');
+            const codeInput = document.getElementById('room-code-input');
+            
+            if (window.MultiplayerClient && joinBtn && codeInput) {
+                const client = new window.MultiplayerClient("GameLobby", (players) => {
+                    const opp = players.find(p => p.id !== client.socket.id);
+                    if (opp) {
+                        joinBtn.innerHTML = `<span>Session Established</span>`;
+                        joinBtn.className = joinBtn.className.replace('bg-primary', 'bg-emerald-500');
+                    }
+                });
+
+                joinBtn.addEventListener('click', () => {
+                    const code = codeInput.value.trim().toUpperCase();
+                    if (code.length === 6) {
+                        joinBtn.innerHTML = `<span class="animate-pulse">Connecting...</span>`;
+                        client.joinRoom(code);
+                    } else {
+                        alert("Please enter a valid 6-character room code.");
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Unified Footer -->
+    <footer class="w-full py-12 sm:py-16 border-t border-surface-container-high bg-surface-container-low dark:border-[#1e293b]/50 dark:bg-[#0f172a] font-['Plus_Jakarta_Sans'] text-on-surface">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 flex flex-col gap-8 lg:flex-row justify-between lg:items-center">
+            <div>
+                <span class="text-xl font-black tracking-tighter text-[#1f2937] dark:text-white">SMART HUB</span>
+                <p class="text-[10px] font-bold text-slate-500 dark:text-[#94a3b8] uppercase tracking-[0.3em] mt-2">© 2026 Simplifying your student life</p>
+            </div>
+            <div class="flex flex-wrap gap-6 sm:gap-12 text-[9px] font-black text-slate-500 dark:text-[#94a3b8] uppercase tracking-[0.3em]">
+                <a class="hover:text-primary transition-colors dark:hover:text-primary" href="/about.html">About</a>
+                <a class="hover:text-primary transition-colors dark:hover:text-primary" href="/contact.html">Contact</a>
+                <a class="hover:text-primary transition-colors dark:hover:text-primary" href="/history.html">History</a>
+                <a class="hover:text-primary transition-colors dark:hover:text-primary" href="/settings.html">Settings</a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="footer-placeholder"></div>
+    <script src="/js/component-loader.js"></script>
+
+</body>
+</html>

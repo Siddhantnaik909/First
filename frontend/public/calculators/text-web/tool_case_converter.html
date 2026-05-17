@@ -1,0 +1,258 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Case Converter</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Case Studio.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Quickly change text between uppercase, lowercase, title case, and more. Perfect for fixing formatting in list, essays, or code.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Recent Changes</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent changes.</p>
+                    </div>
+                </div>
+
+                <div class="bg-purple-900 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">text_fields</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">info</span> Writing Tip
+                     </h4>
+                     <p class="text-purple-100 text-[11px] leading-relaxed mb-4 opacity-80">
+                        Title Case is great for book titles and headers, making your writing look professional and polished!
+                     </p>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="tool_word_counter.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Copy Lab</div>
+                            </div>
+                        </a>
+                        <a href="tool_lorem_ipsum.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Lorem Studio</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-8">
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                             <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block tracking-widest">Type or Paste Text</label>
+                             <textarea id="caseInput" placeholder="Start typing here..." class="w-full h-48 bg-white border border-slate-100 rounded-3xl px-8 py-6 font-medium text-lg focus:ring-2 focus:ring-primary outline-none transition-all resize-none shadow-inner"></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                             <div class="space-y-2">
+                                <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1 block">Choose Format</label>
+                                <select id="caseType" class="w-full bg-white border border-slate-100 rounded-2xl px-6 py-4 font-bold text-sm outline-none focus:ring-2 focus:ring-primary shadow-sm appearance-none">
+                                    <option value="upper">Uppercase (All Caps)</option>
+                                    <option value="lower">Lowercase (All Small)</option>
+                                    <option value="title">Title Case (First Letters Big)</option>
+                                    <option value="sentence">Sentence Case (Start of Sentences)</option>
+                                    <option value="camel">Camel Case (For Coding)</option>
+                                    <option value="pascal">Pascal Case (For Classes)</option>
+                                    <option value="snake">Snake Case (Under_Scores)</option>
+                                    <option value="kebab">Kebab Case (Dashes-In-Middle)</option>
+                                </select>
+                             </div>
+                             <div class="flex items-end gap-2">
+                                <button onclick="convert()" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Convert Now</button>
+                                <button onclick="resetForms()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined">restart_alt</span>
+                                </button>
+                             </div>
+                        </div>
+                    </div>
+
+                    <div id="results" class="hidden space-y-6">
+                        <div class="bg-white p-8 rounded-3xl border border-slate-50 shadow-sm space-y-4">
+                             <div class="flex justify-between items-center">
+                                <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Converted Result</h4>
+                                <div class="flex gap-2">
+                                    <button onclick="copyToClipboard()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors" title="Copy">
+                                        <span id="copy-icon" class="material-symbols-outlined text-sm">content_copy</span>
+                                    </button>
+                                    <button onclick="downloadAsFile()" class="p-3 bg-slate-50 rounded-xl text-slate-400 hover:text-primary transition-all shadow-sm" title="Download">
+                                        <span class="material-symbols-outlined text-sm">download</span>
+                                    </button>
+                                </div>
+                             </div>
+                             <textarea id="caseResult" readonly class="w-full h-48 bg-slate-50 border-none rounded-2xl px-6 py-4 font-mono text-sm focus:ring-0 outline-none transition-all resize-none"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Actions -->
+                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-end items-center gap-4">
+                        <div class="flex gap-3">
+                            <button onclick="saveToHistory()" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Save Result</button>
+                            <button onclick="window.print()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined">print</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let lastResult = "";
+        let lastMode = "";
+
+        function convert() {
+            const input = document.getElementById('caseInput').value;
+            const mode = document.getElementById('caseType').value;
+            if (!input.trim()) return alert("Please enter some text first!");
+
+            let result = "";
+            switch (mode) {
+                case 'upper': result = input.toUpperCase(); break;
+                case 'lower': result = input.toLowerCase(); break;
+                case 'title': result = input.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '); break;
+                case 'sentence': result = input.toLowerCase().replace(/(^\s*\w|[\.\!\?]\s*\w)/g, c => c.toUpperCase()); break;
+                case 'camel': result = input.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, c) => c.toUpperCase()); break;
+                case 'pascal': 
+                    const camel = input.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, c) => c.toUpperCase());
+                    result = camel.charAt(0).toUpperCase() + camel.slice(1);
+                    break;
+                case 'snake': result = input.toLowerCase().trim().replace(/[\s\W]+/g, '_'); break;
+                case 'kebab': result = input.toLowerCase().trim().replace(/[\s\W]+/g, '-'); break;
+            }
+
+            lastResult = result;
+            lastMode = mode;
+            document.getElementById('caseResult').value = result;
+            document.getElementById('results').classList.remove('hidden');
+            window.scrollTo({ top: document.getElementById('results').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function copyToClipboard() {
+            const area = document.getElementById('caseResult');
+            area.select();
+            document.execCommand('copy');
+            const icon = document.getElementById('copy-icon');
+            icon.textContent = 'check';
+            setTimeout(() => icon.textContent = 'content_copy', 2000);
+        }
+
+        function downloadAsFile() {
+            const blob = new Blob([lastResult], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `converted_text_${new Date().getTime()}.txt`;
+            a.click();
+        }
+
+        async function saveToHistory() {
+            if (!lastResult) return;
+            const inputSummary = document.getElementById('caseInput').value.substring(0, 30) + "...";
+            const inputs = [{ label: 'Text', val: inputSummary }];
+            const results = [
+                { label: 'Mode', val: lastMode.toUpperCase(), highlight: true },
+                { label: 'Length', val: lastResult.length + ' chars' }
+            ];
+            const ok = await window.saveCalcToHistory('Case Converter', inputs, results);
+            if (ok) initSidebarHistory('Case Converter', 'sidebar-history-container');
+        }
+
+        function resetForms() {
+            document.getElementById('caseInput').value = '';
+            document.getElementById('results').classList.add('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('Case Converter', 'sidebar-history-container');
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

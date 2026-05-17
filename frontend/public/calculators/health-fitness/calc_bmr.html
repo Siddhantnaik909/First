@@ -1,0 +1,303 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Metabolism Tracker (BMR)</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Energy Burn.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Discover how many calories your body burns just by resting. This helps you plan your meals and reach your fitness goals faster!</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Past Analyses</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent analyses.</p>
+                    </div>
+                </div>
+
+                <div class="bg-indigo-900 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">local_fire_department</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">info</span> Metabolism Tip
+                     </h4>
+                     <p class="text-indigo-100 text-[11px] leading-relaxed mb-4 opacity-80">
+                        Even when you're sleeping, your body is working hard! Use this number as your base for counting daily calories.
+                     </p>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="calc_bmi.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Body Wellness</div>
+                            </div>
+                        </a>
+                        <a href="calc_body_fat.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Fat vs Muscle</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-6">
+                    <!-- Display -->
+                    <div class="bg-white rounded-2xl p-8 text-right flex flex-col justify-end min-h-[220px] border border-slate-100 shadow-sm relative overflow-hidden">
+                        <div class="absolute top-8 left-8 flex gap-2">
+                            <span class="px-3 py-1 rounded-lg bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase">MINIMUM CALORIES</span>
+                            <span class="px-3 py-1 rounded-lg bg-emerald-100 text-emerald-700 text-[10px] font-black tracking-widest uppercase" id="status-tag">AWAKE & RESTING</span>
+                        </div>
+                        <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]">Awaiting Your Info</div>
+                        <div id="calc-display" class="text-6xl font-extrabold tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden uppercase">
+                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0 kcal
+                        </div>
+                    </div>
+
+                    <!-- Inputs -->
+                    <div class="p-8 pb-4 space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-4">
+                                <div class="space-y-4">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block tracking-widest">Select Gender</label>
+                                        <select id="bmrGender" onchange="calculateBMR()" class="w-full bg-white border border-slate-100 rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-lg shadow-sm cursor-pointer">
+                                            <option value="male">MALE</option>
+                                            <option value="female">FEMALE</option>
+                                        </select>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="space-y-2">
+                                            <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block tracking-widest">Age (Years)</label>
+                                            <input type="number" id="bmrAge" oninput="calculateBMR()" class="w-full bg-white border border-slate-100 rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-lg shadow-sm" placeholder="25">
+                                        </div>
+                                        <div class="space-y-2">
+                                            <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block tracking-widest">Weight (kg)</label>
+                                            <input type="number" id="bmrWeight" oninput="calculateBMR()" class="w-full bg-white border border-slate-100 rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-lg shadow-sm" placeholder="70">
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block tracking-widest">Height (cm)</label>
+                                        <input type="number" id="bmrHeight" oninput="calculateBMR()" class="w-full bg-white border border-slate-100 rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-lg shadow-sm" placeholder="175">
+                                    </div>
+                                </div>
+                                <button onclick="resetInputs()" class="w-full py-4 bg-slate-100 rounded-xl text-slate-400 font-bold text-[10px] uppercase tracking-widest hover:text-primary hover:bg-white transition-all shadow-sm">Reset Profile</button>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="p-8 bg-primary/5 border border-primary/10 rounded-2xl space-y-6 h-full flex flex-col justify-center">
+                                    <div id="efficiency-container">
+                                        <div class="flex justify-between items-center text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">
+                                            <span>Body Metabolism</span>
+                                            <span id="resEfficiency" class="text-primary font-black">0%</span>
+                                        </div>
+                                        <div class="w-full bg-slate-200 rounded-full h-1 overflow-hidden">
+                                            <div id="resFill" class="bg-primary h-full transition-all duration-1000" style="width: 0%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <p class="text-[10px] font-black text-primary uppercase tracking-widest">Health Insight</p>
+                                        <p id="bmrInsight" class="text-[11px] text-on-surface-variant leading-relaxed font-medium italic">"Input your age and weight to see how your metabolism works."</p>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                                        <h5 class="font-black uppercase tracking-widest text-[8px] text-slate-400 mb-2">Daily Protein Goal</h5>
+                                        <p id="proteinEst" class="text-xl font-black text-on-surface">0 g</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Actions -->
+                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-end items-center gap-4">
+                        <div class="flex gap-3">
+                                <button id="save-btn" onclick="saveBMRLog()" class="hidden bg-primary text-white px-8 py-4 rounded-xl font-black text-[10px] tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] transition-all">Save Result</button>
+                                <button onclick="window.print()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined">print</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metrics -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 text-center shadow-sm">
+                        <h5 class="font-black uppercase tracking-widest text-[8px] text-slate-400 mb-2">Weekly Base</h5>
+                        <p id="metWeekly" class="text-sm font-black text-on-surface uppercase tracking-tight">0 kcal</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 text-center shadow-sm">
+                        <h5 class="font-black uppercase tracking-widest text-[8px] text-slate-400 mb-2">Daily Water</h5>
+                        <p id="metWater" class="text-sm font-black text-on-surface uppercase tracking-tight">0.0 L</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 text-center shadow-sm">
+                        <h5 class="font-black uppercase tracking-widest text-[8px] text-slate-400 mb-2">Resting Watts</h5>
+                        <p id="metWatts" class="text-sm font-black text-primary uppercase tracking-tight">0 W</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 text-center shadow-sm">
+                        <h5 class="font-black uppercase tracking-widest text-[8px] text-slate-400 mb-2">Energy Index</h5>
+                        <p id="metIndex" class="text-sm font-black text-on-surface uppercase tracking-tight">A+</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        function calculateBMR() {
+            const gender = document.getElementById('bmrGender').value;
+            const age = parseFloat(document.getElementById('bmrAge').value);
+            const weight = parseFloat(document.getElementById('bmrWeight').value);
+            const height = parseFloat(document.getElementById('bmrHeight').value);
+            const display = document.getElementById('calc-display');
+            const status = document.getElementById('calc-status');
+            const protEl = document.getElementById('proteinEst');
+            const efficiencyEl = document.getElementById('resEfficiency');
+            const fillEl = document.getElementById('resFill');
+            const saveBtn = document.getElementById('save-btn');
+
+            if (isNaN(age) || isNaN(weight) || isNaN(height) || age <= 0 || weight <= 0 || height <= 0) {
+                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0 kcal`;
+                status.innerText = "Awaiting Your Info";
+                protEl.innerText = "0 g";
+                efficiencyEl.innerText = "0%";
+                fillEl.style.width = "0%";
+                saveBtn.classList.add('hidden');
+                resetMetrics();
+                return;
+            }
+
+            let bmr = (10 * weight) + (6.25 * height) - (5 * age);
+            bmr = (gender === 'male') ? bmr + 5 : bmr - 161;
+            const finalBmr = Math.round(bmr);
+            display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${finalBmr} kcal`;
+            status.innerText = "Metabolism Calculated";
+            saveBtn.classList.remove('hidden');
+
+            const prot = Math.round(weight * 1.2);
+            protEl.innerText = prot + " g";
+            const efficiency = Math.min(Math.round((finalBmr / 2500) * 100), 100);
+            efficiencyEl.innerText = efficiency + "%";
+            fillEl.style.width = efficiency + "%";
+            
+            document.getElementById('bmrInsight').innerText = `Your body needs at least ${finalBmr} calories every day just to function properly while resting.`;
+            updateMetrics(finalBmr, weight);
+        }
+
+        function updateMetrics(bmr, weight) {
+            document.getElementById('metWeekly').innerText = (bmr * 7).toLocaleString() + " kcal";
+            document.getElementById('metWater').innerText = (weight * 0.033).toFixed(1) + " L";
+            document.getElementById('metWatts').innerText = (bmr / 864 * 4.184).toFixed(1) + " W";
+            document.getElementById('metIndex').innerText = bmr > 1500 ? "Active" : "Stable";
+        }
+
+        function resetMetrics() {
+            document.querySelectorAll('[id^="met"]').forEach(el => el.innerText = '---');
+        }
+
+        function resetInputs() {
+            ['bmrAge', 'bmrWeight', 'bmrHeight'].forEach(id => document.getElementById(id).value = '');
+            calculateBMR();
+        }
+
+        async function saveBMRLog() {
+            const val = document.getElementById('calc-display').innerText.trim();
+            if (val === '0 kcal') return;
+            const inputs = [
+                { label: 'Gender', val: document.getElementById('bmrGender').value.toUpperCase() },
+                { label: 'Weight', val: document.getElementById('bmrWeight').value + ' kg' }
+            ];
+            const results = [
+                { label: 'BMR Calories', val: val, highlight: true },
+                { label: 'Energy %', val: document.getElementById('resEfficiency').innerText }
+            ];
+            const ok = await window.saveCalcToHistory('BMR Calculator', inputs, results);
+            if (ok) initSidebarHistory('BMR Calculator', 'sidebar-history-container');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('BMR Calculator', 'sidebar-history-container');
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

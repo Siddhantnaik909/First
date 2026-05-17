@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | IP Subnet Calculator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #3b82f6; } /* Blue for Network tools */
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Subnet Studio.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Easily calculate your IP range, subnet mask, and host capacity for home or business networks.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(59,130,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-blue-800">Recent Networks</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent networks.</p>
+                    </div>
+                </div>
+
+                <div class="bg-blue-900 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">router</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">info</span> Router Tip
+                     </h4>
+                     <p class="text-blue-100 text-[11px] leading-relaxed mb-4 opacity-80">
+                        A CIDR of `/24` is most common for home networks, giving you up to 254 usable devices!
+                     </p>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="tool_whois.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">IP Geo Lab</div>
+                            </div>
+                        </a>
+                        <a href="tool_dns_lookup.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">DNS Hub</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Network Info</h4>
+                            <div class="space-y-4">
+                                <div class="space-y-2">
+                                    <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1 block">IP Address</label>
+                                    <input type="text" id="subnetIP" placeholder="192.168.1.1" class="w-full bg-white border border-slate-100 rounded-2xl px-6 py-4 font-mono font-bold text-xl outline-none focus:ring-2 focus:ring-primary shadow-sm">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1 block">CIDR (0-32)</label>
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-3xl font-black text-slate-300">/</span>
+                                        <input type="number" id="subnetCIDR" value="24" min="0" max="32" class="w-full bg-white border border-slate-100 rounded-2xl px-6 py-4 font-bold text-xl outline-none focus:ring-2 focus:ring-primary shadow-sm">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 pt-4">
+                                <button onclick="calculateSubnet()" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Calculate Range</button>
+                                <button onclick="clearData()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined">restart_alt</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="results-display" class="hidden space-y-6">
+                            <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Network Results</h4>
+                            <div class="bg-white p-8 rounded-3xl border border-slate-50 shadow-sm space-y-6">
+                                <div class="space-y-1">
+                                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">Network Base</span>
+                                    <span id="netAddr" class="text-3xl font-black text-primary font-mono block tracking-tighter">--.---.---.---</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Broadcast</span>
+                                        <span id="broadAddr" class="text-xs font-black text-on-surface font-mono">--.---</span>
+                                    </div>
+                                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-right">
+                                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Total Hosts</span>
+                                        <span id="hostCount" class="text-xs font-black text-on-surface">---</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="neighbor-block" class="hidden pt-8 border-t border-slate-100">
+                         <h6 class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant flex items-center gap-2 mb-6">
+                            <span class="material-symbols-outlined text-sm">hub</span> Adjacent Networks
+                         </h6>
+                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-white p-6 rounded-2xl border border-slate-50 opacity-50 text-center">
+                                <span class="text-[9px] font-bold text-slate-400 uppercase block mb-1">Previous</span>
+                                <span id="prevNet" class="text-xs font-bold font-mono">--.--</span>
+                            </div>
+                            <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100 text-center scale-105 shadow-xl">
+                                <span class="text-[9px] font-bold text-primary uppercase block mb-1">Current</span>
+                                <span id="currNet" class="text-xs font-black font-mono text-primary">--.--</span>
+                            </div>
+                            <div class="bg-white p-6 rounded-2xl border border-slate-50 opacity-50 text-center">
+                                <span class="text-[9px] font-bold text-slate-400 uppercase block mb-1">Next</span>
+                                <span id="nextNet" class="text-xs font-bold font-mono">--.--</span>
+                            </div>
+                         </div>
+                    </div>
+
+                    <!-- Navigation Actions -->
+                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-end items-center gap-4">
+                        <div class="flex gap-3">
+                            <button onclick="saveToHistory()" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Save Result</button>
+                            <button onclick="window.print()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined">print</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let lastAnalysis = null;
+
+        function ipToLong(ip) {
+            return ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet, 10), 0) >>> 0;
+        }
+
+        function longToIp(long) {
+            return [
+                (long >>> 24) & 0xFF,
+                (long >>> 16) & 0xFF,
+                (long >>> 8) & 0xFF,
+                long & 0xFF
+            ].join('.');
+        }
+
+        function calculateSubnet() {
+            const ipStr = document.getElementById('subnetIP').value.trim();
+            const cidr = parseInt(document.getElementById('subnetCIDR').value);
+
+            // Fixed Regex (no spaces in {} quantifier)
+            if (!/^(\d{1,3}\.){3}\d{1,3}$/.test(ipStr) || isNaN(cidr) || cidr < 0 || cidr > 32) {
+                alert("Please enter a valid IP (e.g., 192.168.1.1) and CIDR (0-32)");
+                return;
+            }
+
+            const ipLong = ipToLong(ipStr);
+            const maskLong = cidr === 0 ? 0 : (0xFFFFFFFF << (32 - cidr)) >>> 0;
+            const netLong = (ipLong & maskLong) >>> 0;
+            const broadcastLong = (netLong | ~maskLong) >>> 0;
+            const blockSize = Math.pow(2, 32 - cidr);
+
+            document.getElementById('results-display').classList.remove('hidden');
+            document.getElementById('neighbor-block').classList.remove('hidden');
+
+            document.getElementById('netAddr').innerText = longToIp(netLong) + ' /' + cidr;
+            document.getElementById('broadAddr').innerText = longToIp(broadcastLong);
+            document.getElementById('hostCount').innerText = blockSize.toLocaleString();
+
+            const prevNet = (netLong - blockSize) >>> 0;
+            const nextNet = (netLong + blockSize) >>> 0;
+
+            document.getElementById('prevNet').innerText = longToIp(prevNet) + ' /' + cidr;
+            document.getElementById('currNet').innerText = longToIp(netLong) + ' /' + cidr;
+            document.getElementById('nextNet').innerText = longToIp(nextNet) + ' /' + cidr;
+
+            lastAnalysis = { ip: ipStr, cidr, net: longToIp(netLong), hosts: blockSize };
+        }
+
+        function clearData() {
+            document.getElementById('subnetIP').value = '';
+            document.getElementById('subnetCIDR').value = '24';
+            document.getElementById('results-display').classList.add('hidden');
+            document.getElementById('neighbor-block').classList.add('hidden');
+            lastAnalysis = null;
+        }
+
+        async function saveToHistory() {
+            if (!lastAnalysis) return;
+            const inputs = [
+                { label: 'Origin', val: lastAnalysis.ip },
+                { label: 'Prefix', val: '/' + lastAnalysis.cidr }
+            ];
+            const results = [
+                { label: 'Network', val: lastAnalysis.net, highlight: true },
+                { label: 'Hosts', val: lastAnalysis.hosts.toLocaleString() }
+            ];
+            const ok = await window.saveCalcToHistory('Subnet Studio', inputs, results);
+            if (ok) initSidebarHistory('Subnet Studio', 'sidebar-history-container');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('Subnet Studio', 'sidebar-history-container');
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

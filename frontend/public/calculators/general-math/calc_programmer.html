@@ -1,0 +1,313 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Programmer Calculator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2">Programmer Calculator.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Convert between Binary, Octal, Decimal, and Hexadecimal. Ideal for developers and testers working with memory addresses or low-level data!</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent registers.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="/calculators/general-math/calc_scientific.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Scientific Calc</div>
+                            </div>
+                        </a>
+                        <a href="/calculators/general-math/calc_math_toolkit.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Math Toolkit</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-xl p-2 shadow-2xl overflow-hidden">
+                    <!-- Console Display -->
+                    <div class="bg-slate-950 m-4 rounded-xl p-8 flex flex-col justify-end min-h-[200px] shadow-inner relative overflow-hidden group">
+                        <div class="absolute top-4 left-4 flex gap-1.5">
+                            <div class="w-2.5 h-2.5 rounded-full bg-rose-500"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-amber-500"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+                        </div>
+                        <div class="text-[10px] font-mono text-slate-500 absolute top-4 right-8 uppercase tracking-[0.3em]">System Output Shell</div>
+                        <div class="space-y-2 mt-8">
+                            <div class="flex items-center gap-4 text-xs font-mono">
+                                <span class="text-[#7a614d]">hex&gt;</span>
+                                <span id="disp-hex" class="text-purple-400 font-bold tracking-widest uppercase">0x0</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-xs font-mono">
+                                <span class="text-[#7a614d]">dec&gt;</span>
+                                <span id="disp-dec" class="text-slate-300 font-bold">0</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-xs font-mono">
+                                <span class="text-[#7a614d]">bin&gt;</span>
+                                <span id="disp-bin" class="text-emerald-500 break-all leading-loose">0000 0000</span>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-0 left-0 w-full h-1 bg-[#0f172a] overflow-hidden">
+                            <div id="bit-loading" class="h-full bg-primary w-0 transition-all duration-300"></div>
+                        </div>
+                    </div>
+                    <!-- Input Grid -->
+                    <div class="p-8 space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-4">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Input Data</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center group">
+                                        <span class="w-12 text-[10px] font-black text-on-surface-variant uppercase">Dec</span>
+                                        <input type="text" id="dec" oninput="convertFrom('dec')" placeholder="Decimal Value" class="flex-1 bg-white border border-surface-container-high rounded-xl px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-primary outline-none transition-all">
+                                    </div>
+                                    <div class="flex items-center group">
+                                        <span class="w-12 text-[10px] font-black text-on-surface-variant uppercase">Hex</span>
+                                        <input type="text" id="hex" oninput="convertFrom('hex')" placeholder="e.g. FFFF" class="flex-1 bg-white border border-surface-container-high rounded-xl px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-primary outline-none transition-all uppercase">
+                                    </div>
+                                    <div class="flex items-center group">
+                                        <span class="w-12 text-[10px] font-black text-on-surface-variant uppercase">Bin</span>
+                                        <input type="text" id="bin" oninput="convertFrom('bin')" placeholder="e.g. 1010" class="flex-1 bg-white border border-surface-container-high rounded-xl px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-primary outline-none transition-all">
+                                    </div>
+                                    <div class="flex items-center group">
+                                        <span class="w-12 text-[10px] font-black text-on-surface-variant uppercase">Oct</span>
+                                        <input type="text" id="oct" oninput="convertFrom('oct')" placeholder="Octal Value" class="flex-1 bg-white border border-surface-container-high rounded-xl px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-primary outline-none transition-all">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Quick Analysis</h4>
+                                <div class="bg-surface-container p-6 rounded-xl space-y-4 border border-surface-container-high">
+                                    <div class="flex justify-between items-center text-xs font-mono">
+                                        <span class="text-on-surface-variant">Arch Size:</span>
+                                        <span id="resBits" class="font-bold text-primary">0-BIT</span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-xs font-mono">
+                                        <span class="text-on-surface-variant">Byte Length:</span>
+                                        <span id="resBytes" class="font-bold">0 BYTES</span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-xs font-mono">
+                                        <span class="text-on-surface-variant">Signed INT8:</span>
+                                        <span id="resInt8" class="font-bold text-rose-500">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-8 border-t border-surface-container-high">
+                            <p class="text-[10px] font-mono text-on-surface-variant font-bold max-w-xs uppercase tracking-widest leading-loose">
+                                System Ready "Â¢ Converting across bases. We use BigInt to ensure accuracy even with very large numbers.
+                            </p>
+                            <div class="flex gap-4">
+                                <button onclick="commitToLog()" id="saveBtn" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-xs tracking-widest hover:shadow-xl transition-all uppercase">Save Register</button>
+                                <button onclick="clearAll()" class="p-4 bg-surface-container rounded-xl text-on-surface-variant hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined">delete_sweep</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Detail -->
+                <div class="mt-8 bg-surface-container rounded-xl p-8 border border-surface-container-high flex items-center gap-8">
+                    <span class="material-symbols-outlined text-4xl text-purple-300">developer_board</span>
+                    <p id="systemInsight" class="text-xs font-medium text-on-surface-variant leading-relaxed">
+                        Enter any value to see it converted instantly. We'll automatically detect the bit size and word boundaries for you.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        function convertFrom(type) {
+            let val = document.getElementById(type).value.trim();
+            if(!val) {
+                resetDisplay();
+                return;
+            }
+
+            try {
+                let dec;
+                if (type === 'dec') dec = BigInt(val);
+                else if (type === 'hex') dec = BigInt('0x' + val.replace(/^0x/i, ''));
+                else if (type === 'oct') dec = BigInt('0o' + val.replace(/^0o/i, ''));
+                else if (type === 'bin') dec = BigInt('0b' + val.replace(/^0b/i, ''));
+
+                // Sync Inputs
+                if (type !== 'dec') document.getElementById('dec').value = dec.toString(10);
+                if (type !== 'hex') document.getElementById('hex').value = dec.toString(16).toUpperCase();
+                if (type !== 'oct') document.getElementById('oct').value = dec.toString(8);
+                if (type !== 'bin') document.getElementById('bin').value = dec.toString(2);
+
+                // Update Shell Display
+                document.getElementById('disp-hex').innerText = '0x' + dec.toString(16).toUpperCase();
+                document.getElementById('disp-dec').innerText = dec.toString(10);
+                const b = dec.toString(2);
+                document.getElementById('disp-bin').innerText = b.match(/.{1,4}/g)?.join(' ') || b;
+
+                // Advanced Analysis
+                const bits = b.length;
+                document.getElementById('resBits').innerText = bits + '-BIT';
+                document.getElementById('resBytes').innerText = Math.ceil(bits / 8) + ' BYTES';
+                document.getElementById('resInt8').innerText = (BigInt.asIntN(8, dec)).toString(10);
+                document.getElementById('bit-loading').style.width = Math.min((bits/64)*100, 100) + '%';
+                document.getElementById('systemInsight').innerHTML = `Detected <strong>${bits}-bit</strong> word size. Hex value ending in <code>${dec.toString(16).toUpperCase().slice(-1)}h</code> which is <code>${b.slice(-4)}b</code> in binary.`;
+            } catch (e) {
+                // Ignore parsing errors while typing
+            }
+        }
+
+        function resetDisplay() {
+            document.getElementById('disp-hex').innerText = '0x0';
+            document.getElementById('disp-dec').innerText = '0';
+            document.getElementById('disp-bin').innerText = '0000 0000';
+            document.getElementById('resBits').innerText = '0-BIT';
+            document.getElementById('resBytes').innerText = '0 BYTES';
+            document.getElementById('resInt8').innerText = '0';
+            document.getElementById('bit-loading').style.width = '0%';
+            document.getElementById('systemInsight').innerText = 'Enter any value to see it converted instantly.';
+        }
+
+        function clearAll() {
+            ['dec', 'hex', 'oct', 'bin'].forEach(id => document.getElementById(id).value = '');
+            resetDisplay();
+        }
+
+        async function commitToLog() {
+            const hex = document.getElementById('disp-hex').innerText;
+            if (hex === '0x0') return;
+
+            const btn = document.getElementById('saveBtn');
+            const orig = btn.innerText;
+            btn.innerText = 'SAVING...';
+            btn.disabled = true;
+
+            const inputs = [{ label: 'Hex Source', val: hex }];
+            const results = [
+                { label: 'Decimal', val: document.getElementById('disp-dec').innerText, highlight: true },
+                { label: 'Bits', val: document.getElementById('resBits').innerText }
+            ];
+
+            try {
+                const ok = await window.saveCalcToHistory('Programmer Calculator', inputs, results);
+                if (ok) {
+                    btn.innerText = 'SAVED';
+                    btn.classList.add('bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.classList.remove('bg-emerald-600');
+                        btn.disabled = false;
+                        if (typeof initSidebarHistory === 'function') {
+                            initSidebarHistory('Programmer Calculator', 'sidebar-history-container');
+                        }
+                    }, 2000);
+                } else {
+                    btn.innerText = orig;
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                btn.innerText = orig;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+             try {
+                if(typeof initSidebarHistory === 'function') {
+                    initSidebarHistory('Programmer Calculator', 'sidebar-history-container');
+                }
+            } catch(e){}
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

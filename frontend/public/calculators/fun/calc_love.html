@@ -1,0 +1,291 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Love Matcher & Relationship Test</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; } 
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { 
+            font-family: 'Material Symbols Outlined'; 
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; 
+        } 
+        .love-progress { transition: stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1); stroke-dasharray: 283; stroke-dashoffset: 283; }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(139, 92, 246, 0.2)); } 50% { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.5)); } }
+        .animate-heartbeat { animation: heartbeat 1s infinite ease-in-out; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="pt-24 pb-20 px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Love Matcher.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Find out how well you and your partner or friend match! Enter both names and see your love score based on name patterns.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Match History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent matches.</p>
+                    </div>
+                </div>
+
+                <div class="bg-rose-900 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">favorite</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">stars</span> Love Tip
+                     </h4>
+                     <p class="text-rose-100 text-[11px] leading-relaxed mb-4 opacity-80">
+                        Try matching names of famous movie couples! This tool uses name patterns to calculate a fun score just for you.
+                     </p>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="calc_fortune_cookie.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Your Fortune</div>
+                            </div>
+                        </a>
+                        <a href="calc_magic_8_ball.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Ask the Ball</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Input Section -->
+                    <div class="bg-surface-container-low rounded-3xl p-8 shadow-2xl space-y-6">
+                        <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Enter Names</h4>
+                        <div class="space-y-6">
+                            <div class="space-y-2">
+                                <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1 block">Your Name</label>
+                                <input type="text" id="name1" placeholder="e.g. Liam" class="w-full bg-white border border-slate-100 rounded-xl px-4 py-4 font-bold text-lg outline-none focus:ring-2 focus:ring-primary shadow-sm transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1 block">Friend's Name</label>
+                                <input type="text" id="name2" placeholder="e.g. Olivia" class="w-full bg-white border border-slate-100 rounded-xl px-4 py-4 font-bold text-lg outline-none focus:ring-2 focus:ring-primary shadow-sm transition-all">
+                            </div>
+                            <div class="flex gap-4 pt-2">
+                                <button onclick="calculateSync()" id="btn-sync" class="flex-1 bg-primary text-white py-4 rounded-xl font-black text-xs tracking-widest uppercase shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">CHECK LOVE</button>
+                                <button onclick="clearData()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined">restart_alt</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Section -->
+                    <div id="results-display" class="bg-white rounded-3xl p-8 shadow-2xl border border-primary/5 flex flex-col items-center justify-center overflow-hidden min-h-[350px] relative">
+                        <div class="relative w-48 h-48 mb-6">
+                            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" fill="none" stroke="#fbe9cd" stroke-width="8"></circle>
+                                <circle id="progress-circle" cx="50" cy="50" r="45" fill="none" stroke="#0f766e" stroke-width="8" stroke-linecap="round" class="love-progress"></circle>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span id="sync-percent" class="text-4xl font-black text-on-surface tracking-tighter">0%</span>
+                                <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Match Score</span>
+                            </div>
+                            <div class="absolute -bottom-2 -right-2 bg-white p-2 rounded-full shadow-lg border border-slate-100 flex items-center justify-center text-primary h-12 w-12">
+                                <span class="material-symbols-outlined text-xl animate-heartbeat">favorite</span>
+                            </div>
+                        </div>
+                        <h3 id="status-title" class="text-2xl font-black text-on-surface tracking-tighter uppercase">Waiting...</h3>
+                        <p id="status-desc" class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1 text-center max-w-[220px]">Enter both names to see the bond!</p>
+                    </div>
+                </div>
+
+                <!-- Insight Block -->
+                <div class="mt-8 bg-surface-container-low p-8 rounded-2xl border border-slate-100 flex items-center gap-8 px-12 italic">
+                    <span class="material-symbols-outlined text-4xl text-primary opacity-20">psychology_alt</span>
+                    <p id="pro-tip" class="text-[11px] text-on-surface-variant leading-relaxed font-medium">
+                        Enter any two names to see their love compatibility. Results are calculated based on name matching algorithms.
+                    </p>
+                </div>
+
+                <!-- Navigation Actions -->
+                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-end items-center gap-4">
+                        <div class="flex gap-3">
+                        <button id="save-btn" onclick="saveToHistory()" class="hidden bg-primary text-white px-8 py-4 rounded-xl font-black text-[10px] tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] transition-all">Save Result</button>
+                        <button onclick="window.print()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined">print</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let lastSync = null;
+
+        function calculateSync() {
+            const name1 = document.getElementById('name1').value.trim();
+            const name2 = document.getElementById('name2').value.trim();
+            if (!name1 || !name2) {
+                alert("Please enter both names!");
+                return;
+            }
+
+            const btn = document.getElementById('btn-sync');
+            btn.innerText = "Checking...";
+
+            const combined = (name1.toLowerCase() + "love" + name2.toLowerCase());
+            let sum = 0;
+            for(let i=0; i<combined.length; i++) sum += combined.charCodeAt(i);
+            const percentage = (sum % 41) + 60;
+
+            const circle = document.getElementById('progress-circle');
+            const percentEl = document.getElementById('sync-percent');
+            const circumference = 2 * Math.PI * 45;
+            circle.style.strokeDashoffset = circumference;
+
+            setTimeout(() => {
+                const offset = circumference - (percentage / 100) * circumference;
+                circle.style.strokeDashoffset = offset;
+            }, 100);
+
+            let count = 0;
+            const step = Math.ceil(percentage / 30);
+            const interval = setInterval(() => {
+                count += step;
+                if (count >= percentage) {
+                    count = percentage;
+                    clearInterval(interval);
+                    updateStatus(percentage);
+                    btn.innerText = "CHECK LOVE";
+                    document.getElementById('save-btn').classList.remove('hidden');
+                }
+                percentEl.innerText = count + "%";
+            }, 30);
+
+            lastSync = { n1: name1, n2: name2, score: percentage };
+        }
+
+        function updateStatus(val) {
+            const title = document.getElementById('status-title');
+            const desc = document.getElementById('status-desc');
+            const tip = document.getElementById('pro-tip');
+
+            if (val > 90) {
+                title.innerText = "SOUL MATES";
+                desc.innerText = "A Perfect Match! Made for each other.";
+                title.className = "text-2xl font-black text-primary tracking-tighter uppercase";
+                tip.innerText = "Wow! You two have an incredible bond that's meant to last a lifetime.";
+            } else if (val > 80) {
+                title.innerText = "GREAT MATCH";
+                desc.innerText = "Strong Connection & Sparks Flying!";
+                title.className = "text-2xl font-black text-on-surface tracking-tighter uppercase";
+                tip.innerText = "Very high compatibility! Your names suggest a deep and vibrant relationship.";
+            } else {
+                title.innerText = "NICE SPARK";
+                desc.innerText = "A Good Match with Potential!";
+                title.className = "text-2xl font-black text-slate-500 tracking-tighter uppercase";
+                tip.innerText = "There's definitely a spark here. Every great relationship starts with a simple match!";
+            }
+        }
+
+        function clearData() {
+            document.getElementById('name1').value = '';
+            document.getElementById('name2').value = '';
+            document.getElementById('progress-circle').style.strokeDashoffset = 283;
+            document.getElementById('sync-percent').innerText = '0%';
+            document.getElementById('status-title').innerText = 'Waiting...';
+            document.getElementById('status-desc').innerText = 'Enter both names to see the bond!';
+            document.getElementById('save-btn').classList.add('hidden');
+            lastSync = null;
+        }
+
+        async function saveToHistory() {
+            if (!lastSync) return;
+            const inputs = [
+                { label: 'Name 1', val: lastSync.n1 },
+                { label: 'Name 2', val: lastSync.n2 }
+            ];
+            const results = [
+                { label: 'Love Score', val: lastSync.score + '%', highlight: true },
+                { label: 'Result', val: document.getElementById('status-title').innerText }
+            ];
+            const ok = await window.saveCalcToHistory('Love Matcher', inputs, results);
+            if (ok) initSidebarHistory('Love Matcher', 'sidebar-history-container');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('Love Matcher', 'sidebar-history-container');
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

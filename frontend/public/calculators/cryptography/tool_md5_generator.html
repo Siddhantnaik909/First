@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | MD5 Hash Generator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        textarea::placeholder { opacity: 0.3; font-weight: 500; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+        <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+    <!-- Core Scripts -->
+    <script src="/js/app.js"></script>
+    <script src="/js/buttons.js"></script>
+    <script src="/js/calc-utils.js"></script>
+    <script type="module" src="/js/script.js"></script>
+
+    <h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2">MD5 Engine.</h1>
+Create a special MD5 code from your text! It helps check if text or files match exactly.
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent hashes.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="/calculators/cryptography/tool_base64.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Base64 Studio</div>
+                            </div>
+                        </a>
+                        <a href="/calculators/cryptography/tool_sha256_generator.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">SHA-256 Sculptor</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-2xl p-2 shadow-2xl overflow-hidden mb-8">
+                    <!-- Display -->
+                    <div class="bg-surface-container-lowest m-4 rounded-xl p-8 text-right flex flex-col justify-end min-h-[160px] shadow-inner relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                        <div class="absolute top-8 left-8 flex gap-2">
+                             <span class="px-3 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase">MD5 DIGEST</span>
+                             <span class="px-3 py-1 rounded bg-slate-100 text-[#7a614d] text-[10px] font-black tracking-widest uppercase" id="len-tag">0 CHR</span>
+                        </div>
+                        <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]">Awaiting input...</div>
+                        <div id="calc-display" class="text-2xl md:text-4xl font-black tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden leading-tight font-mono break-all uppercase">
+                            <span class="w-1 h-10 bg-primary animate-pulse rounded-full mr-2"></span>d41d8cd98f00b204e9800998ecf8427e
+                        </div>
+                    </div>
+
+                    <!-- Inputs -->
+                    <div class="p-8 space-y-12">
+                        <div class="grid grid-cols-1 gap-8">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between px-1">
+                                    <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em]">Plaintext String</h4>
+                                    <button onclick="clearInput()" class="text-[10px] font-black text-primary uppercase tracking-widest hover:underline">Reset</button>
+                                </div>
+                                <textarea id="input" oninput="generateMD5()" class="w-full bg-white border border-surface-container-high rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-mono text-sm" placeholder="Type or paste your text..." rows="6"></textarea>
+                            </div>
+
+                            <div class="bg-primary/5 border border-primary/20 rounded-2xl p-8 space-y-6">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-[10px] font-black text-primary uppercase tracking-widest">Hash Comparison</h4>
+                                    <span id="matchStatus" class="text-[10px] font-black uppercase tracking-widest text-slate-400">Not Comparing</span>
+                                </div>
+                                <div class="relative">
+                                    <textarea id="comparator" oninput="compareHashes()" class="w-full bg-white border border-surface-container-high rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-mono text-sm" placeholder="Paste another code here to check match..." rows="3"></textarea>
+                                    <span id="matchIcon" class="absolute right-5 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-300 pointer-events-none">checklist</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-8 border-t border-surface-container-high">
+                            <p class="text-[10px] font-mono text-on-surface-variant font-bold max-w-xs uppercase tracking-widest leading-loose">
+MD5: Text Code Checker
+                            </p>
+                            <div class="flex gap-4">
+                                <button onclick="saveMD5Log()" id="saveBtn" class="bg-primary text-white px-10 py-5 rounded-xl font-bold text-[10px] tracking-widest hover:shadow-xl transition-all uppercase hover:scale-[1.02] active:scale-95">Save Hash</button>
+                                <button onclick="copyHash(event)" class="p-5 bg-surface-container rounded-xl text-on-surface-variant hover:text-primary transition-all active:scale-90">
+                                    <span class="material-symbols-outlined">content_copy</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Block -->
+                <div class="bg-surface-container p-10 rounded-2xl border border-surface-container-high italic text-[11px] text-on-surface-variant leading-relaxed text-center opacity-70">
+"Note: MD5 is simple but old. For important security, try SHA-256 instead."
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let currentHash = "d41d8cd98f00b204e9800998ecf8427e";
+
+        function generateMD5() {
+            const input = document.getElementById('input').value;
+            const display = document.getElementById('calc-display');
+            const statusText = document.getElementById('calc-status');
+            const lenTag = document.getElementById('len-tag');
+
+            lenTag.innerText = input.length + " CHR";
+
+            if (!input) {
+                currentHash = "d41d8cd98f00b204e9800998ecf8427e";
+                display.innerHTML = `<span class="w-1 h-10 bg-primary animate-pulse rounded-full mr-2"></span>${currentHash}`;
+                statusText.innerText = "Empty string hash";
+                compareHashes();
+                return;
+            }
+
+            try {
+                currentHash = CryptoJS.MD5(input).toString();
+                display.innerHTML = `<span class="w-1 h-10 bg-primary animate-pulse rounded-full mr-2"></span>${currentHash}`;
+                statusText.innerText = "Code ready!";
+            } catch (e) {
+                statusText.innerText = "Error generating hash";
+            }
+            
+            compareHashes();
+        }
+
+        function compareHashes() {
+            const comparator = document.getElementById('comparator').value.trim().toLowerCase();
+            const matchStatus = document.getElementById('matchStatus');
+            const matchIcon = document.getElementById('matchIcon');
+
+            if (!comparator) {
+                matchStatus.innerText = "Not Comparing";
+                matchStatus.className = "text-[10px] font-black uppercase tracking-widest text-slate-400";
+                matchIcon.innerText = "checklist";
+                matchIcon.className = "absolute right-5 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-300 pointer-events-none";
+                return;
+            }
+
+            if (comparator === currentHash.toLowerCase()) {
+                matchStatus.innerText = "Match Confirmed";
+                matchStatus.className = "text-[10px] font-black uppercase tracking-widest text-emerald-600";
+                matchIcon.innerText = "verified";
+                matchIcon.className = "absolute right-5 top-1/2 -translate-y-1/2 material-symbols-outlined text-emerald-500 pointer-events-none";
+            } else {
+                matchStatus.innerText = "No Match";
+                matchStatus.className = "text-[10px] font-black uppercase tracking-widest text-rose-600";
+                matchIcon.innerText = "error";
+                matchIcon.className = "absolute right-5 top-1/2 -translate-y-1/2 material-symbols-outlined text-rose-500 pointer-events-none";
+            }
+        }
+
+        function clearInput() {
+            document.getElementById('input').value = "";
+            document.getElementById('comparator').value = "";
+            generateMD5();
+        }
+
+        function copyHash(event) {
+            navigator.clipboard.writeText(currentHash);
+            const btn = event.currentTarget;
+            const origIcon = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined">done</span>';
+            setTimeout(() => btn.innerHTML = origIcon, 2000);
+        }
+
+        async function saveMD5Log() {
+            const input = document.getElementById('input').value.trim();
+            if (!input) return;
+
+            const btn = document.getElementById('saveBtn');
+            const orig = btn.innerText;
+            btn.innerText = 'SAVING...';
+            btn.disabled = true;
+
+            const inputs = [
+                { label: 'String', val: input.substring(0, 20) + (input.length > 20 ? '...' : '') }
+            ];
+            const results = [
+                { label: 'MD5 Hash', val: currentHash, highlight: true }
+            ];
+
+            try {
+                const ok = await window.saveCalcToHistory('MD5 Generator', inputs, results);
+                if (ok) {
+                    btn.innerText = 'SAVED';
+                    btn.classList.add('bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.classList.remove('bg-emerald-600');
+                        btn.disabled = false;
+                        if (typeof initSidebarHistory === 'function') {
+                            initSidebarHistory('MD5 Generator', 'sidebar-history-container');
+                        }
+                    }, 2000);
+                } else {
+                    btn.innerText = orig;
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                btn.innerText = orig;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                if (typeof initSidebarHistory === 'function') {
+                    initSidebarHistory('MD5 Generator', 'sidebar-history-container');
+                }
+            } catch(e){}
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>

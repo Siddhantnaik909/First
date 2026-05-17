@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMART HUB | All-in-One Productivity Hub</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/design-system.css">
+    <script src="/js/auth.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#c96f32",
+                        "surface": "#f7f2e8",
+                        "on-surface": "#0f172a",
+                        "on-surface-variant": "#475569",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-fill { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24 !important; }
+        .hero-gradient {
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(201, 111, 50, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(47, 156, 149, 0.06) 0%, transparent 40%),
+                #f7f2e8;
+        }
+        .stat-card {
+            background: #ffffff;
+            border: 1px solid rgba(201, 111, 50, 0.1);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(201 111 50 / 0.1);
+            border-color: rgba(201, 111, 50, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface hero-gradient">
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-wrapper max-w-[1440px] mx-auto">
+        <header class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                        <span class="material-symbols-outlined icon-fill">grid_view</span>
+                    </div>
+                    <span class="uppercase tracking-[0.3em] text-[10px] font-bold text-primary">Quick Overview</span>
+                </div>
+                <h1 id="welcome-text" class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2">Hi, Guest!</h1>
+                <p class="text-on-surface-variant text-lg" id="welcome-sub">Your tools and calculators are ready to use.</p>
+            </div>
+            <div class="bg-surface-container-low px-6 py-3 rounded-2xl flex items-center gap-3 border border-surface-container-high shadow-sm">
+                <span class="material-symbols-outlined text-primary">calendar_today</span>
+                <span id="current-date" class="font-bold text-xs uppercase tracking-widest text-on-surface">Saturday, March 21, 2026</span>
+            </div>
+        </header>
+
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <div class="stat-card p-10 rounded-[2rem] group">
+                <div class="flex justify-between items-start mb-8">
+                    <div class="p-4 bg-secondary-fixed rounded-2xl text-on-secondary-fixed">
+                        <span class="material-symbols-outlined text-3xl">build</span>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-300">more_vert</span>
+                </div>
+                <p class="text-on-surface-variant font-bold uppercase tracking-[0.2em] text-[10px] mb-2">Available Tools</p>
+                <h3 id="stat-total-tools" class="text-5xl font-black text-on-surface tracking-tighter">90+</h3>
+                <div class="mt-6 flex items-center gap-2 text-[10px] font-black text-primary uppercase bg-primary/5 px-3 py-1.5 rounded-full w-fit">
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                    Ready
+                </div>
+            </div>
+
+            <div class="p-6 rounded-2xl shadow-xl relative overflow-hidden group hover:scale-[1.02] transition-all duration-500" style="background:linear-gradient(160deg,#1b2238 0%,#243554 52%,#2f9c95 100%);">
+                <div class="absolute -right-12 -top-12 opacity-10 transform group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-[12rem] text-white">history</span>
+                </div>
+                <div class="relative z-10">
+                    <div class="p-4 bg-white/10 rounded-2xl text-white w-fit mb-8 border border-white/10">
+                        <span class="material-symbols-outlined text-3xl">visibility</span>
+                    </div>
+                    <p class="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-2">Active Rooms</p>
+                    <h3 id="stat-last-active" class="text-5xl font-black text-white tracking-tighter">0</h3>
+                    <div class="mt-6 flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        <span class="material-symbols-outlined text-xs">sports_esports</span>
+                        Games open now
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card p-10 rounded-[2rem] group">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="p-4 bg-primary text-white rounded-2xl shadow-lg shadow-primary/20">
+                        <span class="material-symbols-outlined text-3xl">calculate</span>
+                    </div>
+                    <span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+                </div>
+                <p class="text-on-surface-variant font-bold uppercase tracking-[0.2em] text-[10px] mb-2">History Items</p>
+                <h3 id="stat-total-calcs" class="text-5xl font-black text-on-surface tracking-tighter">0</h3>
+                <div class="mt-6 flex items-center gap-2 text-[10px] font-black text-primary uppercase bg-primary/5 px-3 py-1.5 rounded-full w-fit">
+                    <span class="material-symbols-outlined text-[10px]">auto_awesome</span>
+                    Calculated
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <section class="lg:col-span-8 bg-white rounded-[2.5rem] p-6 sm:p-8 lg:p-12 shadow-xl shadow-slate-200/50 border border-slate-100">
+                <div class="flex items-center justify-between mb-10">
+                    <div class="flex items-center gap-4">
+                        <span class="material-symbols-outlined text-primary text-3xl icon-fill">star</span>
+                        <h2 class="text-2xl font-black tracking-tight text-on-surface">Your Favorite Tools</h2>
+                    </div>
+                    <a href="/calculators.html" class="text-[10px] font-black text-primary uppercase tracking-[0.2em] flex items-center gap-2 hover:gap-3 transition-all">
+                        Show All <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </a>
+                </div>
+                <div id="pinned-tools-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <a href="/calculators.html" class="col-span-1 sm:col-span-2 p-12 rounded-3xl border-4 border-dashed border-surface-container-high flex flex-col items-center justify-center gap-4 text-[#a78b6c] hover:border-primary/20 hover:text-primary transition-all group">
+                        <span class="material-symbols-outlined text-5xl group-hover:scale-110 transition-transform">add_circle</span>
+                        <span class="text-xs font-black uppercase tracking-[0.2em]">Add your favorite tools here</span>
+                    </a>
+                </div>
+            </section>
+
+            <section class="lg:col-span-4 space-y-6">
+                <div class="bg-surface-container-low rounded-3xl p-6 border border-surface-container-high relative overflow-hidden">
+                    <div class="flex items-center gap-3 mb-8 relative z-10">
+                        <span class="material-symbols-outlined text-primary text-2xl">list_alt</span>
+                        <h2 class="text-xl font-bold tracking-tight">Recent Activity</h2>
+                    </div>
+                    <div id="recent-activity-container" class="space-y-4 relative z-10 min-h-[300px] flex flex-col items-center justify-center text-center">
+                        <div class="w-16 h-16 bg-surface-container-high rounded-3xl flex items-center justify-center mb-6 text-[#8f6f53]">
+                            <span class="material-symbols-outlined text-3xl">inbox</span>
+                        </div>
+                        <p class="text-sm font-bold text-on-surface">No activity yet</p>
+                        <p class="text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">Your recent calculations will appear here.</p>
+                    </div>
+                </div>
+
+                <div class="bg-primary p-1 rounded-[2.5rem] shadow-xl shadow-primary/20">
+                    <div class="bg-surface-container-lowest p-8 rounded-[2.4rem] space-y-6">
+                        <div class="flex items-center gap-3 text-primary">
+                            <span class="material-symbols-outlined">bolt</span>
+                            <span class="text-[8px] font-black uppercase tracking-[0.4em]">System Updates</span>
+                        </div>
+                        <div class="p-4 bg-surface-container rounded-2xl border-l-[6px] border-primary">
+                            <p class="text-[10px] font-black text-primary uppercase tracking-widest mb-1">Feature Update</p>
+                            <p class="text-[11px] text-on-surface-variant leading-relaxed">We've simplified the interface for better clarity.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <button id="pwa-install-btn" onclick="installPWA()" class="fixed bottom-8 right-8 z-[100] hidden bg-primary text-white p-6 rounded-3xl shadow-2xl hover:scale-110 active:scale-95 transition-all items-center gap-4 group border-4 border-[#f6e4bf]">
+            <span class="material-symbols-outlined text-2xl group-hover:rotate-12 transition-transform">download_for_offline</span>
+            <span class="text-xs font-black uppercase tracking-widest pr-2">Install Hub</span>
+        </button>
+    </main>
+
+    <div id="footer-placeholder"></div>
+    <div id="toast-container" class="fixed bottom-8 right-8 z-[99999] flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- DARK MODE INIT - Universal (Moved to head) -->
+    
+    
+    <script src="/js/admin-ui-config.js"></script>
+    <script src="/js/app.js"></script>
+    <script type="module" src="/js/script.js"></script>
+    <script src="/js/pwa.js"></script>
+    <script src="/js/component-loader.js"></script>
+
+    <script>
+            // Update welcome text on auth change
+            const updateWelcome = () => {
+                const user = AuthSystem.getUser();
+                const welcomeEl = document.getElementById('welcome-text');
+                if (welcomeEl) {
+                    welcomeEl.textContent = AuthSystem.isLoggedIn() ? `Hi, ${user.name.split(' ')[0]}!` : 'Hi, Guest!';
+                }
+            };
+            document.addEventListener('authStateChanged', updateWelcome);
+            updateWelcome();
+
+            const dateEl = document.getElementById('current-date');
+            if (dateEl) {
+                dateEl.textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            }
+
+            fetch('/api/games/stats')
+                .then(res => res.json())
+                .then(data => {
+                    if (document.getElementById('stat-total-tools')) document.getElementById('stat-total-tools').innerText = data.totalTools || 85;
+                    const statusEl = document.getElementById('stat-last-active');
+                    if (statusEl) statusEl.innerText = data.activeRooms || 0;
+                }).catch(console.error);
+
+            // Load client settings for consistency
+            fetch('/api/admin/client/settings')
+                .then(res => res.json())
+                .catch(console.error);
+
+            const history = JSON.parse(localStorage.getItem('calc_history') || '[]');
+            if (document.getElementById('stat-total-calcs')) document.getElementById('stat-total-calcs').innerText = history.length;
+
+            const recentContainer = document.getElementById('recent-activity-container');
+            if (recentContainer && history.length > 0) {
+                recentContainer.innerHTML = `<div class="space-y-4 w-full">` + history.slice(0, 4).map(item => `
+                    <div class="p-6 bg-white rounded-3xl border border-slate-100 flex items-center justify-between text-left hover:border-primary/20 hover:scale-[1.01] transition-all cursor-pointer">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-slate-50 text-primary rounded-xl flex items-center justify-center"><span class="material-symbols-outlined text-sm">bolt</span></div>
+                            <div>
+                                <p class="text-xs font-black text-on-surface tracking-tight">${item.name}</p>
+                                <p class="text-[9px] font-bold text-on-surface-variant truncate max-w-[140px]">${item.results && item.results[0] ? item.results[0].val : '—'}</p>
+                            </div>
+                        </div>
+                        <span class="text-[8px] font-black text-slate-300 uppercase">${new Date(item.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+                    </div>`).join('') + `</div>`;
+                recentContainer.classList.remove('items-center', 'justify-center', 'text-center');
+            }
+    </script>
+</body>
+</html>

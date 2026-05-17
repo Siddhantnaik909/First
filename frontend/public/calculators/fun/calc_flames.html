@@ -1,0 +1,285 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | FLAMES Love Test</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; } 
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { 
+            font-family: 'Material Symbols Outlined'; 
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; 
+        } 
+        .f-letter { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .f-letter.active { transform: scale(1.4); filter: drop-shadow(0 0 10px #0f766e); opacity: 1 !important; }
+        .f-letter.eliminated { text-decoration: line-through; opacity: 0.1; transform: scale(0.8); }
+        @keyframes heart-beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .animate-beat { animation: heart-beat 1.5s infinite ease-in-out; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="pt-24 pb-20 px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">FLAMES Test.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Find out your relationship status with anyone using the classic FLAMES game. Friends, Lovers, Affection, Marriage, Enemies, or Siblings?</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Test History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent tests.</p>
+                    </div>
+                </div>
+
+                <div class="bg-rose-900 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">favorite</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">tips_and_updates</span> Nostalgia
+                     </h4>
+                     <p class="text-rose-100 text-[11px] leading-relaxed mb-4 opacity-80">
+                        FLAMES was a popular game in schools across India. It's a fun way to guess the future bond between two people!
+                     </p>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="calc_dice_roller.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Roll Dice</div>
+                            </div>
+                        </a>
+                        <a href="calc_fortune_cookie.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Your Fortune</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-8">
+                    <div id="results-display" class="bg-white rounded-2xl p-12 flex flex-col items-center justify-center min-h-[350px] relative overflow-hidden shadow-inner uppercase">
+                        <div class="flex gap-6 mb-12" id="flames-row">
+                            <span class="f-letter text-4xl font-black text-slate-100" data-char="F">F</span>
+                            <span class="f-letter text-4xl font-black text-slate-100" data-char="L">L</span>
+                            <span class="f-letter text-4xl font-black text-slate-100" data-char="A">A</span>
+                            <span class="f-letter text-4xl font-black text-slate-100" data-char="M">M</span>
+                            <span class="f-letter text-4xl font-black text-slate-100" data-char="E">E</span>
+                            <span class="f-letter text-4xl font-black text-slate-100" data-char="S">S</span>
+                        </div>
+                        <div id="status-icon-box" class="mb-4">
+                            <span class="material-symbols-outlined text-7xl text-slate-100 animate-pulse">favorite</span>
+                        </div>
+                        <h3 id="result-title" class="text-4xl font-black text-on-surface tracking-tighter uppercase text-center">---</h3>
+                        <p id="result-desc" class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-2">Awaiting your names...</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-4">
+                            <div class="space-y-2">
+                                <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1">Your Name</label>
+                                <input type="text" id="name1" placeholder="e.g. Aryan" class="w-full bg-white border border-slate-100 rounded-2xl px-6 py-4 font-bold text-xl outline-none focus:ring-2 focus:ring-primary shadow-sm">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1">Partner's Name</label>
+                                <input type="text" id="name2" placeholder="e.g. Siya" class="w-full bg-white border border-slate-100 rounded-2xl px-6 py-4 font-bold text-xl outline-none focus:ring-2 focus:ring-primary shadow-sm">
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-end gap-4">
+                            <button onclick="runFlames()" id="btn-calc" class="w-full bg-primary text-white py-5 rounded-2xl font-black text-xs tracking-widest uppercase shadow-lg shadow-primary/20 hover:scale-[1.01] active:scale-95 transition-all">START TEST</button>
+                            <button onclick="clearData()" class="w-full py-4 bg-slate-100 rounded-2xl text-slate-400 font-bold text-[10px] tracking-widest uppercase flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-sm">restart_alt</span> Reset All
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Actions -->
+                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-end items-center gap-4">
+                        <div class="flex gap-3">
+                            <button id="save-btn" onclick="saveToHistory()" class="hidden bg-primary text-white px-8 py-4 rounded-xl font-black text-[10px] tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] transition-all">Save Result</button>
+                            <button onclick="window.print()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined">print</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let lastFlames = null;
+        const flamesMap = {
+            'F': { title: 'Friends', icon: 'diversity_3', color: '#3b82f6', desc: 'A strong & loyal bond' },
+            'L': { title: 'Lovers', icon: 'favorite', color: '#ef4444', desc: 'Romantic sparks are flying!' },
+            'A': { title: 'Affection', icon: 'heart_plus', color: '#ec4899', desc: 'Warm feelings for each other' },
+            'M': { title: 'Marriage', icon: 'diamond', color: '#f59e0b', desc: 'A long-term life partnership' },
+            'E': { title: 'Enemies', icon: 'bolt', color: '#444', desc: 'Some sparks, but not the good kind' },
+            'S': { title: 'Siblings', icon: 'family_restroom', color: '#10b981', desc: 'Protective and caring bond' }
+        };
+
+        async function runFlames() {
+            let n1Str = document.getElementById('name1').value.trim();
+            let n2Str = document.getElementById('name2').value.trim();
+            if (!n1Str || !n2Str) {
+                alert("Please enter both names!");
+                return;
+            }
+
+            const btn = document.getElementById('btn-calc');
+            const saveBtn = document.getElementById('save-btn');
+            btn.innerText = "CALCULATING...";
+            
+            let n1 = n1Str.toLowerCase().replace(/\s/g, '');
+            let n2 = n2Str.toLowerCase().replace(/\s/g, '');
+            let n1Arr = n1.split('');
+            let n2Arr = n2.split('');
+
+            n1Arr.forEach(char => {
+                let idx = n2Arr.indexOf(char);
+                if (idx > -1) {
+                    n2Arr.splice(idx, 1);
+                    n1 = n1.replace(char, '');
+                }
+            });
+
+            let count = n1.length + n2Arr.length;
+            let flames = ['F', 'L', 'A', 'M', 'E', 'S'];
+            const letters = document.querySelectorAll('.f-letter');
+            
+            letters.forEach(l => {
+                l.className = 'f-letter text-4xl font-black text-slate-100';
+                l.style.color = '';
+            });
+
+            let index = 0;
+            while (flames.length > 1) {
+                index = (index + count - 1) % flames.length;
+                let eliminated = flames.splice(index, 1)[0];
+                const el = document.querySelector(`[data-char="${eliminated}"]`);
+                el.classList.add('eliminated');
+                await new Promise(r => setTimeout(r, 200));
+            }
+
+            const final = flames[0];
+            const data = flamesMap[final];
+            const activeEl = document.querySelector(`[data-char="${final}"]`);
+            activeEl.className = 'f-letter text-6xl font-black active';
+            activeEl.style.color = data.color;
+
+            document.getElementById('status-icon-box').innerHTML = `<span class="material-symbols-outlined text-8xl animate-beat" style="color: ${data.color}">${data.icon}</span>`;
+            document.getElementById('result-title').innerText = data.title;
+            document.getElementById('result-title').style.color = data.color;
+            document.getElementById('result-desc').innerText = data.desc;
+
+            saveBtn.classList.remove('hidden');
+            lastFlames = { n1: n1Str, n2: n2Str, result: data.title };
+            btn.innerText = "TEST AGAIN";
+        }
+
+        function clearData() {
+            document.getElementById('name1').value = '';
+            document.getElementById('name2').value = '';
+            const letters = document.querySelectorAll('.f-letter');
+            letters.forEach(l => {
+                l.className = 'f-letter text-4xl font-black text-slate-100';
+                l.style.color = '';
+            });
+            document.getElementById('status-icon-box').innerHTML = `<span class="material-symbols-outlined text-7xl text-slate-100 animate-pulse">favorite</span>`;
+            document.getElementById('result-title').innerText = '---';
+            document.getElementById('result-title').style.color = '';
+            document.getElementById('result-desc').innerText = 'Awaiting your names...';
+            document.getElementById('save-btn').classList.add('hidden');
+            lastFlames = null;
+        }
+
+        async function saveToHistory() {
+            if (!lastFlames) return;
+            const inputs = [
+                { label: 'Name 1', val: lastFlames.n1 },
+                { label: 'Name 2', val: lastFlames.n2 }
+            ];
+            const results = [
+                { label: 'Conclusion', val: lastFlames.result, highlight: true }
+            ];
+            const ok = await window.saveCalcToHistory('FLAMES Game', inputs, results);
+            if (ok) initSidebarHistory('FLAMES Game', 'sidebar-history-container');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('FLAMES Game', 'sidebar-history-container');
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

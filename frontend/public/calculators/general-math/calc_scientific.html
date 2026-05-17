@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Scientific Calculator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .calc-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .calc-btn:active { transform: scale(0.92); filter: brightness(0.9); }
+        .display-scroll::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2">Science Studio.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">A powerful calculator for advanced math and science. Whether you need trigonometry, logarithms, or exponents, we've got the tools you need!</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Worksheet Log</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent steps.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="/calculators/general-math/calc_standard.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Standard Hub</div>
+                            </div>
+                        </a>
+                        <a href="/calculators/general-math/calc_programmer.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Percent Lab</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-xl p-2 shadow-2xl overflow-hidden max-w-[540px] mx-auto lg:mx-0">
+                    <!-- Display -->
+                    <div class="bg-surface-container-lowest m-4 rounded-xl p-8 text-right flex flex-col justify-end min-h-[160px] shadow-inner relative overflow-hidden">
+                        <div class="absolute top-6 left-6 flex gap-2">
+                            <span class="px-2 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-bold tracking-widest uppercase">RAD</span>
+                        </div>
+                        <div id="calc-exp" class="text-on-surface-variant text-sm font-medium tracking-tight mb-2 min-h-[20px] opacity-60 overflow-x-auto display-scroll whitespace-nowrap"></div>
+                        <input type="text" id="calc-display" readonly value="0" class="text-6xl font-extrabold tracking-tighter text-on-surface bg-transparent border-none outline-none text-right w-full display-scroll">
+                    </div>
+                    <!-- Calculator Keyboard -->
+                    <div class="p-6 grid grid-cols-5 gap-3">
+                        <!-- Scientific Row 1 -->
+                        <button onclick="func('Math.sin')" class="calc-btn p-4 bg-surface-container-high text-on-surface rounded-xl text-xs font-bold hover:bg-primary/10 hover:text-primary transition-all uppercase">sin</button>
+                        <button onclick="func('Math.cos')" class="calc-btn p-4 bg-surface-container-high text-on-surface rounded-xl text-xs font-bold hover:bg-primary/10 hover:text-primary transition-all uppercase">cos</button>
+                        <button onclick="func('Math.tan')" class="calc-btn p-4 bg-surface-container-high text-on-surface rounded-xl text-xs font-bold hover:bg-primary/10 hover:text-primary transition-all uppercase">tan</button>
+                        <button onclick="func('Math.log10')" class="calc-btn p-4 bg-surface-container-high text-on-surface rounded-xl text-xs font-bold hover:bg-primary/10 hover:text-primary transition-all uppercase">log</button>
+                        <button onclick="func('Math.log')" class="calc-btn p-4 bg-surface-container-high text-on-surface rounded-xl text-xs font-bold hover:bg-primary/10 hover:text-primary transition-all uppercase">ln</button>
+                        <!-- Scientific Row 2 -->
+                        <button onclick="append('(')" class="calc-btn p-4 bg-surface-container-high text-on-surface rounded-xl text-xs font-bold hover:bg-primary/10 hover:text-primary transition-all uppercase">(</button>
+                        <button onclick="append(')')" class="calc-btn p-4 bg-surface-container-high text-on-surface rounded-xl text-xs font-bold hover:bg-primary/10 hover:text-primary transition-all uppercase">)</button>
+                        <button onclick="append('**')" class="calc-btn p-4 bg-surface-container-high text-on-surface rounded-xl text-xs font-bold hover:bg-primary/10 hover:text-primary transition-all uppercase">^</button>
+                        <button onclick="func('Math.sqrt')" class="calc-btn p-4 bg-surface-container-high text-on-surface rounded-xl text-xs font-bold hover:bg-primary/10 hover:text-primary transition-all uppercase">âˆš</button>
+                        <button onclick="clearDisplay()" class="calc-btn p-4 bg-rose-50 text-rose-600 rounded-xl text-xs font-black hover:bg-rose-600 hover:text-white transition-all uppercase">AC</button>
+                        <!-- Number Rows -->
+                        <button onclick="append('7')" class="calc-btn p-6 bg-surface-container-lowest text-on-surface rounded-xl text-xl font-bold hover:shadow-lg">7</button>
+                        <button onclick="append('8')" class="calc-btn p-6 bg-surface-container-lowest text-on-surface rounded-xl text-xl font-bold hover:shadow-lg">8</button>
+                        <button onclick="append('9')" class="calc-btn p-6 bg-surface-container-lowest text-on-surface rounded-xl text-xl font-bold hover:shadow-lg">9</button>
+                        <button onclick="deleteLast()" class="calc-btn p-6 bg-surface-container text-on-surface rounded-xl text-sm font-bold text-on-surface-variant hover:bg-surface-container-high uppercase">Del</button>
+                        <button onclick="append('/')" class="calc-btn p-6 bg-secondary-fixed text-on-secondary-fixed rounded-xl text-xl font-bold hover:bg-primary hover:text-white">Ã·</button>
+                        <button onclick="append('4')" class="calc-btn p-6 bg-surface-container-lowest text-on-surface rounded-xl text-xl font-bold hover:shadow-lg">4</button>
+                        <button onclick="append('5')" class="calc-btn p-6 bg-surface-container-lowest text-on-surface rounded-xl text-xl font-bold hover:shadow-lg">5</button>
+                        <button onclick="append('6')" class="calc-btn p-6 bg-surface-container-lowest text-on-surface rounded-xl text-xl font-bold hover:shadow-lg">6</button>
+                        <button onclick="append('*')" class="calc-btn p-6 bg-secondary-fixed text-on-secondary-fixed rounded-xl text-xl font-bold hover:bg-primary hover:text-white">Ã—</button>
+                        <button onclick="append('-')" class="calc-btn p-6 bg-secondary-fixed text-on-secondary-fixed rounded-xl text-xl font-bold hover:bg-primary hover:text-white">-</button>
+                        <button onclick="append('1')" class="calc-btn p-6 bg-surface-container-lowest text-on-surface rounded-xl text-xl font-bold hover:shadow-lg">1</button>
+                        <button onclick="append('2')" class="calc-btn p-6 bg-surface-container-lowest text-on-surface rounded-xl text-xl font-bold hover:shadow-lg">2</button>
+                        <button onclick="append('3')" class="calc-btn p-6 bg-surface-container-lowest text-on-surface rounded-xl text-xl font-bold hover:shadow-lg">3</button>
+                        <button onclick="append('+')" class="calc-btn p-6 bg-secondary-fixed text-on-secondary-fixed rounded-xl text-xl font-bold hover:bg-primary hover:text-white">+</button>
+                        <button onclick="append('Math.PI')" class="calc-btn p-6 bg-surface-container text-on-surface rounded-xl text-sm font-bold hover:bg-primary/10 transition-all">Ï€</button>
+                        <button onclick="append('0')" class="calc-btn p-6 bg-surface-container-lowest text-on-surface rounded-xl text-xl font-bold hover:shadow-lg">0</button>
+                        <button onclick="append('.')" class="calc-btn p-6 bg-surface-container-lowest text-on-surface rounded-xl text-xl font-bold hover:shadow-lg text-primary">.</button>
+                        <button onclick="append('Math.E')" class="calc-btn p-6 bg-surface-container text-on-surface rounded-xl text-sm font-bold hover:bg-primary/10 transition-all uppercase">e</button>
+                        <button onclick="solve()" class="col-span-2 calc-btn p-6 bg-primary text-white rounded-xl text-2xl font-black hover:shadow-2xl hover:scale-[1.02] shadow-xl shadow-primary/30">=</button>
+                    </div>
+                    <div class="px-6 py-4 flex items-center justify-between border-t border-surface-container-high">
+                        <p class="text-[9px] font-bold text-on-surface-variant uppercase tracking-[0.2em]">High Precision Math "Â¢ Smart Hub Core</p>
+                        <button onclick="saveScientificToHistory()" id="saveBtn" class="text-[10px] font-black text-primary uppercase tracking-widest hover:underline">Save to Registry</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let expression = '';
+        const display = document.getElementById('calc-display');
+        const expView = document.getElementById('calc-exp');
+
+        function updateDisplay(val) {
+            display.value = val || '0';
+            expView.textContent = expression.replace(/Math\./g, '').replace(/\*\*/g, '^');
+            expView.scrollLeft = expView.scrollWidth;
+        }
+
+        function append(val) {
+            if (expression === '0') expression = '';
+            expression += val;
+            updateDisplay(expression);
+        }
+
+        function func(fn) {
+            expression += fn + '(';
+            updateDisplay(expression);
+        }
+
+        function clearDisplay() {
+            expression = '';
+            updateDisplay('0');
+        }
+
+        function deleteLast() {
+            expression = expression.slice(0, -1);
+            if (expression.endsWith('Math.')) expression = expression.slice(0, -5);
+            updateDisplay(expression);
+        }
+
+        function solve() {
+            if (!expression) return;
+            try {
+                const finalResult = eval(expression);
+                const displayExp = expression.replace(/Math\./g, '').replace(/\*\*/g, '^');
+                lastCalculation = { exp: displayExp, res: finalResult };
+                expression = finalResult.toString();
+                updateDisplay(expression);
+                // Flash animation for result
+                display.classList.add('text-primary');
+                setTimeout(() => display.classList.remove('text-primary'), 300);
+            } catch (e) {
+                display.value = 'Error';
+                expression = '';
+            }
+        }
+
+        let lastCalculation = null;
+
+        async function saveScientificToHistory() {
+            if (!lastCalculation) return;
+
+            const btn = document.getElementById('saveBtn');
+            const orig = btn.innerText;
+            btn.innerText = 'SAVING...';
+            btn.disabled = true;
+
+            const inputs = [{ label: 'Equation', val: lastCalculation.exp }];
+            const results = [{ label: 'Result', val: lastCalculation.res.toString(), highlight: true }];
+
+            try {
+                const ok = await window.saveCalcToHistory('Science Studio', inputs, results);
+                if (ok) {
+                    btn.innerText = 'SAVED';
+                    btn.style.color = '#10b981'; // emerald-600
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.style.color = '';
+                        btn.disabled = false;
+                        if (typeof initSidebarHistory === 'function') {
+                            initSidebarHistory('Science Studio', 'sidebar-history-container');
+                        }
+                    }, 2000);
+                } else {
+                    btn.innerText = orig;
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                btn.innerText = orig;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+             try {
+                if(typeof initSidebarHistory === 'function') {
+                    initSidebarHistory('Science Studio', 'sidebar-history-container');
+                }
+            } catch(e){}
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key >= '0' && e.key <= '9') append(e.key);
+            if (e.key === '.') append('.');
+            if (e.key === '+') append('+');
+            if (e.key === '-') append('-');
+            if (e.key === '*') append('*');
+            if (e.key === '/') append('/');
+            if (e.key === 'Enter') solve();
+            if (e.key === 'Backspace') deleteLast();
+            if (e.key === 'Escape') clearDisplay();
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,247 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Discount & Offer Calculator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Discount Calc.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Shopping online? Calculate the final price after discounts and see your actual savings on any product instantly.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Saved Deals</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No deals saved yet.</p>
+                    </div>
+                </div>
+
+                <div class="bg-rose-900 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">shopping_bag</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">local_offer</span> Smart Deal Tip
+                     </h4>
+                     <p class="text-rose-100 text-[11px] leading-relaxed mb-4 opacity-80">
+                        Always check if the discount is on the MRP (Maximum Retail Price). In India, MRP should always be the highest price any seller can charge including GST!
+                     </p>
+                     <div class="space-y-2">
+                        <div class="flex items-center gap-2 text-[10px] font-bold text-rose-200">
+                            <span class="w-1 h-1 bg-rose-400 rounded-full"></span> MRP includes all taxes (GST)
+                        </div>
+                        <div class="flex items-center gap-2 text-[10px] font-bold text-rose-200">
+                            <span class="w-1 h-1 bg-rose-400 rounded-full"></span> Look for Credit Card cashbacks
+                        </div>
+                        <div class="flex items-center gap-2 text-[10px] font-bold text-rose-200">
+                            <span class="w-1 h-1 bg-rose-400 rounded-full"></span> Save extra with coupon codes
+                        </div>
+                     </div>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="calc_currency.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Money Swapper</div>
+                            </div>
+                        </a>
+                        <a href="calc_loan.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Loan Studio</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-8">
+                    <div class="bg-white p-12 rounded-2xl border border-slate-100 shadow-sm text-center">
+                        <div class="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2" id="calc-status">Finding your deal...</div>
+                        <div id="calc-display" class="text-7xl font-black text-on-surface font-mono">₹0</div>
+                        <div id="savings-val" class="mt-4 text-sm font-bold text-emerald-600 uppercase tracking-widest">
+                            YOU SAVE: ₹0
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block tracking-widest">Original MRP (₹)</label>
+                                <input type="number" id="price" placeholder="1999" value="1999" oninput="solveDiscount()" class="w-full bg-white border border-surface-container-high rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-lg">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block tracking-widest">Discount (%)</label>
+                                <input type="number" id="discount" placeholder="30" value="30" oninput="solveDiscount()" class="w-full bg-white border border-surface-container-high rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-lg">
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="bg-indigo-50/50 border border-indigo-100 rounded-2xl p-6">
+                                <div class="flex justify-between items-center text-[10px] font-black uppercase text-indigo-400 mb-4">
+                                    <span>Summary</span>
+                                    <span class="material-symbols-outlined text-sm">summarize</span>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between text-xs font-bold text-on-surface-variant">
+                                        <span>Money Saved:</span>
+                                        <span id="savedComp" class="text-emerald-600">₹0</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs font-bold text-on-surface-variant border-t border-indigo-100 pt-3">
+                                        <span>Final Price:</span>
+                                        <span id="effectiveComp" class="text-on-surface">₹0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="resetForms()" class="w-full py-4 bg-slate-100 text-slate-500 rounded-2xl font-bold text-[10px] tracking-widest uppercase hover:bg-slate-200 transition-all flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-sm">restart_alt</span> Reset Calculator
+                            </button>
+                        </div>
+                    </div>
+
+                    <button onclick="saveDiscountLog()" id="saveBtn" class="w-full bg-primary text-white py-5 rounded-2xl font-black text-xs tracking-[0.2em] uppercase shadow-lg shadow-primary/20 hover:scale-[1.01] active:scale-95 transition-all">Save This Deal</button>
+                </div>
+
+                <div class="bg-surface-container p-10 rounded-2xl border border-surface-container-high italic text-[11px] text-on-surface-variant leading-relaxed text-center opacity-70 mt-8">
+                    "Buyer Insight: Don't fall for 'Buy 1 Get 1' if you only need one. Sometimes a single 50% flat discount is much better!"
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        function solveDiscount() {
+            const price = parseFloat(document.getElementById('price').value) || 0;
+            const discount = parseFloat(document.getElementById('discount').value) || 0;
+            const display = document.getElementById('calc-display');
+            const statusText = document.getElementById('calc-status');
+            const savingsValEl = document.getElementById('savings-val');
+            const savedComp = document.getElementById('savedComp');
+            const effectiveComp = document.getElementById('effectiveComp');
+
+            if (price <= 0) {
+                display.innerText = "₹0";
+                statusText.innerText = "Finding your deal...";
+                return;
+            }
+
+            const savingAmt = price * (discount / 100);
+            const finalPrice = price - savingAmt;
+
+            const f = (val) => '₹' + Math.round(val).toLocaleString('en-IN');
+
+            display.innerText = f(finalPrice);
+            statusText.innerText = `Great! You are getting ${discount}% off`;
+            savingsValEl.innerText = `YOU SAVE: ${f(savingAmt)}`;
+            savedComp.innerText = f(savingAmt);
+            effectiveComp.innerText = f(finalPrice);
+        }
+
+        async function saveDiscountLog() {
+            const val = document.getElementById('calc-display').innerText.trim();
+            if (val === '₹0') return;
+            const ok = await window.saveCalcToHistory('Discount Deal', 
+                [{ label: 'MRP', val: '₹' + document.getElementById('price').value }, { label: 'Off', val: document.getElementById('discount').value + '%' }], 
+                [{ label: 'Deal Price', val: val, highlight: true }]
+            );
+            if (ok) renderSidebarHistory();
+        }
+
+        function renderSidebarHistory() {
+            if (typeof initSidebarHistory === 'function') {
+                initSidebarHistory('Discount Deal', 'sidebar-history-container');
+            }
+        }
+
+        function resetForms() {
+            document.getElementById('price').value = 1999;
+            document.getElementById('discount').value = 30;
+            solveDiscount();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            solveDiscount();
+            renderSidebarHistory();
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

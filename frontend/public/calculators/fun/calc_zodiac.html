@@ -1,0 +1,646 @@
+﻿<!doctype html>
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Smart Hub | Zodiac Calculator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+      :root {
+        --primary-color: #0f766e;
+      }
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+      .material-symbols-outlined {
+        font-family: "Material Symbols Outlined";
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      @keyframes orbit {
+        from {
+          transform: rotate(0deg) translateX(10px) rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg) translateX(10px) rotate(-360deg);
+        }
+      }
+      .celestial-anim {
+        animation: orbit 10s linear infinite;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300"
+  >
+    <div id="header-placeholder"></div>
+
+        <main class="pt-24 pb-20 px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+      <div class="mb-12">
+        <nav
+          class="flex items-center gap-2 text-sm text-on-surface-variant mb-4 font-medium tracking-wide"
+        >
+          <span>FUN ZONE</span>
+          <span class="material-symbols-outlined text-xs">chevron_right</span>
+          <span
+            class="text-primary uppercase tracking-widest text-[10px] font-bold"
+            >Zodiac Calculator</span
+          >
+        </nav>
+        <h1
+          id="page-title"
+          class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']"
+        >
+          Zodiac Sign.
+        </h1>
+        <p id="page-desc" class="text-on-surface-variant text-lg max-w-2xl">
+          Find your personal Sun sign and Vedic Moon sign based on your birth details.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-12 gap-8 items-start">
+        <!-- Sidebar -->
+        <div class="col-span-12 lg:col-span-4 space-y-8">
+          <div
+            class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]"
+          >
+            <div class="flex justify-between items-center mb-6">
+              <h3
+                id="registry-title"
+                class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800"
+              >
+                Recent Results
+              </h3>
+              <span
+                onclick="clearSidebarHistory()"
+                class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors"
+                title="Clear History"
+                >delete_sweep</span
+              >
+            </div>
+            <div class="space-y-6" id="sidebar-history-container">
+              <p
+                class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4"
+              >
+                No recent results.
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="bg-indigo-950 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group"
+          >
+            <div
+              class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500"
+            >
+              <span class="material-symbols-outlined text-[120px]">stars</span>
+            </div>
+            <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+               <span class="material-symbols-outlined text-sm">auto_awesome</span> Zodiac Fact
+            </h4>
+            <p class="text-indigo-100 text-[11px] leading-relaxed mb-4 opacity-80">
+               Your Sun Sign represents your core personality, while your Moon Sign reflects your inner emotions and intuition!
+            </p>
+          </div>
+        
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="calc_rock_paper_scissors.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Battle Arena</div>
+                            </div>
+                        </a>
+                        <a href="game_car_racing.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Car Racing Game</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        <!-- Content Area -->
+        <div class="col-span-12 lg:col-span-8">
+          <div
+            class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-6"
+          >
+            <!-- Display -->
+            <div
+              class="bg-white rounded-2xl p-8 text-right flex flex-col justify-end min-h-[220px] border border-slate-100 shadow-sm relative overflow-hidden"
+            >
+              <div class="absolute top-8 left-8 flex gap-2">
+                <span
+                  class="px-3 py-1 rounded-lg bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase"
+                  >ZODIAC STATUS</span
+                >
+                <span
+                  class="px-3 py-1 rounded-lg bg-slate-100 text-[#7a614d] text-[10px] font-black tracking-widest uppercase"
+                  id="calc-status"
+                  >WAITING...</span
+                >
+              </div>
+              <div
+                id="result-label"
+                class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]"
+              >
+                Your Moon Sign (Rashi)
+              </div>
+              <div
+                id="calc-display"
+                class="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tighter text-on-surface flex flex-wrap items-center justify-end gap-2 overflow-hidden italic leading-tight"
+              >
+                <span
+                  class="w-1 h-10 md:h-12 lg:h-14 bg-primary animate-pulse rounded-full mr-2"
+                ></span
+                >Enter Details
+              </div>
+              <p id="zodiac-desc" class="text-xs md:text-sm text-slate-500 font-medium mt-4 normal-case max-w-sm ml-auto text-right"></p>
+            </div>
+
+            <!-- Input Section -->
+            <div class="p-8 pb-4 space-y-8">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                  <label
+                    id="lbl-name"
+                    class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block"
+                    >Your Name</label
+                  >
+                  <input
+                    type="text"
+                    id="user-name"
+                    placeholder="e.g. Aryan"
+                    class="w-full bg-white border border-slate-100 rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-sm shadow-sm"
+                  />
+                </div>
+
+                <div class="space-y-2">
+                  <label
+                    id="lbl-date"
+                    class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block"
+                    >Birth Date</label
+                  >
+                  <input
+                    type="date"
+                    id="dob"
+                    class="w-full bg-white border border-slate-100 rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-sm shadow-sm"
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label
+                    id="lbl-time"
+                    class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block"
+                    >Birth Time (IST)</label
+                  >
+                  <input
+                    type="time"
+                    id="tob"
+                    class="w-full bg-white border border-slate-100 rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-sm shadow-sm"
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label
+                    id="lbl-venue"
+                    class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block"
+                    >Birth Place</label
+                  >
+                  <input
+                    type="text"
+                    id="place"
+                    placeholder="City Name"
+                    class="w-full bg-white border border-slate-100 rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-sm shadow-sm"
+                  />
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex gap-4">
+                  <button
+                    onclick="calculateRashi()"
+                    class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all"
+                  >
+                    <span id="btn-calc-text">Check Zodiac</span>
+                  </button>
+                  <button
+                    onclick="toggleLanguage()"
+                    id="lang-btn"
+                    class="px-6 py-5 bg-slate-100 rounded-2xl text-slate-500 font-black hover:text-primary hover:bg-slate-200 transition-colors uppercase text-[10px] tracking-widest"
+                  >
+                    à¤®à¤°à¤¾à¤ à¥€
+                  </button>
+              </div>
+              
+              <!-- Navigation Actions -->
+                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-end items-center gap-4">
+                        <div class="flex gap-3">
+                      <button id="save-btn" onclick="saveToRegistry(document.getElementById('user-name').value, document.getElementById('dob').value, document.getElementById('tob').value, window.lastWestern, window.lastRashi, window.lastNak, window.lastMulank, window.lastBhagyank)" class="hidden bg-primary text-white px-8 py-4 rounded-xl font-black text-[10px] tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] transition-all">Save Result</button>
+                      <button onclick="window.print()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                          <span class="material-symbols-outlined">print</span>
+                      </button>
+                  </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Analysis Block -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+            <div
+              class="bg-white p-6 rounded-2xl border border-slate-100 text-center shadow-sm"
+            >
+              <div class="flex items-center justify-center gap-3 mb-2">
+                 <span class="material-symbols-outlined text-primary text-sm">light_mode</span>
+                 <h5 id="lbl-sun-sign" class="font-black uppercase tracking-widest text-[8px] text-slate-400">Sun Sign</h5>
+              </div>
+              <p id="sun-val" class="text-sm font-black text-on-surface uppercase tracking-tight">--</p>
+              <p id="sun-desc" class="text-[9px] text-slate-400 mt-2 font-bold normal-case leading-tight"></p>
+            </div>
+            <div
+              class="bg-white p-6 rounded-2xl border border-slate-100 text-center shadow-sm"
+            >
+              <div class="flex items-center justify-center gap-3 mb-2">
+                 <span class="material-symbols-outlined text-emerald-500 text-sm">stars</span>
+                 <h5 id="lbl-pada" class="font-black uppercase tracking-widest text-[8px] text-slate-400">Nakshatra (Star)</h5>
+              </div>
+              <p id="pada-val" class="text-sm font-black text-on-surface uppercase tracking-tight">--</p>
+            </div>
+            <div
+              class="bg-white p-6 rounded-2xl border border-slate-100 text-center shadow-sm"
+            >
+              <div class="flex items-center justify-center gap-3 mb-2">
+                 <span class="material-symbols-outlined text-amber-500 text-sm">explore</span>
+                 <h5 id="lbl-sync" class="font-black uppercase tracking-widest text-[8px] text-slate-400">Moon Position</h5>
+              </div>
+              <p id="pos-val" class="text-sm font-black text-on-surface uppercase tracking-tight">--</p>
+            </div>
+          </div>
+
+          <!-- Numerology Block -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div
+              class="bg-white p-6 rounded-2xl border border-slate-100 text-center shadow-sm"
+            >
+              <div class="flex items-center justify-center gap-3 mb-2">
+                 <span class="material-symbols-outlined text-purple-500 text-sm">looks_one</span>
+                 <h5 id="lbl-mulank" class="font-black uppercase tracking-widest text-[8px] text-slate-400">Mulank (Root)</h5>
+              </div>
+              <p id="mulank-val" class="text-sm font-black text-on-surface uppercase tracking-tight">--</p>
+            </div>
+            <div
+              class="bg-white p-6 rounded-2xl border border-slate-100 text-center shadow-sm"
+            >
+              <div class="flex items-center justify-center gap-3 mb-2">
+                 <span class="material-symbols-outlined text-indigo-500 text-sm">auto_awesome</span>
+                 <h5 id="lbl-bhagyank" class="font-black uppercase tracking-widest text-[8px] text-slate-400">Bhagyank (Destiny)</h5>
+              </div>
+              <p id="bhagyank-val" class="text-sm font-black text-on-surface uppercase tracking-tight">--</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script type="module" src="/js/script.js"></script>
+    <script>
+      // Dictionary containing both languages
+      const translations = {
+          en: {
+              title: "Zodiac Sign.",
+              desc: "Find your personal Sun sign and Vedic Moon sign based on your birth details.",
+              registry: "Recent Results",
+              awaiting: "Waiting...",
+              prophetic: "Your Moon Sign (Rashi)",
+              enterOrigin: "Enter Details",
+              lblName: "Your Name",
+              lblDate: "Birth Date",
+              lblTime: "Birth Time (IST)",
+              lblVenue: "Birth Place",
+              btnCalc: "Check Zodiac",
+              lblSun: "Sun Sign (Western)",
+              lblPada: "Nakshatra (Star)",
+              lblSync: "Moon Position",
+              lblMulank: "Mulank (Root)",
+              lblBhagyank: "Bhagyank (Destiny)",
+              langBtn: "à¤®à¤°à¤¾à¤ à¥€",
+              alertDate: "Please select your Birth Date.",
+              alertFuture: "Birth Date cannot be in the future.",
+              sunSign: "Sun Sign (Western Zodiac)",
+              moonSign: "Moon Sign (Vedic)",
+              observed: "Calculated",
+              padaText: "Pada",
+              rashis: [ "Mesh (Aries) â™ˆ","Vrishabh (Taurus) â™‰","Mithun (Gemini) â™Š", "Karka (Cancer) â™‹","Simha (Leo) â™Œ","Kanya (Virgo) â™", "Tula (Libra) â™Ž","Vrishchik (Scorpio) â™","Dhanu (Sagittarius) â™", "Makar (Capricorn) â™‘","Kumbha (Aquarius) â™’","Meena (Pisces) â™“" ],
+              nakshatras: [ "Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra", "Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni", "Uttara Phalguni","Hasta","Chitra","Swati","Vishakha", "Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha", "Shravana","Dhanishta","Shatabhisha","Purva Bhadrapada", "Uttara Bhadrapada","Revati" ]
+          },
+          mr: {
+              title: "à¤°à¤¾à¤¶à¥€ à¤•à¥…à¤²à¥à¤•à¥à¤¯à¥à¤²à¥‡à¤Ÿà¤°.",
+              desc: "à¤¤à¥à¤®à¤šà¥à¤¯à¤¾ à¤œà¤¨à¥à¤® à¤¤à¤ªà¤¶à¥€à¤²à¤¾à¤¨à¥à¤¸à¤¾à¤° à¤¤à¥à¤®à¤šà¥€ à¤ªà¤¾à¤¶à¥à¤šà¤¾à¤¤à¥à¤¯ à¤¸à¥‚à¤°à¥à¤¯ à¤°à¤¾à¤¶à¥€ à¤†à¤£à¤¿ à¤µà¥ˆà¤¦à¤¿à¤• à¤šà¤‚à¤¦à¥à¤° à¤°à¤¾à¤¶à¥€ à¤¶à¥‹à¤§à¤¾.",
+              registry: "à¤®à¤¾à¤—à¥€à¤² à¤¨à¤¿à¤•à¤¾à¤²",
+              awaiting: "à¤ªà¥à¤°à¤¤à¥€à¤•à¥à¤·à¥‡à¤¤",
+              prophetic: "à¤¤à¥à¤®à¤šà¥€ à¤šà¤‚à¤¦à¥à¤° à¤°à¤¾à¤¶à¥€ (à¤µà¥ˆà¤¦à¤¿à¤•)",
+              enterOrigin: "à¤®à¤¾à¤¹à¤¿à¤¤à¥€ à¤­à¤°à¤¾",
+              lblName: "à¤¤à¥à¤®à¤šà¥‡ à¤¨à¤¾à¤µ",
+              lblDate: "à¤œà¤¨à¥à¤® à¤¤à¤¾à¤°à¥€à¤–",
+              lblTime: "à¤œà¤¨à¥à¤® à¤µà¥‡à¤³ (IST)",
+              lblVenue: "à¤œà¤¨à¥à¤® à¤ à¤¿à¤•à¤¾à¤£",
+              btnCalc: "à¤°à¤¾à¤¶à¥€ à¤¤à¤ªà¤¾à¤¸à¤¾",
+              lblSun: "à¤¸à¥‚à¤°à¥à¤¯ à¤°à¤¾à¤¶à¥€ (à¤ªà¤¾à¤¶à¥à¤šà¤¾à¤¤à¥à¤¯)",
+              lblPada: "à¤¨à¤•à¥à¤·à¤¤à¥à¤° (à¤¸à¥à¤Ÿà¤¾à¤°)",
+              lblSync: "à¤šà¤‚à¤¦à¥à¤°à¤¾à¤šà¥€ à¤¸à¥à¤¥à¤¿à¤¤à¥€",
+              lblMulank: "à¤®à¥‚à¤²à¤¾à¤‚à¤• (à¤°à¥‚à¤Ÿ)",
+              lblBhagyank: "à¤­à¤¾à¤—à¥à¤¯à¤¾à¤‚à¤• (à¤¡à¥‡à¤¸à¥à¤Ÿà¤¿à¤¨à¥€)",
+              langBtn: "English",
+              alertDate: "à¤•à¥ƒà¤ªà¤¯à¤¾ à¤¤à¥à¤®à¤šà¥€ à¤œà¤¨à¥à¤® à¤¤à¤¾à¤°à¥€à¤– à¤Ÿà¤¾à¤•à¤¾.",
+              alertFuture: "à¤œà¤¨à¥à¤® à¤¤à¤¾à¤°à¥€à¤– à¤­à¤µà¤¿à¤·à¥à¤¯à¤¾à¤¤à¥€à¤² à¤…à¤¸à¥‚ à¤¶à¤•à¤¤ à¤¨à¤¾à¤¹à¥€.",
+              sunSign: "à¤¸à¥‚à¤°à¥à¤¯ à¤°à¤¾à¤¶à¥€ (à¤ªà¤¾à¤¶à¥à¤šà¤¾à¤¤à¥à¤¯)",
+              moonSign: "à¤šà¤‚à¤¦à¥à¤° à¤°à¤¾à¤¶à¥€ (à¤µà¥ˆà¤¦à¤¿à¤•)",
+              observed: "à¤¤à¤ªà¤¾à¤¸à¤²à¥‡",
+              padaText: "à¤ªà¤¦",
+              rashis: [ "à¤®à¥‡à¤· â™ˆ","à¤µà¥ƒà¤·à¤­ â™‰","à¤®à¤¿à¤¥à¥à¤¨ â™Š", "à¤•à¤°à¥à¤• â™‹","à¤¸à¤¿à¤‚à¤¹ â™Œ","à¤•à¤¨à¥à¤¯à¤¾ â™", "à¤¤à¥‚à¤³ â™Ž","à¤µà¥ƒà¤¶à¥à¤šà¤¿à¤• â™","à¤§à¤¨à¥ â™", "à¤®à¤•à¤° â™‘","à¤•à¥à¤‚à¤­ â™’","à¤®à¥€à¤¨ â™“" ],
+              nakshatras: [ "à¤…à¤¶à¥à¤µà¤¿à¤¨à¥€","à¤­à¤°à¤£à¥€","à¤•à¥ƒà¤¤à¥à¤¤à¤¿à¤•à¤¾","à¤°à¥‹à¤¹à¤¿à¤£à¥€","à¤®à¥ƒà¤—à¤¶à¥€à¤°à¥à¤·","à¤†à¤°à¥à¤¦à¥à¤°à¤¾", "à¤ªà¥à¤¨à¤°à¥à¤µà¤¸à¥‚","à¤ªà¥à¤·à¥à¤¯","à¤†à¤¶à¥à¤²à¥‡à¤·à¤¾","à¤®à¤˜à¤¾","à¤ªà¥‚à¤°à¥à¤µà¤¾ à¤«à¤¾à¤²à¥à¤—à¥à¤¨à¥€", "à¤‰à¤¤à¥à¤¤à¤°à¤¾ à¤«à¤¾à¤²à¥à¤—à¥à¤¨à¥€","à¤¹à¤¸à¥à¤¤","à¤šà¤¿à¤¤à¥à¤°à¤¾","à¤¸à¥à¤µà¤¾à¤¤à¥€","à¤µà¤¿à¤¶à¤¾à¤–à¤¾", "à¤…à¤¨à¥à¤°à¤¾à¤§à¤¾","à¤œà¥à¤¯à¥‡à¤·à¥à¤ à¤¾","à¤®à¥‚à¤³","à¤ªà¥‚à¤°à¥à¤µà¤¾à¤·à¤¾à¤¢à¤¾","à¤‰à¤¤à¥à¤¤à¤°à¤¾à¤·à¤¾à¤¢à¤¾", "à¤¶à¥à¤°à¤µà¤£","à¤§à¤¨à¤¿à¤·à¥à¤ à¤¾","à¤¶à¤¤à¤¤à¤¾à¤°à¤•à¤¾","à¤ªà¥‚à¤°à¥à¤µà¤¾ à¤­à¤¾à¤¦à¥à¤°à¤ªà¤¦à¤¾", "à¤‰à¤¤à¥à¤¤à¤°à¤¾ à¤­à¤¾à¤¦à¥à¤°à¤ªà¤¦à¤¾","à¤°à¥‡à¤µà¤¤à¥€" ]
+          }
+      };
+
+      let currentLang = 'en';
+
+      // Switch Language and apply UI updates
+      window.toggleLanguage = function() {
+          currentLang = currentLang === 'en' ? 'mr' : 'en';
+          applyLanguage();
+          // Recalculate instantly if there is an active date selected
+          if (document.getElementById("dob").value) {
+              window.calculateRashi();
+          }
+      };
+
+      function applyLanguage() {
+          const t = translations[currentLang];
+          document.getElementById("page-title").innerText = t.title;
+          document.getElementById("page-desc").innerText = t.desc;
+          document.getElementById("registry-title").innerText = t.registry;
+          
+          // Only update placeholder text if not currently showing an observed calculation result
+          const currentStatus = document.getElementById("calc-status").innerText;
+          if (currentStatus !== translations.en.observed && currentStatus !== translations.mr.observed) {
+              document.getElementById("calc-status").innerText = t.awaiting;
+              document.getElementById("calc-display").innerHTML = `<span class="w-1 h-10 md:h-12 lg:h-14 bg-primary animate-pulse rounded-full mr-2"></span>${t.enterOrigin}`;
+              document.getElementById("zodiac-desc").innerText = "";
+              if(document.getElementById("sun-desc")) document.getElementById("sun-desc").innerText = "";
+          }
+
+          document.getElementById("result-label").innerText = t.prophetic;
+
+          document.getElementById("lbl-name").innerText = t.lblName;
+          document.getElementById("lbl-date").innerText = t.lblDate;
+          document.getElementById("lbl-time").innerText = t.lblTime;
+          document.getElementById("lbl-venue").innerText = t.lblVenue;
+          document.getElementById("btn-calc-text").innerText = t.btnCalc;
+          document.getElementById("lbl-sun-sign").innerText = t.lblSun;
+          document.getElementById("lbl-pada").innerText = t.lblPada;
+          document.getElementById("lbl-sync").innerText = t.lblSync;
+          document.getElementById("lbl-mulank").innerText = t.lblMulank;
+          document.getElementById("lbl-bhagyank").innerText = t.lblBhagyank;
+          document.getElementById("lang-btn").innerText = t.langBtn;
+      }
+
+      const toJulian = (date) => date / 86400000 + 2440587.5; 
+
+      function moonLongitude(jd) { 
+          const T = (jd - 2451545.0)/36525; 
+          let L0 = 218.3164477 + 481267.88123421*T; // Mean Longitude
+          let M = 134.9633964 + 477198.8675055*T;   // Mean Anomaly 
+          let D = 297.8501921 + 445267.1114034*T;   // Mean Elongation
+          let M_sun = 357.5291092 + 35999.0502909*T; // Sun Mean Anomaly
+          
+          L0 = ((L0%360)+360)%360; 
+          M = ((M%360)+360)%360; 
+          D = ((D%360)+360)%360; 
+          M_sun = ((M_sun%360)+360)%360;
+
+          const toRad = Math.PI / 180;
+          let lon = L0 
+              + 6.289 * Math.sin(M * toRad)                // Center displacement
+              + 1.274 * Math.sin((2 * D - M) * toRad)      // Evection
+              + 0.658 * Math.sin(2 * D * toRad)            // Variation
+              + 0.214 * Math.sin(2 * M * toRad)            // Center displacement 2nd term
+              - 0.186 * Math.sin(M_sun * toRad);           // Solar term
+              
+          return ((lon%360)+360)%360; 
+      } 
+
+      function lahiriAyanamsa(jd) { 
+          const t = (jd - 2451545.0)/36525; 
+          // Accurate Lahiri Ayanamsa approximation for modern era
+          return 23.85694 + 1.3975 * t; 
+      } 
+
+      // Helper function to convert English digits to Marathi digits
+      function formatDigits(num, lang) {
+          if (lang === 'en') return num;
+          const marathiDigits = ['à¥¦','à¥§','à¥¨','à¥©','à¥ª','à¥«','à¥¬','à¥­','à¥®','à¥¯'];
+          return String(num).replace(/[0-9]/g, match => marathiDigits[match]);
+      }
+
+      function getZodiacSign(day, month, lang) {
+          let idx = 12; // Unknown
+          if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) idx = 0;
+          else if ((month === 2 && day >= 19) || (month === 3 && day <= 20)) idx = 1;
+          else if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) idx = 2;
+          else if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) idx = 3;
+          else if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) idx = 4;
+          else if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) idx = 5;
+          else if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) idx = 6;
+          else if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) idx = 7;
+          else if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) idx = 8;
+          else if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) idx = 9;
+          else if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) idx = 10;
+          else if ((month === 12 && day >= 22) || (month === 1 && day <= 19)) idx = 11;
+
+          const signsEn = ['Aquarius', 'Pisces', 'Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Unknown'];
+          const signsMr = ['à¤•à¥à¤‚à¤­', 'à¤®à¥€à¤¨', 'à¤®à¥‡à¤·', 'à¤µà¥ƒà¤·à¤­', 'à¤®à¤¿à¤¥à¥à¤¨', 'à¤•à¤°à¥à¤•', 'à¤¸à¤¿à¤‚à¤¹', 'à¤•à¤¨à¥à¤¯à¤¾', 'à¤¤à¥‚à¤³', 'à¤µà¥ƒà¤¶à¥à¤šà¤¿à¤•', 'à¤§à¤¨à¥', 'à¤®à¤•à¤°', 'à¤…à¤œà¥à¤žà¤¾à¤¤'];
+          const symbols = ['â™’', 'â™“', 'â™ˆ', 'â™‰', 'â™Š', 'â™‹', 'â™Œ', 'â™', 'â™Ž', 'â™', 'â™', 'â™‘', '?'];
+          
+          const descEn = [
+              'Innovative, progressive, and deeply humanitarian.',
+              'Compassionate, artistic, and deeply intuitive.',
+              'Courageous, determined, confident, and enthusiastic.',
+              'Reliable, patient, practical, and devoted.',
+              'Gentle, affectionate, curious, and adaptable.',
+              'Tenacious, highly imaginative, loyal, and emotional.',
+              'Creative, passionate, generous, and warm-hearted.',
+              'Loyal, analytical, kind, and hardworking.',
+              'Cooperative, diplomatic, gracious, and fair-minded.',
+              'Resourceful, brave, passionate, and stubborn.',
+              'Generous, idealistic, and has a great sense of humor.',
+              'Responsible, disciplined, and self-controlled.',
+              'Could not determine sign. Please check your date.'
+          ];
+          const descMr = [
+              'à¤¨à¤¾à¤µà¤¿à¤¨à¥à¤¯à¤ªà¥‚à¤°à¥à¤£, à¤ªà¥à¤°à¤—à¤¤ à¤†à¤£à¤¿ à¤…à¤¤à¥à¤¯à¤‚à¤¤ à¤®à¤¾à¤¨à¤µà¤¤à¤¾à¤µà¤¾à¤¦à¥€.',
+              'à¤¦à¤¯à¤¾à¤³à¥‚, à¤•à¤²à¤¾à¤¤à¥à¤®à¤• à¤†à¤£à¤¿ à¤…à¤¤à¥à¤¯à¤‚à¤¤ à¤…à¤‚à¤¤à¤°à¥à¤œà¥à¤žà¤¾à¤¨à¥€.',
+              'à¤§à¥ˆà¤°à¥à¤¯à¤µà¤¾à¤¨, à¤¦à¥ƒà¤¢à¤¨à¤¿à¤¶à¥à¤šà¤¯à¥€, à¤†à¤¤à¥à¤®à¤µà¤¿à¤¶à¥à¤µà¤¾à¤¸à¥€ à¤†à¤£à¤¿ à¤‰à¤¤à¥à¤¸à¤¾à¤¹à¥€.',
+              'à¤µà¤¿à¤¶à¥à¤µà¤¾à¤¸à¤¾à¤°à¥à¤¹, à¤¸à¤‚à¤¯à¤®à¥€, à¤µà¥à¤¯à¤¾à¤µà¤¹à¤¾à¤°à¤¿à¤• à¤†à¤£à¤¿ à¤¸à¤®à¤°à¥à¤ªà¤¿à¤¤.',
+              'à¤¸à¥Œà¤®à¥à¤¯, à¤ªà¥à¤°à¥‡à¤®à¤³, à¤œà¤¿à¤œà¥à¤žà¤¾à¤¸à¥‚ à¤†à¤£à¤¿ à¤œà¥à¤³à¤µà¥‚à¤¨ à¤˜à¥‡à¤£à¤¾à¤°à¥‡.',
+              'à¤šà¤¿à¤•à¤¾à¤Ÿà¥€à¤šà¥‡, à¤…à¤¤à¥à¤¯à¤‚à¤¤ à¤•à¤²à¥à¤ªà¤•, à¤¨à¤¿à¤·à¥à¤ à¤¾à¤µà¤¾à¤¨ à¤†à¤£à¤¿ à¤­à¤¾à¤µà¤¨à¤¿à¤•.',
+              'à¤¸à¤°à¥à¤œà¤¨à¤¶à¥€à¤², à¤¤à¤¾à¤ªà¤Ÿ, à¤‰à¤¦à¤¾à¤° à¤†à¤£à¤¿ à¤ªà¥à¤°à¥‡à¤®à¤³.',
+              'à¤¨à¤¿à¤·à¥à¤ à¤¾à¤µà¤¾à¤¨, à¤µà¤¿à¤¶à¥à¤²à¥‡à¤·à¤£à¤¾à¤¤à¥à¤®à¤•, à¤¦à¤¯à¤¾à¤³à¥‚ à¤†à¤£à¤¿ à¤®à¥‡à¤¹à¤¨à¤¤à¥€.',
+              'à¤¸à¤¹à¤•à¤¾à¤°à¥€, à¤®à¥à¤¤à¥à¤¸à¤¦à¥à¤¦à¥€, à¤¦à¤¯à¤¾à¤³à¥‚ à¤†à¤£à¤¿ à¤¨à¥à¤¯à¤¾à¤¯à¥à¤¯.',
+              'à¤¸à¤‚à¤¸à¤¾à¤§à¤¨à¤ªà¥‚à¤°à¥à¤£, à¤¶à¥‚à¤°, à¤¤à¤¾à¤ªà¤Ÿ à¤†à¤£à¤¿ à¤¹à¤Ÿà¥à¤Ÿà¥€.',
+              'à¤‰à¤¦à¤¾à¤°, à¤†à¤¦à¤°à¥à¤¶à¤µà¤¾à¤¦à¥€ à¤†à¤£à¤¿ à¤µà¤¿à¤¨à¥‹à¤¦à¤¾à¤šà¥€ à¤‰à¤¤à¥à¤¤à¤® à¤œà¤¾à¤£ à¤…à¤¸à¤²à¥‡à¤²à¥‡.',
+              'à¤œà¤¬à¤¾à¤¬à¤¦à¤¾à¤°, à¤¶à¤¿à¤¸à¥à¤¤à¤¬à¤¦à¥à¤§ à¤†à¤£à¤¿ à¤†à¤¤à¥à¤®-à¤¨à¤¿à¤¯à¤‚à¤¤à¥à¤°à¤¿à¤¤.',
+              'à¤°à¤¾à¤¶à¥€ à¤“à¤³à¤–à¤¤à¤¾ à¤†à¤²à¥€ à¤¨à¤¾à¤¹à¥€. à¤•à¥ƒà¤ªà¤¯à¤¾ à¤¤à¤¾à¤°à¥€à¤– à¤¤à¤ªà¤¾à¤¸à¤¾.'
+          ];
+          
+          return { 
+              sign: lang === 'mr' ? signsMr[idx] : signsEn[idx], 
+              symbol: symbols[idx],
+              desc: lang === 'mr' ? descMr[idx] : descEn[idx]
+          };
+      }
+
+      window.calculateRashi = function() { 
+          const t = translations[currentLang];
+          const dob = document.getElementById("dob").value; 
+          const tob = document.getElementById("tob").value || "12:00"; // default to noon if omitted
+          
+          if(!dob) return alert(t.alertDate); 
+
+          // 1. Parse Date explicitly to avoid Timezone shifts (Browser local vs UTC offset bugs)
+          const [y,m,d] = dob.split("-").map(Number); 
+
+          // Future Date Validation
+          const inputDate = new Date(y, m - 1, d);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0); // Strip time so we only compare the exact day
+          if (inputDate > today) {
+              return alert(t.alertFuture);
+          }
+
+          // 2. Western Zodiac (Sun Sign) using exact parsed day and month
+          const westernZodiac = getZodiacSign(d, m, currentLang);
+          
+          // 3. Vedic Rashi (Moon Sign)
+          const [hh,mm] = tob.split(":").map(Number); 
+          const utc = Date.UTC(y, m-1, d, hh-5, mm-30, 0); 
+          const jd = toJulian(utc); 
+          const moonLon = moonLongitude(jd); 
+          const ayan = lahiriAyanamsa(jd); 
+          let sidereal = ((moonLon - ayan)%360 + 360)%360; 
+          
+          const rashi = t.rashis[Math.floor(sidereal / 30)]; 
+          const nak = t.nakshatras[Math.floor(sidereal / (360/27))]; 
+          const pada = Math.floor((sidereal % (360/27)) / (360/108)) + 1; 
+
+          // 4. Numerology (Mulank & Bhagyank)
+          const calcRoot = (num) => (num === 0 ? 0 : ((num - 1) % 9) + 1);
+          const mulank = calcRoot(d);
+          
+          const dateStr = dob.replace(/-/g, ''); // e.g. "1998-08-29" -> "19980829"
+          let sumDigits = 0;
+          for(let char of dateStr) sumDigits += parseInt(char);
+          const bhagyank = calcRoot(sumDigits);
+          
+          // Store values for save functionality
+          window.lastWestern = westernZodiac.sign;
+          window.lastRashi = rashi;
+          window.lastNak = nak;
+          window.lastMulank = mulank;
+          window.lastBhagyank = bhagyank;
+
+          // Update UI Elements
+          document.getElementById('calc-status').innerText = t.observed; 
+          document.getElementById('calc-status').className = "px-3 py-1 rounded-lg bg-emerald-100 text-emerald-700 text-[10px] font-black tracking-widest uppercase"; 
+          
+          // Display Moon Sign as primary text
+          document.getElementById('calc-display').innerHTML = `<span class="w-1 h-10 md:h-12 lg:h-14 bg-primary animate-pulse rounded-full mr-2"></span>${rashi}`; 
+          document.getElementById('zodiac-desc').innerText = nak + " (" + t.padaText + " " + formatDigits(pada, currentLang) + ")";
+
+          // Update the bottom metrics blocks
+          document.getElementById('sun-val').innerText = `${westernZodiac.sign} ${westernZodiac.symbol}`; 
+          document.getElementById('sun-desc').innerText = westernZodiac.desc;
+
+          document.getElementById('pada-val').innerText = nak; 
+          document.getElementById('pos-val').innerText = formatDigits(sidereal.toFixed(2), currentLang) + "Â°"; 
+          document.getElementById('mulank-val').innerText = formatDigits(mulank, currentLang);
+          document.getElementById('bhagyank-val').innerText = formatDigits(bhagyank, currentLang);
+          
+          document.getElementById('save-btn').classList.remove('hidden');
+      };
+
+      window.saveToRegistry = async function(name, dob, tob, zodiac, rashi, nak, mulank, bhagyank) { 
+          if (!zodiac) return;
+          const inputs = [ 
+              { label: 'Name', val: name || 'Anonymous' },
+              { label: 'Date', val: dob }, 
+              { label: 'Time', val: tob } 
+          ]; 
+          const results = [ 
+              { label: 'Sun Sign', val: zodiac, highlight: true }, 
+              { label: 'Moon Sign', val: rashi },
+              { label: 'Mulank', val: mulank },
+              { label: 'Bhagyank', val: bhagyank }
+          ]; 
+          const ok = await window.saveCalcToHistory('Zodiac Calculator', inputs, results); 
+          if (ok) initSidebarHistory('Zodiac Calculator', 'sidebar-history-container'); 
+      } 
+
+      document.addEventListener('DOMContentLoaded', () => { 
+          initSidebarHistory('Zodiac Calculator', 'sidebar-history-container'); 
+          
+          // Restrict calendar input to past/present dates only
+          const tzOffset = (new Date()).getTimezoneOffset() * 60000;
+          const todayDateStr = new Date(Date.now() - tzOffset).toISOString().split('T')[0];
+          document.getElementById('dob').setAttribute('max', todayDateStr);
+      });
+    </script>
+  
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

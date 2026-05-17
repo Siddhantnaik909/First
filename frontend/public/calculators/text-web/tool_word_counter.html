@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Word Counter</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Copy Lab.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Instantly count words, characters, and reading time. Perfect for essays, social media posts, or articles.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Recent Checks</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent checks.</p>
+                    </div>
+                </div>
+
+                <div class="bg-indigo-950 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">description</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">auto_stories</span> Reading Speed
+                     </h4>
+                     <p class="text-indigo-100 text-[11px] leading-relaxed mb-4 opacity-80">
+                        The average person reads about 200"â€œ250 words per minute. We use this to estimate your reading time!
+                     </p>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="tool_url_encoder.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">URL Hub</div>
+                            </div>
+                        </a>
+                        <a href="tool_case_converter.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Case Studio</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-8">
+                    <div class="space-y-4">
+                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block tracking-widest">Type or Paste Your Text</label>
+                        <textarea id="textInput" oninput="analyze()" placeholder="Start typing here..." class="w-full h-80 bg-white border border-slate-100 rounded-3xl px-8 py-6 font-medium text-lg focus:ring-2 focus:ring-primary outline-none transition-all resize-none shadow-inner"></textarea>
+                    </div>
+
+                    <div id="results" class="grid grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-50 text-center shadow-sm">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase block mb-1">Words</span>
+                            <span id="res-words" class="text-3xl font-black text-primary">0</span>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-50 text-center shadow-sm">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase block mb-1">Characters</span>
+                            <span id="res-chars" class="text-3xl font-black text-on-surface">0</span>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-50 text-center shadow-sm">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase block mb-1">Sentences</span>
+                            <span id="res-sentences" class="text-3xl font-black text-on-surface">0</span>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-50 text-center shadow-sm">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase block mb-1">Paragraphs</span>
+                            <span id="res-paragraphs" class="text-3xl font-black text-on-surface">0</span>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-50 text-center shadow-sm">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase block mb-1">Reading Time</span>
+                            <span id="res-time" class="text-3xl font-black text-emerald-500">0m</span>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Actions -->
+                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-end items-center gap-4">
+                        <div class="flex gap-3">
+                            <button onclick="saveToHistory()" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Save Result</button>
+                            <button onclick="window.print()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined">print</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let lastReport = null;
+
+        function analyze() {
+            const text = document.getElementById('textInput').value.trim();
+            if(!text) {
+                document.getElementById('res-words').innerText = '0';
+                document.getElementById('res-chars').innerText = '0';
+                document.getElementById('res-sentences').innerText = '0';
+                document.getElementById('res-paragraphs').innerText = '0';
+                document.getElementById('res-time').innerText = '0m';
+                return;
+            }
+
+            const words = text.split(/\s+/).filter(w => w.length > 0);
+            const wordCount = words.length;
+            const charSpan = text.length;
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+            const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0).length;
+            const readingTime = Math.ceil(wordCount / 225);
+
+            document.getElementById('res-words').innerText = wordCount.toLocaleString();
+            document.getElementById('res-chars').innerText = charSpan.toLocaleString();
+            document.getElementById('res-sentences').innerText = sentences.toLocaleString();
+            document.getElementById('res-paragraphs').innerText = paragraphs.toLocaleString();
+            document.getElementById('res-time').innerText = readingTime + 'm';
+
+            lastReport = { words: wordCount, readingTime: readingTime };
+        }
+
+        async function saveToHistory() {
+            if (!lastReport) return;
+            const text = document.getElementById('textInput').value.trim();
+            const summary = text.substring(0, 30) + "...";
+            const inputs = [{ label: 'Snippet', val: summary }];
+            const results = [
+                { label: 'Words', val: lastReport.words.toLocaleString(), highlight: true },
+                { label: 'Wait Time', val: lastReport.readingTime + ' mins' }
+            ];
+            const ok = await window.saveCalcToHistory('Word Counter', inputs, results);
+            if (ok) initSidebarHistory('Word Counter', 'sidebar-history-container');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('Word Counter', 'sidebar-history-container');
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

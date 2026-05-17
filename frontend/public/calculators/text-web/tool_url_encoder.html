@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | URL Encoder & Decoder</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tab-btn.active {
+            background: #0f766e;
+            color: white;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">URL Hub.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Safely convert links or text into a format that works in any web browser. Useful for programmers, designers, and web developers.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Conversion History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent history.</p>
+                    </div>
+                </div>
+
+                <div class="bg-purple-900 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">link</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">language</span> Web Fact
+                     </h4>
+                     <p class="text-purple-100 text-[11px] leading-relaxed mb-4 opacity-80">
+                        URLs can only contain certain characters. Encoding ensures things like spaces ("%20") don't break your links!
+                     </p>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="tool_password.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Safe Token</div>
+                            </div>
+                        </a>
+                        <a href="tool_word_counter.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Copy Lab</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-8">
+                    <div class="flex bg-white p-1.5 rounded-2xl border border-slate-100 shadow-sm">
+                        <button onclick="switchTab('encode')" id="tab-encode" class="flex-1 tab-btn active py-3 rounded-xl font-black text-[10px] tracking-widest uppercase transition-all duration-300">ENCODE LINK</button>
+                        <button onclick="switchTab('decode')" id="tab-decode" class="flex-1 tab-btn py-3 rounded-xl font-black text-[10px] tracking-widest uppercase transition-all duration-300 text-slate-400">DECODE LINK</button>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                            <label id="input-label" class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Paste Your Link or Text Here</label>
+                            <textarea id="input-text" placeholder="e.g. https://example.com/my page" class="w-full h-48 bg-white border border-slate-100 rounded-3xl px-8 py-6 font-medium text-lg focus:ring-2 focus:ring-primary outline-none transition-all resize-none shadow-inner"></textarea>
+                        </div>
+                        <div class="flex gap-4">
+                             <button onclick="calculate()" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">CONVERT LINK</button>
+                             <button onclick="resetForms()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined">restart_alt</span>
+                             </button>
+                        </div>
+                    </div>
+
+                    <div id="results" class="hidden space-y-6">
+                        <div class="bg-white p-8 rounded-3xl border border-slate-50 shadow-sm space-y-4">
+                             <div class="flex justify-between items-center text-on-surface-variant text-[10px] font-black uppercase tracking-widest">
+                                <span>Converted Result</span>
+                                <div class="flex gap-2">
+                                    <button onclick="copyToClipboard()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                        <span id="copy-icon" class="material-symbols-outlined text-sm">content_copy</span>
+                                    </button>
+                                    <button onclick="downloadAsFile()" class="p-3 bg-slate-50 rounded-xl text-slate-400 hover:text-primary transition-all shadow-sm">
+                                        <span class="material-symbols-outlined text-sm">download</span>
+                                    </button>
+                                </div>
+                             </div>
+                             <textarea id="output-text" readonly class="w-full h-64 bg-slate-50 border-none rounded-2xl px-6 py-4 font-mono text-sm focus:ring-0 outline-none transition-all resize-none break-all"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Actions -->
+                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-end items-center gap-4">
+                        <div class="flex gap-3">
+                            <button onclick="saveToHistory()" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Save Result</button>
+                            <button onclick="window.print()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined">print</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let currentMode = 'encode';
+        let lastResult = "";
+
+        function switchTab(mode) {
+            currentMode = mode;
+            document.getElementById('tab-encode').classList.toggle('active', mode === 'encode');
+            document.getElementById('tab-decode').classList.toggle('active', mode === 'decode');
+            document.getElementById('tab-encode').classList.toggle('text-slate-400', mode !== 'encode');
+            document.getElementById('tab-decode').classList.toggle('text-slate-400', mode !== 'decode');
+            document.getElementById('input-label').innerText = mode === 'encode' ? 'Paste Your Link or Text Here' : 'Paste Your Encoded Link Here';
+            document.getElementById('input-text').placeholder = mode === 'encode' ? 'e.g. https://example.com/my page' : 'e.g. https%3A%2F%2Fexample.com%2Fmy%20page';
+            document.getElementById('results').classList.add('hidden');
+        }
+
+        function calculate() {
+            const input = document.getElementById('input-text').value;
+            if(!input.trim()) return alert("Please enter something first!");
+            
+            try {
+                const output = currentMode === 'encode' ? encodeURIComponent(input) : decodeURIComponent(input);
+                lastResult = output;
+                document.getElementById('output-text').value = output;
+                document.getElementById('results').classList.remove('hidden');
+            } catch(e) {
+                alert("This doesn't seem to be a valid link format for " + currentMode + "ing.");
+            }
+        }
+
+        function copyToClipboard() {
+            navigator.clipboard.writeText(lastResult).then(() => {
+                const icon = document.getElementById('copy-icon');
+                icon.textContent = 'check';
+                setTimeout(() => icon.textContent = 'content_copy', 2000);
+            });
+        }
+
+        function downloadAsFile() {
+            const blob = new Blob([lastResult], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `converted_link_${new Date().getTime()}.txt`;
+            a.click();
+        }
+
+        async function saveToHistory() {
+            if (!lastResult) return;
+            const summary = document.getElementById('input-text').value.substring(0, 30) + "...";
+            const inputs = [{ label: 'Link', val: summary }];
+            const results = [
+                { label: 'Type', val: currentMode.toUpperCase(), highlight: true },
+                { label: 'Length', val: lastResult.length + ' chars' }
+            ];
+            const ok = await window.saveCalcToHistory('URL Tool', inputs, results);
+            if (ok) initSidebarHistory('URL Tool', 'sidebar-history-container');
+        }
+
+        function resetForms() {
+            document.getElementById('input-text').value = '';
+            document.getElementById('results').classList.add('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('URL Tool', 'sidebar-history-container');
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

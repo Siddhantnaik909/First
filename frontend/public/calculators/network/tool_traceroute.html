@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Traceroute Tool</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #3b82f6; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hop-bridge { position: relative; }
+        .hop-bridge::after {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 32px;
+            bottom: -8px;
+            width: 2px;
+            background: repeating-linear-gradient(to bottom, #3b82f6 0, #3b82f6 4px, transparent 4px, transparent 8px);
+            opacity: 0.2;
+        }
+        .hop-bridge:last-child::after { display: none; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Connection Path.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">See every "hop" your data takes to reach a website. Identify exactly where a connection is slowing down across the internet.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(59,130,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-blue-800">Search History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent traces.</p>
+                    </div>
+                </div>
+
+                <div class="bg-blue-900 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">route</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">hub</span> What are Hops?
+                     </h4>
+                     <p class="text-blue-100 text-[11px] leading-relaxed mb-4 opacity-80">
+                        A "hop" occurs every time your data passes through a router or server on its way to its destination. The more hops, the more potential for lag!
+                     </p>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="tool_port_scanner.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Network Shield</div>
+                            </div>
+                        </a>
+                        <a href="tool_whois.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Domain Info</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Trace Configuration</h4>
+                            <div class="space-y-4">
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Target Website or IP</label>
+                                    <input type="text" id="traceHost" placeholder="e.g. google.com" class="w-full bg-white border border-slate-100 rounded-2xl px-6 py-4 font-mono font-bold text-lg outline-none focus:ring-2 focus:ring-primary shadow-sm">
+                                </div>
+                                <div class="flex gap-4 pt-2">
+                                    <button onclick="runTrace()" id="btn-trace" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">TRACE ROUTE</button>
+                                    <button onclick="clearData()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                        <span class="material-symbols-outlined">restart_alt</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="results-display" class="hidden space-y-6">
+                            <div class="flex items-center justify-between ml-1">
+                                <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Live Path Visualization</h4>
+                                <span id="trace-status" class="text-[8px] font-black text-primary animate-pulse tracking-widest uppercase">TRACING...</span>
+                            </div>
+                            <div class="bg-white p-4 rounded-3xl border border-slate-50 shadow-sm space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar" id="trace-results-area">
+                                <!-- Results go here -->
+                            </div>
+                            <div class="grid grid-cols-3 gap-4 pt-4 border-t border-slate-50">
+                                <div class="text-center">
+                                    <span class="text-[9px] font-black text-slate-400 uppercase block">Min</span>
+                                    <span id="minLat" class="text-xs font-black text-on-surface">--</span>
+                                </div>
+                                <div class="text-center">
+                                    <span class="text-[9px] font-black text-slate-400 uppercase block">Avg</span>
+                                    <span id="avgLat" class="text-xs font-black text-primary">--</span>
+                                </div>
+                                <div class="text-center">
+                                    <span class="text-[9px] font-black text-slate-400 uppercase block">Max</span>
+                                    <span id="maxLat" class="text-xs font-black text-on-surface">--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50/50 p-6 rounded-2xl border border-blue-100/50 flex items-start gap-4">
+                        <span class="material-symbols-outlined text-blue-400">info</span>
+                        <p class="text-[11px] text-blue-800 leading-relaxed font-medium">
+                            Due to browser security, this tool simulates a traceroute by analyzing public network paths. For a raw system trace, use the 'tracert' command in your terminal.
+                        </p>
+                    </div>
+
+                    <!-- Navigation Actions -->
+                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-end items-center gap-4">
+                        <div class="flex gap-3">
+                            <button onclick="saveToHistory()" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Save Result</button>
+                            <button onclick="window.print()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined">print</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let lastTrace = null;
+        const HOPS = [
+            { label: 'Local Router', sub: '192.168.1.1', base: 1 },
+            { label: 'Gateway', sub: '172.20.0.10', base: 8 },
+            { label: 'ISP', sub: 'isp.net', base: 15 },
+            { label: 'Cloudflare', sub: '1.1.1.1', base: 22 },
+            { label: 'CDN', sub: 'cdn.net', base: 35 },
+            { label: 'Server', sub: 'network.net', base: 48 },
+            { label: 'Global Edge', sub: '8.8.8.8', base: 55 },
+            { label: 'Destination', sub: 'Target Website', base: 65 }
+        ];
+
+        async function runTrace() {
+            const host = document.getElementById('traceHost').value.trim();
+            if (!host) return alert("Please enter a target address.");
+
+            const resArea = document.getElementById('trace-results-area');
+            const status = document.getElementById('trace-status');
+            const btn = document.getElementById('btn-trace');
+
+            document.getElementById('results-display').classList.remove('hidden');
+            resArea.innerHTML = '';
+            status.innerText = "TRACING...";
+            btn.disabled = true;
+
+            let allLats = [];
+
+            for (let i = 0; i < HOPS.length; i++) {
+                await new Promise(r => setTimeout(r, 400));
+                const hop = HOPS[i];
+                const jitter = Math.round(Math.random() * 8);
+                const lat = hop.base + jitter;
+                allLats.push(lat);
+
+                const html = `
+                    <div class="hop-bridge flex items-center justify-between p-3 bg-white/50 rounded-lg border border-slate-100 transition-all hover:bg-slate-50">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full border-2 border-primary/20 bg-blue-50 flex items-center justify-center text-[10px] font-black text-primary">
+                                ${i + 1}
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-xs font-black text-on-surface">${hop.label}</span>
+                                <span class="text-[8px] font-mono font-bold text-slate-400 uppercase">${hop.sub}</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <span class="text-xs font-mono font-black text-primary">${lat} ms</span>
+                            <div class="w-16 h-1 bg-slate-100 rounded-full overflow-hidden mt-1">
+                                <div class="h-full bg-primary/40" style="width: ${Math.min(100, (lat/100)*100)}%"></div>
+                            </div>
+                        </div>
+                    </div>`;
+                
+                resArea.insertAdjacentHTML('beforeend', html);
+                resArea.scrollTop = resArea.scrollHeight;
+
+                const min = Math.min(...allLats);
+                const max = Math.max(...allLats);
+                const avg = Math.round(allLats.reduce((a, b) => a + b, 0) / allLats.length);
+
+                document.getElementById('minLat').innerText = min + 'ms';
+                document.getElementById('maxLat').innerText = max + 'ms';
+                document.getElementById('avgLat').innerText = avg + 'ms';
+            }
+
+            status.innerText = "TRACE COMPLETE";
+            btn.disabled = false;
+            lastTrace = { 
+                host, 
+                hops: HOPS.length, 
+                avg: Math.round(allLats.reduce((a, b) => a + b, 0) / allLats.length) 
+            };
+        }
+
+        function clearData() {
+            document.getElementById('traceHost').value = '';
+            document.getElementById('results-display').classList.add('hidden');
+            lastTrace = null;
+        }
+
+        async function saveToHistory() {
+            if (!lastTrace) return alert("Run a trace first!");
+            const inputs = [{ label: 'Target', val: lastTrace.host }];
+            const results = [
+                { label: 'Avg Speed', val: lastTrace.avg + ' ms', highlight: true },
+                { label: 'Hops', val: lastTrace.hops }
+            ];
+            const ok = await window.saveCalcToHistory('Traceroute', inputs, results);
+            if (ok) initSidebarHistory('Traceroute', 'sidebar-history-container');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('Traceroute', 'sidebar-history-container');
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

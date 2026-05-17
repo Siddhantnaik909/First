@@ -1,0 +1,265 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Whois Lookup Tool</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #3b82f6; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Domain Info.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Find out who owns a website or IP address. Get details about domain registration, expiration dates, and registrars.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(59,130,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-blue-800">Search History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent searches.</p>
+                    </div>
+                </div>
+
+                <div class="bg-blue-900 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">badge</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">shield</span> WHOIS Privacy
+                     </h4>
+                     <p class="text-blue-100 text-[11px] leading-relaxed mb-4 opacity-80">
+                        Many website owners use "Privacy Protection" to hide their personal email and phone number from the public WHOIS registry.
+                     </p>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="tool_traceroute.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Connection Path</div>
+                            </div>
+                        </a>
+                        <a href="calc_subnet.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Network Setup</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Lookup Parameters</h4>
+                            <div class="space-y-4">
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Domain or IP</label>
+                                    <input type="text" id="whoisInput" placeholder="example.com or 8.8.8.8" class="w-full bg-white border border-slate-100 rounded-2xl px-6 py-4 font-mono font-bold text-lg outline-none focus:ring-2 focus:ring-primary shadow-sm">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Search Type</label>
+                                    <select id="whoisMode" class="w-full bg-white border border-slate-100 rounded-2xl px-6 py-4 font-bold text-sm outline-none focus:ring-2 focus:ring-primary shadow-sm appearance-none">
+                                        <option value="domain">Domain Info (Website)</option>
+                                        <option value="network">Network Info (IP Address)</option>
+                                    </select>
+                                </div>
+                                <div class="flex gap-4 pt-2">
+                                    <button onclick="runWhois()" id="btn-whois" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">START SEARCH</button>
+                                    <button onclick="clearData()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                        <span class="material-symbols-outlined">restart_alt</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="results-display" class="hidden space-y-6">
+                            <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Lookup Result</h4>
+                            <div class="bg-white p-8 rounded-3xl border border-slate-50 shadow-sm space-y-4" id="whois-results-area">
+                                <!-- Results go here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50/50 p-6 rounded-2xl border border-blue-100/50 flex items-start gap-4">
+                        <span class="material-symbols-outlined text-blue-400">gavel</span>
+                        <p class="text-[11px] text-blue-800 leading-relaxed font-medium">
+                            This tool uses the RDAP protocol to fetch official registration data. Due to GDPR and privacy laws, some ownership details may be redacted or hidden by the registrar.
+                        </p>
+                    </div>
+
+                    <!-- Navigation Actions -->
+                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-end items-center gap-4">
+                        <div class="flex gap-3">
+                            <button onclick="saveToHistory()" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Save Result</button>
+                            <button onclick="window.print()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined">print</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let lastReport = null;
+
+        async function runWhois() {
+            const target = document.getElementById('whoisInput').value.trim();
+            const mode = document.getElementById('whoisMode').value;
+            if (!target) return alert("Please enter a domain or IP address.");
+
+            const btn = document.getElementById('btn-whois');
+            const resArea = document.getElementById('whois-results-area');
+            
+            btn.innerText = "LOOKING UP...";
+            resArea.innerHTML = '<div class="space-y-3"><div class="h-4 bg-slate-100 rounded animate-pulse"></div><div class="h-4 bg-slate-100 rounded w-5/6 animate-pulse"></div></div>';
+            document.getElementById('results-display').classList.remove('hidden');
+            
+            try {
+                let url = `/api/proxy/rdap?target=${target}&mode=${mode}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (!response.ok) throw new Error(data.error || "Could not find registry data for this target.");
+                
+                let html = '';
+                if (mode === 'network') {
+                    html = `
+                        <div class="text-left space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-[9px] font-black text-slate-400 uppercase">Provider</span>
+                                <span class="text-sm font-black text-primary">${data.name || 'N/A'}</span>
+                            </div>
+                            <div class="flex justify-between items-center border-t border-slate-50 pt-4">
+                                <span class="text-[9px] font-black text-slate-400 uppercase">IP Range</span>
+                                <span class="text-[11px] font-mono font-bold text-on-surface">${data.startAddress} - ${data.endAddress}</span>
+                            </div>
+                        </div>`;
+                    lastReport = { target, main: data.name || data.handle, sub: 'Network/IP' };
+                } else {
+                    let registrar = 'Privacy Protected';
+                    if (data.entities) {
+                        const reg = data.entities.find(e => e.roles && e.roles.includes('registrar'));
+                        if (reg) registrar = reg.handle || 'Listed';
+                    }
+                    html = `
+                        <div class="text-left space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-[9px] font-black text-slate-400 uppercase">Registrar</span>
+                                <span class="text-sm font-black text-primary">${registrar}</span>
+                            </div>
+                            <div class="flex justify-between items-center border-t border-slate-50 pt-4">
+                                <span class="text-[9px] font-black text-slate-400 uppercase">Domain Name</span>
+                                <span class="text-[11px] font-mono font-bold text-on-surface">${data.ldhName}</span>
+                            </div>
+                        </div>`;
+                    lastReport = { target, main: data.ldhName, sub: registrar };
+                }
+                resArea.innerHTML = html;
+            } catch (err) {
+                resArea.innerHTML = `<div class="text-[10px] font-bold text-rose-500 uppercase py-4">Lookup Failed: ${err.message}</div>`;
+            } finally {
+                btn.innerText = "START SEARCH";
+            }
+        }
+
+        function clearData() {
+            document.getElementById('whoisInput').value = '';
+            document.getElementById('results-display').classList.add('hidden');
+            lastReport = null;
+        }
+
+        async function saveToHistory() {
+            if (!lastReport) return alert("Run a search first!");
+            const inputs = [{ label: 'Target', val: lastReport.target }];
+            const results = [
+                { label: 'Registry', val: lastReport.sub, highlight: true },
+                { label: 'Name', val: lastReport.main }
+            ];
+            const ok = await window.saveCalcToHistory('Whois Lookup', inputs, results);
+            if (ok) initSidebarHistory('Whois Lookup', 'sidebar-history-container');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('Whois Lookup', 'sidebar-history-container');
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

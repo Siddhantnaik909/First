@@ -1,0 +1,307 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Smart Hub | Professional Brick Architect</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
+    <link rel="stylesheet" href="/css/design-system.css">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            <h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Brick Studio.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Easily estimate how many bricks you need for your wall or project. Simply enter the dimensions and we'll calculate the total count with a safety margin!</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-white p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent brick estimates.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="/calculators/construction/calc_fuel.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Fuel Economy Lab</div>
+                            </div>
+                        </a>
+                        <a href="/calculators/construction/calc_concrete.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Concrete Studio</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-xl p-2 shadow-2xl overflow-hidden">
+                    <!-- Display -->
+                    <div class="bg-white m-4 rounded-xl p-8 text-right flex flex-col justify-end min-h-[220px] shadow-inner relative overflow-hidden">
+                        <div class="absolute top-8 left-8 flex gap-2">
+                            <span class="px-2 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-bold tracking-widest uppercase">Brick Count</span>
+                        </div>
+                        <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 opacity-60">Total Area: 0.00 sq.ft</div>
+                        <div id="calc-display" class="text-7xl font-extrabold tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden">
+                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0 <span class="text-2xl font-bold text-on-surface-variant uppercase tracking-widest ml-4">Bricks</span>
+                        </div>
+                    </div>
+                    <!-- Controls -->
+                    <div class="p-8 space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-4">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em]">Wall Dimensions</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-bold text-on-surface-variant uppercase ml-1">Length (ft)</label>
+                                        <input type="number" id="length" oninput="calculateBricks()" class="w-full bg-white border border-surface-container-high rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-lg" placeholder="10" value="">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-bold text-on-surface-variant uppercase ml-1">Height (ft)</label>
+                                        <input type="number" id="height" oninput="calculateBricks()" class="w-full bg-white border border-surface-container-high rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-lg" placeholder="10" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em]">Brick Details</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-bold text-on-surface-variant uppercase ml-1">Brick Size</label>
+                                        <select id="brickSize" onchange="calculateBricks()" class="w-full bg-white border border-surface-container-high rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold">
+                                            <option value="6.75">Standard (6.75 / sq.ft)</option>
+                                            <option value="4.5">Jumbo (4.5 / sq.ft)</option>
+                                            <option value="9">Modular (9 / sq.ft)</option>
+                                        </select>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-bold text-on-surface-variant uppercase ml-1">Waste Factor</label>
+                                        <select id="wasteFactor" onchange="calculateBricks()" class="w-full bg-white border border-surface-container-high rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold">
+                                            <option value="1.1">10% Waste</option>
+                                            <option value="1.05">5% Waste</option>
+                                            <option value="1.15">15% Waste</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row gap-8 items-center justify-between pt-8 border-t border-surface-container-high">
+                            <div class="flex gap-4">
+                                <button onclick="resetBrickInputs()" class="bg-surface-container text-on-surface-variant px-8 py-4 rounded-xl font-bold text-sm tracking-widest hover:shadow-xl transition-all uppercase">Clear Input</button>
+                                <button onclick="saveBrickProject(event)" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest hover:shadow-xl transition-all uppercase">Save Estimate</button>
+                                <button onclick="window.print()" class="p-4 bg-surface-container rounded-xl text-on-surface-variant hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined">print</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pro Tips -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+                    <div class="bg-white p-8 rounded-xl border border-surface-container-high shadow-sm flex flex-col justify-center">
+                        <p class="text-[11px] text-on-surface-variant leading-loose opacity-80 italic italic">
+                            "Pro Tip: A standard 3/8-inch mortar joint is already factored into these counts. For complex patterns like herringbone, increase your waste factor to 15%."
+                        </p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl border border-surface-container-high shadow-sm shadow-sm">
+                         <div class="flex items-center gap-3 mb-4">
+                            <span class="material-symbols-outlined text-primary">analytics</span>
+                            <h5 class="font-bold uppercase tracking-widest text-[10px]">Material Info</h5>
+                        </div>
+                        <div class="space-y-4 text-sm">
+                            <div class="flex justify-between items-center"><span class="text-on-surface-variant">Area (Gross)</span><span id="resArea" class="font-bold">0.00 sq.ft</span></div>
+                            <div class="flex justify-between items-center"><span class="text-on-surface-variant">Net Units</span><span id="resNet" class="font-bold">0 pcs</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        function calculateBricks() {
+            const lenInput = document.getElementById('length');
+            const heightInput = document.getElementById('height');
+            const sizeInput = document.getElementById('brickSize');
+            const wasteInput = document.getElementById('wasteFactor');
+
+            if (!lenInput || !heightInput || !sizeInput || !wasteInput) return;
+
+            const length = parseFloat(lenInput.value) || 0;
+            const height = parseFloat(heightInput.value) || 0;
+            const bricksPerSqFt = parseFloat(sizeInput.value) || 6.75;
+            const waste = parseFloat(wasteInput.value) || 1.1;
+
+            if (length <= 0 || height <= 0) return;
+
+            const area = length * height;
+            const netBricks = Math.ceil(area * bricksPerSqFt);
+            const totalBricks = Math.ceil(netBricks * waste);
+
+            // Update UI
+            const status = document.getElementById('calc-status');
+            if (status) status.innerText = `Total Area: ${area.toFixed(2)} sq.ft`;
+            
+            const display = document.getElementById('calc-display');
+            if (display) {
+                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${totalBricks} <span class="text-2xl font-bold text-on-surface-variant uppercase tracking-widest ml-4">BRICKS</span>`;
+            }
+
+            const resArea = document.getElementById('resArea');
+            if (resArea) resArea.innerText = `${area.toFixed(2)} sq.ft`;
+            
+            const resNet = document.getElementById('resNet');
+            if (resNet) resNet.innerText = `${netBricks} pcs`;
+        }
+
+        function resetBrickInputs() {
+            document.getElementById('length').value = '';
+            document.getElementById('height').value = '';
+            document.getElementById('brickSize').value = '6.75';
+            document.getElementById('wasteFactor').value = '1.1';
+            
+            const display = document.getElementById('calc-display');
+            if (display) {
+                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0 <span class="text-2xl font-bold text-on-surface-variant uppercase tracking-widest ml-4">BRICKS</span>`;
+            }
+            
+            const status = document.getElementById('calc-status');
+            if (status) status.innerText = 'Total Area: 0.00 sq.ft';
+            
+            const resArea = document.getElementById('resArea');
+            if (resArea) resArea.innerText = '0.00 sq.ft';
+            
+            const resNet = document.getElementById('resNet');
+            if (resNet) resNet.innerText = '0 pcs';
+        }
+
+        async function saveBrickProject(event) {
+            const displayEl = document.getElementById('calc-display');
+            if (!displayEl) return;
+            const count = displayEl.innerText.replace('BRICKS', '').trim();
+            if (count === '0' || !count) {
+                alert('✓ Please enter values and calculate first');
+                return;
+            }
+
+            const btn = event.currentTarget;
+            const orig = btn.innerText;
+            btn.innerText = '✓ SAVING...';
+            btn.disabled = true;
+
+            const inputs = [
+                { label: 'Wall', val: `${document.getElementById('length').value} x ${document.getElementById('height').value} ft` },
+                { label: 'Brick Type', val: document.getElementById('brickSize').options[document.getElementById('brickSize').selectedIndex].text }
+            ];
+            const results = [
+                { label: 'Total Bricks', val: count + ' pcs', highlight: true },
+                { label: 'Wall Area', val: document.getElementById('calc-status').innerText.replace('Total Area: ', '') }
+            ];
+
+            try {
+                const ok = await window.saveCalcToHistory('Brick Calculator', inputs, results);
+                if (ok) {
+                    btn.innerText = '✓ SAVED!';
+                    btn.classList.add('bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.classList.remove('bg-emerald-600');
+                        btn.disabled = false;
+                        if (typeof initSidebarHistory === 'function') {
+                            initSidebarHistory('Brick Calculator', 'sidebar-history-container');
+                        }
+                    }, 2000);
+                } else {
+                    throw new Error('Failed to save');
+                }
+            } catch (e) {
+                btn.innerText = '✗ ERROR';
+                console.error('Save error:', e);
+                setTimeout(() => {
+                    btn.innerText = orig;
+                    btn.disabled = false;
+                }, 2000);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                if (typeof initSidebarHistory === 'function') {
+                    initSidebarHistory('Brick Calculator', 'sidebar-history-container');
+                }
+            } catch (e) {}
+            calculateBricks();
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+    <script>
+    // Mobile menu toggle function
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        if (menu) {
+            menu.classList.toggle('hidden');
+            document.body.style.overflow = menu.classList.contains('hidden') ? '' : 'hidden';
+        }
+    }
+    </script>
+
+    <script src="/js/app.js"></script>
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

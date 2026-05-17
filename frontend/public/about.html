@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>About Smart Hub</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/design-system.css">
+    <script>
+        tailwind.config = {
+            
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .hero-mesh {
+            background: radial-gradient(circle at 20% 30%, rgba(201, 111, 50, 0.12), transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(47, 156, 149, 0.10), transparent 36%),
+                linear-gradient(180deg, #f7f2e8 0%, #f4dfbe 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300 hero-mesh">
+    <!-- Unified Navbar Component Placeholder -->
+    <div id="header-placeholder"></div>
+
+<main class="main-content-wrapper">
+        <!-- Hero Section -->
+        <section class="px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto mb-24">
+            <div class="flex flex-col lg:grid lg:grid-cols-12 gap-16 items-center">
+                <div class="lg:col-span-7">
+                    <span class="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-black tracking-[0.3em] uppercase mb-8">
+                        What we do
+                    </span>
+                    <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-on-surface mb-8 leading-[0.9]">
+                        Learn. <br> Solve. <br> <span class="text-primary">Grow.</span>
+                    </h1>
+                    <p class="text-xl text-on-surface-variant max-w-xl leading-relaxed font-medium">
+                        Smart Hub is your all-in-one student toolkit. We've gathered over 85 useful tools and fun games in one simple, beautiful place.
+                    </p>
+                </div>
+                <div class="lg:col-span-5 w-full">
+                    <div class="aspect-square rounded-[3rem] bg-primary flex items-center justify-center shadow-2xl relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined text-white text-[10rem] md:text-[14rem] animate-pulse icon-fill">architecture</span>
+                        <div class="absolute bottom-10 left-10 right-10 p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-white text-center">
+                            <p class="text-[10px] font-black uppercase tracking-[0.4em]">Student Friendly</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vision Section -->
+        <section class="bg-slate-900 py-32 text-white">
+            <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10">
+                <div class="flex flex-col lg:grid lg:grid-cols-2 gap-24 items-start">
+                    <div>
+                        <h2 class="text-4xl md:text-5xl font-black tracking-tighter mb-8 leading-none">Our Goal.</h2>
+                        <div class="w-20 h-2 bg-primary mb-12 rounded-full"></div>
+                        <p class="text-xl text-slate-400 leading-relaxed font-medium mb-8">
+                            We want to make your daily tasks easier by bringing all the tools you need into one place.
+                        </p>
+                        <p class="text-xl text-slate-400 leading-relaxed font-medium">
+                            Smart Hub helps you stay organized and efficient with tools that are easy to use and look great.
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full">
+                        <div class="p-10 bg-white/5 rounded-[2.5rem] border border-white/10 hover:bg-white/10 transition-all group">
+                            <span class="material-symbols-outlined text-primary text-4xl mb-6 group-hover:scale-110 transition-transform">bolt</span>
+                            <h3 class="text-xl font-black mb-3 text-white">Efficiency</h3>
+                            <p class="text-sm text-slate-400">Everything works fast and smooth.</p>
+                        </div>
+                        <div class="p-10 bg-white/5 rounded-[2.5rem] border border-white/10 hover:bg-white/10 transition-all group">
+                            <span class="material-symbols-outlined text-primary text-4xl mb-6 group-hover:scale-110 transition-transform">shield</span>
+                            <h3 class="text-xl font-black mb-3 text-white">Security</h3>
+                            <p class="text-sm text-slate-400">Your data stays safe with you.</p>
+                        </div>
+                        <div class="p-10 bg-white/5 rounded-[2.5rem] border border-white/10 hover:bg-white/10 transition-all group">
+                            <span class="material-symbols-outlined text-primary text-4xl mb-6 group-hover:scale-110 transition-transform">auto_awesome</span>
+                            <h3 class="text-xl font-black mb-3 text-white">Innovation</h3>
+                            <p class="text-sm text-slate-400">Always adding new helpful features.</p>
+                        </div>
+                        <div class="p-10 bg-white/5 rounded-[2.5rem] border border-white/10 hover:bg-white/10 transition-all group">
+                            <span class="material-symbols-outlined text-primary text-4xl mb-6 group-hover:scale-110 transition-transform">school</span>
+                            <h3 class="text-xl font-black mb-3 text-white">Made for You</h3>
+                            <p class="text-sm text-slate-400">Built for students and daily use.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Offerings Bento -->
+        <section class="py-24 sm:py-32 px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto">
+            <h2 class="text-center text-5xl font-black tracking-tighter text-on-surface mb-4">What's Inside</h2>
+            <p class="text-center text-on-surface-variant mb-20 max-w-2xl mx-auto font-medium">Explore our collection of helpful calculators and fun games designed for you.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <a href="calculators.html" class="md:col-span-8 bg-surface-container-low rounded-[3rem] p-12 flex flex-col justify-between hover:bg-white hover:shadow-2xl transition-all border border-transparent hover:border-primary/20 group h-[450px]">
+                    <div>
+<span class="material-symbols-outlined text-primary mb-8 text-5xl icon-fill">calculate</span>
+                        <h3 class="text-3xl font-black mb-6">Smart Calculators</h3>
+                        <p class="text-on-surface-variant text-lg max-w-md font-medium leading-relaxed">Math, science, and money tools for your homework or daily projects.</p>
+                    </div>
+                    <div class="flex gap-4">
+                        <span class="px-4 py-2 bg-white rounded-2xl text-[10px] font-black uppercase tracking-widest text-primary border border-primary/10">85+ Tools</span>
+                        <span class="px-4 py-2 bg-white rounded-2xl text-[10px] font-black uppercase tracking-widest text-primary border border-primary/10">Daily Use</span>
+                    </div>
+                </a>
+                
+                <a href="GameLobby.html" class="md:col-span-4 bg-primary rounded-[3rem] p-12 text-white flex flex-col justify-between shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all relative overflow-hidden group">
+                    <div class="absolute -right-10 -top-10 opacity-20 group-hover:scale-110 transition-transform">
+                         <span class="material-symbols-outlined text-[12rem]">sports_esports</span>
+                    </div>
+                    <span class="material-symbols-outlined text-5xl mb-8">videogame_asset</span>
+                    <div class="relative z-10">
+                        <h3 class="text-3xl font-black mb-4">Game Zone</h3>
+                        <p class="text-emerald-50 text-base font-medium opacity-80 leading-relaxed">Fun and simple games to play when you need a quick study break.</p>
+                    </div>
+                </a>
+
+                <a href="calculators.html" class="md:col-span-4 bg-surface-container-low rounded-[3rem] p-12 flex flex-col justify-center items-center text-center hover:bg-white hover:shadow-2xl transition-all border border-transparent hover:border-primary/20 group">
+                    <span class="material-symbols-outlined text-primary mb-6 text-5xl">network_check</span>
+                    <h3 class="text-xl font-black uppercase tracking-tighter">Network Tools</h3>
+                    <p class="text-sm text-on-surface-variant mt-4 font-medium opacity-70">Check your IP, find locations, and test your internet speed.</p>
+                </a>
+
+                <a href="calculators.html" class="md:col-span-8 bg-surface-container-lowest rounded-[3rem] p-12 flex flex-col md:flex-row items-center gap-12 shadow-[0px_40px_80px_rgba(15,118,110,0.06)] border border-slate-50 hover:border-primary/30 transition-all group">
+                    <div class="flex-1">
+                        <span class="material-symbols-outlined text-primary mb-8 text-5xl">terminal</span>
+                        <h3 class="text-3xl font-black mb-6">Advanced Tools</h3>
+                        <p class="text-on-surface-variant text-lg font-medium leading-relaxed">Password tools, text converters, and more for advanced student researchers.</p>
+                    </div>
+                    <div class="w-48 h-48 rounded-[2rem] bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                         <span class="material-symbols-outlined text-7xl">settings_ethernet</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="py-24 sm:py-32 px-4 sm:px-6 lg:px-10">
+            <div class="max-w-4xl mx-auto bg-primary rounded-[2.5rem] sm:rounded-[4rem] p-10 sm:p-14 lg:p-20 text-white text-center shadow-2xl shadow-primary/30 relative overflow-hidden group">
+                <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-white/10 rounded-full blur-[100px] group-hover:scale-110 transition-all"></div>
+                <div class="relative z-10">
+                    <h2 class="text-5xl font-black tracking-tighter mb-8 leading-none">Ready to Start?</h2>
+                    <p class="text-xl text-emerald-50 mb-12 max-w-xl mx-auto font-medium opacity-90">
+                        Join now to save your favorites, see your history, and use all our tools for free.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                        <a href="login.html" class="bg-white text-primary font-black py-5 px-12 rounded-[2rem] hover:shadow-2xl transition-all text-xs uppercase tracking-[0.4em]">Login</a>
+                        <a href="contact.html" class="bg-primary/20 border-2 border-white/20 text-white font-black py-5 px-12 rounded-[2rem] hover:bg-primary/40 transition-all text-xs uppercase tracking-[0.4em]">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <script type="module" src="/js/script.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>

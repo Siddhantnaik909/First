@@ -1,0 +1,29 @@
+{
+  "name": "my-project-root",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "cd backend && npm run dev",
+    "fix-users": "npm run fix-users --prefix backend",
+    "setup-indexes": "npm run setup-indexes --prefix backend",
+    "seed-admin": "npm run seed-admin --prefix backend"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.86.1",
+    "docx": "^9.6.1",
+    "image-size": "^2.0.2",
+    "jsonwebtoken": "^9.0.3",
+    "playwright": "^1.59.1",
+"socket.io-client": "^4.8.3"
+  },
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "cd backend && npm run dev",
+    "fix-users": "npm run fix-users --prefix backend",
+    "setup-indexes": "npm run setup-indexes --prefix backend",
+    "seed-admin": "npm run seed-admin --prefix backend",
+    "screenshots": "node take_screenshots.js",
+    "docx": "node export_docx.js",
+    "screenshots-to-docx": "npm run screenshots && npm run docx"
+  }
+}

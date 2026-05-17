@@ -1,0 +1,316 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Capacitor Code Decoder</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2">Capacitor Decoder.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Easily decode 3-digit capacitor codes (like 104 or 223) into farads, microfarads, and nanofarads. Essential for identifying ceramic and film capacitors.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent records.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="/calculators/electronics/calc_resistor_color_code.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Resistor Colors</div>
+                            </div>
+                        </a>
+                        <a href="/calculators/electronics/calc_555_timer.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">555 Timer</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-2xl p-2 shadow-2xl overflow-hidden mb-8">
+                    <!-- Display -->
+                    <div class="bg-surface-container-lowest m-4 rounded-xl p-12 text-right flex flex-col justify-end min-h-[260px] shadow-inner relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                        <div class="absolute top-8 left-8 flex gap-2">
+                            <span class="px-3 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase">CAPACITANCE VALUE</span>
+                            <span class="px-3 py-1 rounded bg-slate-100 text-[#7a614d] text-[10px] font-black tracking-widest uppercase" id="tol-tag">--- TOLERANCE</span>
+                        </div>
+                        <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]">Awaiting 3-digit code...</div>
+                        <div id="calc-display" class="text-7xl font-black tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden leading-tight font-mono">
+                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0.00 ÂµF
+                        </div>
+                    </div>
+
+                    <!-- Inputs -->
+                    <div class="p-8 space-y-12">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <div class="space-y-6">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Marking Data</h4>
+                                <div class="space-y-5">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Component Code (e.g. 104)</label>
+                                        <div class="relative group">
+                                            <input type="text" id="capCode" oninput="decodeCap()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-5 py-6 font-black text-4xl text-center text-on-surface focus:ring-2 focus:ring-primary transition-all outline-none uppercase tracking-widest" placeholder="104" maxlength="5">
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Voltage Rating (Optional)</label>
+                                        <div class="relative group">
+                                            <input type="number" id="voltage" oninput="decodeCap()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-5 py-4 font-bold text-on-surface focus:ring-2 focus:ring-primary transition-all outline-none" placeholder="e.g. 50">
+                                            <span class="absolute right-5 top-1/2 -translate-y-1/2 text-xs font-black text-on-surface-variant opacity-40">Volts</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button onclick="resetInput()" class="w-full py-4 bg-surface-container text-on-surface-variant rounded-xl font-bold text-[10px] tracking-widest uppercase hover:bg-slate-200 transition-all">Clear Code</button>
+                            </div>
+
+                            <div class="space-y-6">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Unit Breakdown</h4>
+                                <div class="bg-primary/5 border border-primary/20 rounded-2xl p-8 space-y-6">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center shadow-lg">
+                                            <span class="material-symbols-outlined">bolt</span>
+                                        </div>
+                                        <div>
+                                            <span id="resEnergy" class="text-3xl font-black text-on-surface">0.00 mJ</span>
+                                            <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest block opacity-60">Energy Stored @ Vin</span>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2 pt-4 border-t border-primary/10">
+                                        <span class="text-[10px] font-black text-primary uppercase tracking-widest block">Pro Tip</span>
+                                        <p id="pro-tip" class="text-xs text-on-surface-variant leading-relaxed font-medium italic">Standard 104 = 10 followed by 4 zeros in pF. Result: 100,000 pF.</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="p-5 bg-surface-container rounded-xl text-center">
+                                        <span id="resNF" class="text-xl font-black text-on-surface block">0 nF</span>
+                                        <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">Nano-farads</span>
+                                    </div>
+                                    <div class="p-5 bg-surface-container rounded-xl text-center">
+                                        <span id="resPF" class="text-xl font-black text-on-surface block truncate">0 pF</span>
+                                        <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">Pico-farads</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-8 border-t border-surface-container-high">
+                            <p class="text-[10px] font-mono text-on-surface-variant font-bold max-w-xs uppercase tracking-widest leading-loose">
+                                Formula: AB Ã— 10^C [pF]
+                            </p>
+                            <button onclick="saveCapLog()" id="saveBtn" class="bg-primary text-white px-10 py-5 rounded-xl font-bold text-[10px] tracking-widest hover:shadow-xl transition-all uppercase hover:scale-[1.02] active:scale-95">Save to History</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Block -->
+                <div class="bg-surface-container p-10 rounded-2xl border border-surface-container-high italic text-[11px] text-on-surface-variant leading-relaxed text-center opacity-70">
+                    "Tolerance Letter Guide: J = Â±5%, K = Â±10%, M = Â±20%. Ceramic capacitors often use these letters after the 3-digit code."
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        const toleranceMap = {
+            'F': 'Â±1%', 'G': 'Â±2%', 'H': 'Â±3%', 'J': 'Â±5%', 'K': 'Â±10%', 'M': 'Â±20%', 'Z': '+80%/-20%'
+        };
+
+        function decodeCap() {
+            const input = document.getElementById('capCode').value.trim().toUpperCase();
+            const voltage = parseFloat(document.getElementById('voltage').value) || 0;
+
+            const display = document.getElementById('calc-display');
+            const statusText = document.getElementById('calc-status');
+            const tolTag = document.getElementById('tol-tag');
+            const energyEl = document.getElementById('resEnergy');
+            const nfEl = document.getElementById('resNF');
+            const pfEl = document.getElementById('resPF');
+            const tip = document.getElementById('pro-tip');
+
+            const match = input.match(/^(\d{3})([A-Z])?$/);
+
+            if (match) {
+                const code = match[1];
+                const tChar = match[2];
+                
+                const d1 = parseInt(code[0]);
+                const d2 = parseInt(code[1]);
+                const mult = parseInt(code[2]);
+
+                const pf = (d1 * 10 + d2) * Math.pow(10, mult);
+                const nf = pf / 1000;
+                const uf = pf / 1000000;
+
+                const tol = toleranceMap[tChar] || "Â±20% Low";
+
+                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${uf < 0.001 ? nf.toFixed(2) + ' nF' : uf.toFixed(4) + ' ÂµF'}`;
+                statusText.innerText = "Component logic resolved";
+                tolTag.innerText = tol.toUpperCase();
+                
+                nfEl.innerText = nf.toLocaleString() + " nF";
+                pfEl.innerText = pf.toLocaleString() + " pF";
+
+                if (voltage > 0) {
+                    // Energy = 1/2 CV^2
+                    const energyJ = 0.5 * (pf * 1e-12) * Math.pow(voltage, 2);
+                    const energyMJ = energyJ * 1000;
+                    energyEl.innerText = energyMJ < 0.01 ? energyJ.toExponential(2) + " J" : energyMJ.toFixed(4) + " mJ";
+                } else {
+                    energyEl.innerText = "0.00 mJ";
+                }
+
+                tip.innerText = `Code ${code}${tChar || ''} translates to ${pf.toLocaleString()} picofarads. Tolerance: ${tol}.`;
+            } else {
+                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0.00 ÂµF`;
+                statusText.innerText = input.length > 0 ? "Invalid code format" : "Awaiting 3-digit code...";
+                tolTag.innerText = "--- TOLERANCE";
+                nfEl.innerText = "0 nF";
+                pfEl.innerText = "0 pF";
+                energyEl.innerText = "0.00 mJ";
+            }
+        }
+
+        function resetInput() {
+            document.getElementById('capCode').value = "";
+            document.getElementById('voltage').value = "";
+            decodeCap();
+        }
+
+        async function saveCapLog() {
+            const val = document.getElementById('calc-display').innerText.trim();
+            if (val === '0.00 ÂµF') return;
+
+            const btn = document.getElementById('saveBtn');
+            const orig = btn.innerText;
+            btn.innerText = 'SAVING...';
+            btn.disabled = true;
+
+            const inputs = [
+                { label: 'Code', val: document.getElementById('capCode').value.toUpperCase() },
+                { label: 'Voltage', val: document.getElementById('voltage').value + ' V' }
+            ];
+            const results = [
+                { label: 'Value', val: val, highlight: true },
+                { label: 'Unit', val: document.getElementById('resNF').innerText }
+            ];
+
+            try {
+                const ok = await window.saveCalcToHistory('Capacitor Code', inputs, results);
+                if (ok) {
+                    btn.innerText = 'SAVED';
+                    btn.classList.add('bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.classList.remove('bg-emerald-600');
+                        btn.disabled = false;
+                        if (typeof initSidebarHistory === 'function') {
+                            initSidebarHistory('Capacitor Code', 'sidebar-history-container');
+                        }
+                    }, 2000);
+                } else {
+                    btn.innerText = orig;
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                btn.innerText = orig;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                if (typeof initSidebarHistory === 'function') {
+                    initSidebarHistory('Capacitor Code', 'sidebar-history-container');
+                }
+            } catch(e){}
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Chess | Smart Hub Arcade</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Syne:wght@400;700;800&family=Chakra+Petch:ital,wght@0,400;0,700;1,700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/toast.css">
+
+    <!-- Chessboard.js styling -->
+    <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+
+    <style>
+        :root {
+            /* DEEP ARCADE DARK */
+            --bg: #09090b;
+            --text-main: #f4f4f5;
+            --text-mute: #a1a1aa;
+
+            --neo-cyan: #00f0ff;
+            --neo-magenta: #ff0055;
+            --neo-yellow: #fffb00;
+
+            --border-heavy: 4px solid #fff;
+
+            --shadow-hard: 10px 10px 0px var(--neo-magenta);
+            --shadow-hover: 15px 15px 0px var(--neo-cyan);
+
+            --panel-bg: rgba(255, 255, 255, 0.02);
+            --crt-scanline: rgba(255, 255, 255, 0.05);
+
+            /* CHESS SPECIFIC */
+            --chess-white: #f4f4f5;
+            --chess-black: #09090b;
+        }
+
+        :root.light {
+            /* DAYLIGHT BRUTALISM */
+            --bg: #f4f0ec;
+            --text-main: #111111;
+            --text-mute: #666666;
+
+            --neo-cyan: #0051ff;
+            --neo-magenta: #e60000;
+            --neo-yellow: #ffb800;
+
+            --border-heavy: 4px solid #111111;
+
+            --shadow-hard: 10px 10px 0px #111111;
+            --shadow-hover: 15px 15px 0px var(--neo-magenta);
+
+            --panel-bg: #ffffff;
+            --crt-scanline: rgba(0, 0, 0, 0.05);
+
+            /* CHESS SPECIFIC */
+            --chess-white: #ffffff;
+            --chess-black: #111111;
+        }
+
+        body {
+            font-family: 'Syne', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            transition: background-color 0.4s, color 0.4s;
+        }
+
+        body::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, var(--crt-scanline) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 9999;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        h1,
+        h2,
+        h3,
+        .bungee-text {
+            font-family: 'Bungee Shade', cursive;
+            text-transform: uppercase;
+        }
+
+        .tech-text {
+            font-family: 'Chakra Petch', sans-serif;
+            text-transform: uppercase;
+        }
+
+        nav {
+            background: var(--bg);
+            border-bottom: var(--border-heavy);
+        }
+
+        .btn-arcade {
+            font-family: 'Chakra Petch', sans-serif;
+            font-weight: 700;
+            border: var(--border-heavy);
+            border-color: var(--text-main);
+            background: var(--bg);
+            color: var(--text-main);
+            padding: 12px 24px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: var(--shadow-hard);
+            transition: all 0.1s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer;
+        }
+
+        .btn-arcade:hover {
+            transform: translate(-5px, -5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-arcade:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--neo-cyan);
+        }
+
+        .btn-neo-yellow {
+            background: var(--neo-yellow) !important;
+            color: #000 !important;
+            border-color: #000 !important;
+        }
+
+        .btn-neo-cyan {
+            background: var(--neo-cyan) !important;
+            color: #000 !important;
+            border-color: #000 !important;
+        }
+
+        .arcade-card {
+            background: var(--panel-bg);
+            border: var(--border-heavy);
+            border-color: var(--text-main);
+            padding: 24px;
+            box-shadow: var(--shadow-hard);
+        }
+
+        .abstract-line {
+            height: 4px;
+            background: var(--text-main);
+            width: 100%;
+            margin: 40px 0;
+        }
+
+        select {
+            background: var(--bg);
+            color: var(--text-main);
+            border: var(--border-heavy);
+            border-color: var(--text-main);
+            padding: 8px 12px;
+            font-family: 'Chakra Petch';
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Chess Board Brutalism Overrides */
+        #board {
+            border: var(--border-heavy);
+            box-shadow: var(--shadow-hard);
+            margin: 0 auto;
+        }
+
+        .white-1e1d7 {
+            background-color: var(--chess-white) !important;
+            color: var(--chess-black) !important;
+        }
+
+        .black-3c85d {
+            background-color: var(--chess-black) !important;
+            color: var(--chess-white) !important;
+        }
+
+        .highlight-white {
+            box-shadow: inset 0 0 3px 3px var(--neo-yellow);
+        }
+
+        .highlight-black {
+            box-shadow: inset 0 0 3px 3px var(--neo-yellow);
+        }
+
+        .highlight-source {
+            box-shadow: inset 0 0 0 4px var(--neo-magenta) !important;
+        }
+
+        /* Overlay */
+        #game-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            border: var(--border-heavy);
+            border-color: var(--neo-cyan);
+        }
+
+        /* Table styles for moves */
+        .arcade-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .arcade-table th {
+            border-bottom: 2px solid var(--text-main);
+            text-align: left;
+            padding: 8px;
+            color: var(--neo-yellow);
+        }
+
+        .arcade-table td {
+            border-bottom: 1px solid var(--text-mute);
+            padding: 8px;
+            font-family: 'Chakra Petch', monospace;
+            font-weight: 700;
+        }
+
+        .pulse-magenta { animation: pulse-mag 2s infinite; }
+        @keyframes pulse-mag {
+            0%, 100% { text-shadow: 0 0 10px var(--neo-magenta); opacity: 1; }
+            50% { text-shadow: 0 0 20px var(--neo-magenta); opacity: 0.8; }
+        }
+        .pulse-cyan { animation: pulse-cy 2s infinite; }
+        @keyframes pulse-cy {
+            0%, 100% { text-shadow: 0 0 10px var(--neo-cyan); opacity: 1; }
+            50% { text-shadow: 0 0 20px var(--neo-cyan); opacity: 0.8; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header-placeholder"></div>
+    <nav class="w-full h-24 flex items-center px-6 md:px-12 justify-between z-40 relative">
+        <div class="flex items-center gap-8">
+            <span class="text-2xl md:text-3xl font-bold bungee-text"
+                style="color: var(--neo-cyan); text-shadow: 4px 4px 0px var(--text-main);">SH ARCADE</span>
+            <div class="hidden md:flex items-center gap-8 tech-text font-bold text-lg">
+                <a class="hover:text-[var(--neo-yellow)] hover:-translate-y-1 transition-all"
+                    href="/GameLobby.html">&lt; LOBBY</a>
+            </div>
+        </div>
+        <div class="flex gap-4 items-center">
+            <button onclick="toggleTheme()" class="btn-arcade !p-2 !shadow-none" aria-label="Toggle Theme">
+                <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-[1600px] mx-auto px-6 md:px-12 py-12 min-h-[calc(100vh-96px)] flex flex-col xl:flex-row gap-12">
+
+        <!-- Left Column: Controls & Analytics -->
+        <div class="w-full xl:w-3/12 flex flex-col gap-8">
+            <div>
+                <h1 class="text-5xl md:text-6xl bungee-text leading-[1] mb-4"
+                    style="color: var(--text-main); text-shadow: 6px 6px 0px var(--neo-magenta);">LOGIC<br />WAR.</h1>
+                <p class="tech-text text-xl font-bold text-[var(--text-mute)]">CHESS MATRIX MODULE.</p>
+            </div>
+
+            <div class="arcade-card flex flex-col gap-4">
+                <h2 class="tech-text font-bold text-xl border-b-4 border-[var(--text-main)] pb-2">GAMEMODE</h2>
+                <div class="flex flex-col gap-4">
+                    <button onclick="startCPU()" id="mode-cpu" class="btn-arcade btn-neo-yellow w-full">VS CPU</button>
+                    <button onclick="startLocal()" id="mode-local" class="btn-arcade w-full">LOCAL P2</button>
+                </div>
+
+                <div id="cpu-controls" class="mt-4 flex flex-col gap-2">
+                    <label class="tech-text font-bold text-sm">AI ENGINE DEPTH:</label>
+                    <select id="cpu-difficulty">
+                        <option value="easy">Level 1 (FAST)</option>
+                        <option value="med">Level 2 (STANDARD)</option>
+                        <option value="hard">Level 3 (DEEP)</option>
+                        <option value="master" selected>Level 4 (GRANDMASTER)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="arcade-card !border-[var(--neo-cyan)]">
+                <h2 class="tech-text font-bold text-xl border-b-4 border-[var(--neo-cyan)] pb-2">STATS TALLY</h2>
+                <div class="flex justify-between items-center mt-4">
+                    <div class="text-center">
+                        <div id="wins-count" class="bungee-text text-3xl" style="color: var(--neo-cyan);">0</div>
+                        <div class="tech-text font-bold text-xs">WINS</div>
+                    </div>
+                    <div class="text-center">
+                        <div id="ties-count" class="bungee-text text-3xl" style="color: var(--neo-yellow);">0</div>
+                        <div class="tech-text font-bold text-xs">TIES</div>
+                    </div>
+                    <div class="text-center">
+                        <div id="losses-count" class="bungee-text text-3xl" style="color: var(--neo-magenta);">0</div>
+                        <div class="tech-text font-bold text-xs">LOSSES</div>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="performRestart()" class="btn-arcade text-xl w-full">REBOOT BOARD</button>
+        </div>
+
+        <!-- Center Column: The Board -->
+        <div class="w-full xl:w-6/12 flex flex-col items-center justify-center relative gap-6">
+
+            <div class="w-full flex justify-between items-center tech-text font-bold">
+                <span class="text-[var(--neo-yellow)] tracking-widest text-lg">BLACK (CPU) CAPTURED: <span
+                        id="black-taken"></span></span>
+            </div>
+
+            <div class="relative w-full max-w-[600px]">
+                <div id="board" class="w-full"></div>
+
+                <div id="game-overlay">
+                    <span id="overlay-status-icon" class="material-symbols-outlined text-6xl"
+                        style="color: var(--neo-yellow);">military_tech</span>
+                    <h2 id="overlay-status-text" class="bungee-text text-4xl text-white my-4">MATE</h2>
+                    <button onclick="performRestart()" class="btn-arcade btn-neo-cyan text-xl">NEW MATCH</button>
+                </div>
+                <!-- Multiplayer Badge -->
+                <div id="mp-badge" class="hidden absolute -top-12 right-0 bg-primary/20 text-primary border border-primary/30 px-4 py-1.5 rounded-full tech-text font-bold text-xs animate-pulse">
+                    <span class="material-symbols-outlined text-xs align-middle mr-1">public</span> ONLINE ACTIVE
+                </div>
+            </div>
+
+            <div class="w-full flex justify-between items-center tech-text font-bold">
+                <span class="text-[var(--text-main)] tracking-widest text-lg">WHITE (USER) CAPTURED: <span
+                        id="white-taken"></span></span>
+            </div>
+
+            <div class="w-full arcade-card flex justify-between items-center py-4 px-6 mt-4">
+                <div id="status-text" class="bungee-text text-xl" style="color: var(--neo-magenta);">WHITE TO MOVE</div>
+                <div class="tech-text font-bold text-2xl" id="game-timer">00:00</div>
+            </div>
+        </div>
+
+        <!-- Right Column: Move Logger -->
+        <div class="w-full xl:w-3/12 flex flex-col gap-8">
+            <div class="arcade-card flex-grow max-h-[600px] overflow-y-auto">
+                <h2 class="tech-text font-bold text-xl border-b-4 border-[var(--neo-yellow)] pb-2"
+                    style="color: var(--neo-yellow);">MOVE LOGGER</h2>
+                <div id="move-list-container" class="mt-4">
+                    <p class="tech-text font-bold text-[var(--text-mute)]">AWAITING COMMENCEMENT...</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script src="/js/multiplayerClient.js"></script>
+
+    <script>
+        // -------------------------
+        // THEME ENGINE
+        // -------------------------
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('light')) {
+                html.classList.remove('light'); html.classList.add('dark');
+                localStorage.setItem('theme', 'dark'); icon.innerText = 'light_mode';
+            } else {
+                html.classList.remove('dark'); html.classList.add('light');
+                localStorage.setItem('theme', 'light'); icon.innerText = 'dark_mode';
+            }
+        }
+        if (localStorage.getItem('theme') === 'light') toggleTheme();
+
+        // -------------------------
+        // CHESS ENGINE & LOGIC
+        // -------------------------
+        let board = null;
+        let game = new Chess();
+        let playMode = 'cpu';
+        let moveHistory = [];
+        let capturedPieces = { white: [], black: [] };
+        let gameStats = { wins: 0, ties: 0, losses: 0 };
+
+        let gameStartTime = Date.now();
+        let gameTimer = null;
+
+        let mpClient = null;
+        let myColor = 'w'; // Default for local/CPU
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initBoard();
+            loadGameStats();
+            document.getElementById('game-timer').textContent = "00:00";
+            setupMultiplayer();
+        });
+
+        function setupMultiplayer() {
+            const params = new URLSearchParams(window.location.search);
+            const room = params.get('room');
+            const isHost = params.get('host') === 'true';
+
+            if (room) {
+                mpClient = new window.MultiplayerClient("Chess", (players) => {
+                    console.log("[MP] Players changed:", players);
+                }, (action) => {
+                    if (action.action === 'MOVE') {
+                        handleOpponentMove(action.payload.move);
+                    } else if (action.action === 'RESTART') {
+                        executeRestartLocal();
+                    }
+                });
+
+                playMode = 'multi';
+                myColor = isHost ? 'w' : 'b';
+                
+                document.getElementById('mp-badge').classList.remove('hidden');
+                document.getElementById('cpu-controls').style.display = 'none';
+                document.getElementById('mode-cpu').disabled = true;
+                document.getElementById('mode-local').disabled = true;
+                document.getElementById('mode-cpu').style.opacity = '0.5';
+                document.getElementById('mode-local').style.opacity = '0.5';
+
+                if (!isHost) board.orientation('black');
+            }
+        }
+
+        const moveSound = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
+        function playMoveSound() {
+            moveSound.currentTime = 0;
+            moveSound.play().catch(() => {});
+        }
+
+        function initBoard() {
+            if (board) board.destroy();
+            const config = {
+                draggable: true,
+                position: 'start',
+                onDragStart: (source, piece) => {
+                    if (game.game_over()) return false;
+                    if (playMode === 'cpu' && game.turn() === 'b') return false;
+                    if (playMode === 'multi' && game.turn() !== myColor) return false;
+                    if ((game.turn() === 'w' && piece.search(/^b/) !== -1) || (game.turn() === 'b' && piece.search(/^w/) !== -1)) return false;
+                },
+                onDrop: (source, target) => {
+                    removeGreySquares();
+                    let move = game.move({ from: source, to: target, promotion: 'q' });
+                    if (move === null) return 'snapback';
+                    
+                    if (playMode === 'multi') {
+                        mpClient.sendAction('MOVE', { move: { from: source, to: target, promotion: 'q' } });
+                    }
+
+                    addMoveToHistory(move);
+                    updateStatus();
+                    playMoveSound();
+
+                    if (playMode === 'cpu' && !game.game_over()) setTimeout(makeCPUMove, 600);
+                },
+                onSnapEnd: () => board.position(game.fen()),
+                pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png'
+            };
+            board = Chessboard('board', config);
+
+            // Brutal Square Click Logic
+            $('#board').on('click', '[class*="square-"]', function () {
+                let square = $(this).attr('data-square');
+                if (square) handleSquareClick(square);
+            });
+        }
+
+        let selectedSquare = null;
+        function handleSquareClick(square) {
+            if (game.game_over()) return;
+            if (playMode === 'cpu' && game.turn() === 'b') return;
+            if (playMode === 'multi' && game.turn() !== myColor) return;
+
+            if (selectedSquare) {
+                let moveData = { from: selectedSquare, to: square, promotion: 'q' };
+                let move = game.move(moveData);
+                if (move === null) {
+                    let piece = game.get(square);
+                    if (piece && piece.color === game.turn()) {
+                        selectedSquare = square;
+                        removeGreySquares();
+                        showLegalMoves(square);
+                    } else {
+                        selectedSquare = null;
+                        removeGreySquares();
+                    }
+                } else {
+                    if (playMode === 'multi') {
+                        mpClient.sendAction('MOVE', { move: moveData });
+                    }
+                    selectedSquare = null;
+                    removeGreySquares();
+                    board.position(game.fen());
+                    addMoveToHistory(move);
+                    updateStatus();
+                    playMoveSound();
+                    if (playMode === 'cpu' && !game.game_over()) setTimeout(makeCPUMove, 600);
+                }
+            } else {
+                let piece = game.get(square);
+                if (piece && piece.color === game.turn()) {
+                    selectedSquare = square;
+                    showLegalMoves(square);
+                }
+            }
+        }
+
+        function removeGreySquares() {
+            $('#board .square-55d63').removeClass('highlight-white highlight-black highlight-source');
+        }
+
+        function greySquare(square, isSource = false) {
+            let $square = $('#board .square-' + square);
+            if (isSource) { $square.addClass('highlight-source'); return; }
+            $square.addClass($square.hasClass('black-3c85d') ? 'highlight-black' : 'highlight-white');
+        }
+
+        function showLegalMoves(square) {
+            let moves = game.moves({ square: square, verbose: true });
+            if (moves.length === 0) return;
+            greySquare(square, true);
+            for (let i = 0; i < moves.length; i++) { greySquare(moves[i].to); }
+        }
+
+        function updateStatus() {
+            let status = game.turn() === 'w' ? "WHITE'S TURN" : "BLACK'S TURN";
+            const statusEl = document.getElementById('status-text');
+            
+            statusEl.classList.remove('pulse-magenta', 'pulse-cyan');
+            if (game.turn() === 'w') {
+                statusEl.style.color = 'var(--neo-cyan)';
+                statusEl.classList.add('pulse-cyan');
+            } else {
+                statusEl.style.color = 'var(--neo-magenta)';
+                statusEl.classList.add('pulse-magenta');
+            }
+
+            if (playMode === 'multi') {
+                const isMyTurn = game.turn() === myColor;
+                status = isMyTurn ? "YOUR TURN" : "OPPONENT'S TURN";
+            }
+
+            if (game.in_checkmate()) {
+                let winner = game.turn() === 'w' ? 'BLACK' : 'WHITE';
+                status = `CHECKMATE. ${winner} WINS`;
+                showOverlay(`${winner} WINS`, 'military_tech');
+                stopGameTimer();
+                if (playMode === 'cpu') {
+                    const playerWon = (winner === 'WHITE');
+                    updateGameStats(playerWon ? 'win' : 'loss');
+                }
+            } else if (game.in_draw()) {
+                status = "STALEMATE DETECTED";
+                showOverlay("DRAW MATCH", 'handshake');
+                stopGameTimer();
+                updateGameStats('tie');
+            }
+            document.getElementById('status-text').innerText = status;
+        }
+
+        function showOverlay(text, icon) {
+            const over = document.getElementById('game-overlay');
+            document.getElementById('overlay-status-text').innerText = text;
+            document.getElementById('overlay-status-icon').innerText = icon;
+            over.style.opacity = '1'; over.style.pointerEvents = 'auto';
+        }
+        function hideOverlay() {
+            const over = document.getElementById('game-overlay');
+            over.style.opacity = '0'; over.style.pointerEvents = 'none';
+        }
+
+        function makeCPUMove() {
+            const diff = document.getElementById('cpu-difficulty').value;
+            const moves = game.moves();
+            if (moves.length === 0) return;
+
+            let move;
+            if (diff === 'easy') {
+                move = moves[Math.floor(Math.random() * moves.length)];
+            } else {
+                let depth = diff === 'med' ? 1 : (diff === 'hard' ? 2 : 3);
+                move = getBestMove(game, depth);
+            }
+            const gameMove = game.move(move);
+            board.position(game.fen());
+            addMoveToHistory(gameMove);
+            updateStatus();
+        }
+
+        function getBestMove(g, depth) {
+            let moves = g.moves();
+            let bestMove = -Infinity;
+            let bestMoveFound;
+            moves.forEach(m => {
+                g.move(m);
+                let value = minimax(g, depth - 1, -Infinity, Infinity, false);
+                g.undo();
+                if (value > bestMove) { bestMove = value; bestMoveFound = m; }
+            });
+            return bestMoveFound || moves[0];
+        }
+
+        function minimax(g, depth, alpha, beta, isMaximizing) {
+            if (depth === 0) return -evaluateBoard(g.board());
+            let moves = g.moves();
+            if (isMaximizing) {
+                let bestScore = -Infinity;
+                for (let m of moves) {
+                    g.move(m);
+                    bestScore = Math.max(bestScore, minimax(g, depth - 1, alpha, beta, !isMaximizing));
+                    g.undo();
+                    alpha = Math.max(alpha, bestScore);
+                    if (beta <= alpha) return bestScore;
+                }
+                return bestScore;
+            } else {
+                let bestScore = Infinity;
+                for (let m of moves) {
+                    g.move(m);
+                    bestScore = Math.min(bestScore, minimax(g, depth - 1, alpha, beta, !isMaximizing));
+                    g.undo();
+                    beta = Math.min(beta, bestScore);
+                    if (beta <= alpha) return bestScore;
+                }
+                return bestScore;
+            }
+        }
+
+        function evaluateBoard(b) {
+            let total = 0;
+            const vals = { p: 10, n: 30, b: 30, r: 50, q: 90, k: 900 };
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    let p = b[r][c];
+                    if (p) total += vals[p.type] * (p.color === 'w' ? 1 : -1);
+                }
+            }
+            return total;
+        }
+
+        function handleOpponentMove(moveData) {
+            let move = game.move(moveData);
+            if (move) {
+                board.position(game.fen());
+                addMoveToHistory(move);
+                updateStatus();
+                playMoveSound();
+            }
+        }
+
+        function performRestart() {
+            if (playMode === 'multi') {
+                if (confirm("Reset the board? This will reset for both players.")) {
+                    mpClient.sendAction('RESTART', {});
+                    executeRestartLocal();
+                }
+            } else {
+                executeRestartLocal();
+            }
+        }
+
+        function executeRestartLocal() {
+            game.reset();
+            board.position('start');
+            hideOverlay();
+
+            moveHistory = [];
+            capturedPieces = { white: [], black: [] };
+            stopGameTimer();
+            document.getElementById('game-timer').textContent = "00:00";
+
+            updateMoveList();
+            updateCapturedPieces();
+            updateStatus();
+        }
+
+        function startGameTimer() {
+            if (gameTimer) clearInterval(gameTimer);
+            gameTimer = setInterval(() => {
+                const elapsed = Date.now() - gameStartTime;
+                const mins = Math.floor(elapsed / 60000).toString().padStart(2, '0');
+                const secs = Math.floor((elapsed % 60000) / 1000).toString().padStart(2, '0');
+                document.getElementById('game-timer').textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function stopGameTimer() {
+            if (gameTimer) { clearInterval(gameTimer); gameTimer = null; }
+        }
+
+        function updateMoveList() {
+            const container = document.getElementById('move-list-container');
+            if (moveHistory.length === 0) {
+                container.innerHTML = '<p class="tech-text font-bold text-[var(--text-mute)]">AWAITING COMMENCEMENT...</p>';
+                return;
+            }
+
+            let html = '<table class="arcade-table"><thead><tr><th>#</th><th>W</th><th>B</th></tr></thead><tbody>';
+            for (let i = 0; i < moveHistory.length; i += 2) {
+                const num = Math.floor(i / 2) + 1;
+                const wm = moveHistory[i].notation;
+                const bm = moveHistory[i + 1] ? moveHistory[i + 1].notation : '';
+                html += `<tr><td>${num}</td><td>${wm}</td><td>${bm}</td></tr>`;
+            }
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function updateCapturedPieces() {
+            document.getElementById('white-taken').innerHTML = capturedPieces.black.map(p => getPieceSymbol(p)).join(' ');
+            document.getElementById('black-taken').innerHTML = capturedPieces.white.map(p => getPieceSymbol(p)).join(' ');
+        }
+
+        function getPieceSymbol(piece) {
+            const sym = { 'wP': '♙', 'wN': '♘', 'wB': '♗', 'wR': '♖', 'wQ': '♕', 'wK': '♔', 'bP': '♟', 'bN': '♞', 'bB': '♝', 'bR': '♜', 'bQ': '♛', 'bK': '♚' };
+            return sym[piece] || '';
+        }
+
+        function updateGameStats(result) {
+            if (result === 'win') gameStats.wins++;
+            else if (result === 'tie') gameStats.ties++;
+            else if (result === 'loss') gameStats.losses++;
+            document.getElementById('wins-count').textContent = gameStats.wins;
+            document.getElementById('ties-count').textContent = gameStats.ties;
+            document.getElementById('losses-count').textContent = gameStats.losses;
+            saveGameStats();
+        }
+        function saveGameStats() { localStorage.setItem('chess-arcade-stats', JSON.stringify(gameStats)); }
+        function loadGameStats() {
+            const saved = localStorage.getItem('chess-arcade-stats');
+            if (saved) {
+                gameStats = JSON.parse(saved);
+                document.getElementById('wins-count').textContent = gameStats.wins;
+                document.getElementById('ties-count').textContent = gameStats.ties;
+                document.getElementById('losses-count').textContent = gameStats.losses;
+            }
+        }
+
+        function addMoveToHistory(move) {
+            if (moveHistory.length === 0) {
+                gameStartTime = Date.now();
+                startGameTimer();
+            }
+            moveHistory.push({ notation: move.san, color: move.color });
+            if (move.captured) {
+                const cap = move.color === 'w' ? 'b' + move.captured.toUpperCase() : 'w' + move.captured.toUpperCase();
+                if (move.color === 'w') capturedPieces.white.push(cap); else capturedPieces.black.push(cap);
+            }
+            updateMoveList();
+            updateCapturedPieces();
+        }
+
+        function startCPU() {
+            playMode = 'cpu';
+            document.getElementById('mode-cpu').classList.add('btn-neo-yellow'); document.getElementById('mode-cpu').classList.remove('background-var(--bg)');
+            document.getElementById('mode-local').classList.remove('btn-neo-yellow');
+            document.getElementById('cpu-controls').style.display = 'flex';
+            performRestart();
+        }
+        function startLocal() {
+            playMode = 'local';
+            document.getElementById('mode-local').classList.add('btn-neo-yellow');
+            document.getElementById('mode-cpu').classList.remove('btn-neo-yellow');
+            document.getElementById('cpu-controls').style.display = 'none';
+            performRestart();
+        } 
+    </script>
+
+    <div id="footer-placeholder"></div>
+    <script src="/js/component-loader.js"></script>
+</body>
+
+</html>

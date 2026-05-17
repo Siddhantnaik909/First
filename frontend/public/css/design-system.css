@@ -1,0 +1,1417 @@
+/**
+ * Smart Hub Design System v2.0
+ * Standardized CSS variables and component classes
+ * Use with Tailwind CSS
+ */
+
+/* ========================================
+   CSS Custom Properties (Design Tokens)
+   ======================================== */
+
+:root {
+  --header-height: 64px;
+  --footer-height: 60px;
+
+    /* Brand Colors */
+    --primary: #c96f32;
+    --primary-container: #2f9c95;
+    --primary-gradient: linear-gradient(135deg, #c96f32 0%, #2f9c95 100%);
+    
+    /* Premium Accents */
+    --accent-blue: #4f46e5;
+    --accent-indigo: #6366f1;
+    --accent-purple: #a855f7;
+    --accent-pink: #ec4899;
+    --accent-rose: #f43f5e;
+    
+    /* Surface Colors (Light Mode) - High Contrast Version */
+    --surface: #f1f3f6; 
+    --surface-container: #e9ecef;
+    --surface-container-low: #f8f9fa;
+    --surface-container-lowest: #ffffff; 
+    --surface-container-high: #dee2e6;
+    
+    /* Text Colors - Improved Readability */
+    --on-surface: #0f172a; 
+    --on-surface-variant: #475569; 
+    --on-primary: #ffffff;
+    
+    /* Status Colors */
+    --success: #10b981;
+    --success-container: #d8efe4;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --error-container: #fee2e2;
+    
+    /* Neutral Colors */
+    --white: #ffffff;
+    --black: #000000;
+    --slate-50: #f8fafc;
+    --slate-100: #f1f5f9;
+    --slate-200: #e2e8f0;
+    --slate-300: #cbd5e1;
+    --slate-400: #94a3b8;
+    --slate-500: #64748b;
+    --slate-600: #475569;
+    --slate-700: #334155;
+    --slate-800: #1e293b;
+    --slate-900: #0f172a;
+    
+    /* Layout */
+    --page-max-width: 1440px;
+    --section-gap: 3rem;
+    --card-padding: 2.5rem;
+    --card-padding-sm: 1.5rem;
+    --border-radius: 1.5rem;
+    --border-radius-sm: 1rem;
+    --border-radius-lg: 2rem;
+    
+    /* Spacing */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
+    
+    /* Typography */
+    --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-primary: 0 10px 40px -10px rgba(201, 111, 50, 0.3);
+}
+
+/* ========================================
+   Base Styles
+   ======================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--surface);
+    color: var(--on-surface);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ========================================
+   Layout Components
+   ======================================== */
+
+/* Standard Page Container */
+.page-container {
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    padding: 7rem 1rem 5rem;
+}
+
+@media (min-width: 640px) {
+    .page-container {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .page-container {
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+    }
+}
+
+/* Color Utilities */
+.bg-accent-blue { background-color: var(--accent-blue) !important; }
+.text-accent-blue { color: var(--accent-blue) !important; }
+.bg-accent-purple { background-color: var(--accent-purple) !important; }
+.text-accent-purple { color: var(--accent-purple) !important; }
+.bg-accent-rose { background-color: var(--accent-rose) !important; }
+.text-accent-rose { color: var(--accent-rose) !important; }
+.bg-primary { background-color: var(--primary) !important; }
+.text-primary { color: var(--primary) !important; }
+
+/* Main Content Wrapper (standardized for all hub pages) */
+.main-content-wrapper,
+.main-content {
+    padding-top: 7rem; /* Default for mobile/small screens */
+    padding-bottom: 5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+}
+
+/* Fix for redundant select arrows when using appearance-none */
+select.appearance-none {
+    background-image: none !important;
+}
+
+@media (min-width: 640px) {
+    .main-content-wrapper,
+    .main-content {
+        padding-top: 7rem;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .main-content-wrapper,
+    .main-content {
+        padding-top: 9rem;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+    }
+}
+
+/* ========================================
+   Button Components
+   ======================================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-radius: var(--border-radius);
+    padding: 0.75rem 1.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    line-height: 1.25;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary), 0 0 0 4px var(--surface);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Primary Button */
+.btn-primary {
+    background: var(--primary-gradient);
+    color: white;
+    box-shadow: 0 4px 14px rgba(201, 111, 50, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(201, 111, 50, 0.4);
+    transform: translateY(-1px);
+}
+
+.btn-primary:focus {
+    box-shadow: 0 0 0 2px white, 0 0 0 4px var(--primary);
+}
+
+/* Secondary Button */
+.btn-secondary {
+    background: var(--surface-container);
+    color: var(--on-surface);
+    border: 1px solid var(--surface-container-high);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--surface-container-low);
+}
+
+/* Danger/Error Button */
+.btn-danger {
+    background: var(--error-container);
+    color: var(--error);
+    border: 1px solid var(--error);
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: var(--error);
+    color: white;
+}
+
+/* Success Button */
+.btn-success {
+    background: var(--success-container);
+    color: var(--success);
+    border: 1px solid var(--success);
+}
+
+.btn-success:hover:not(:disabled) {
+    background: var(--success);
+    color: white;
+}
+
+/* Ghost Button (Minimal) */
+.btn-ghost {
+    background: transparent;
+    color: var(--on-surface-variant);
+}
+
+.btn-ghost:hover:not(:disabled) {
+    background: var(--surface-container);
+    color: var(--on-surface);
+}
+
+/* Small Button Variant */
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+}
+
+/* Large Button Variant */
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+}
+
+/* Button Loading States */
+.btn.loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.btn.loading::after {
+    content: "";
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-left: 0.5em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.btn-primary.loading {
+    color: transparent;
+}
+
+/* ========================================
+   Card Components
+   ======================================== */
+
+.card {
+    background: var(--surface-container-lowest);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--surface-container-high);
+    padding: var(--card-padding);
+    box-shadow: var(--shadow);
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    box-shadow: var(--shadow-primary);
+    transform: translateY(-4px);
+}
+
+.card-header {
+    padding-bottom: var(--space-4);
+    margin-bottom: var(--space-4);
+    border-bottom: 1px solid var(--surface-container-high);
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--on-surface);
+    margin: 0;
+}
+
+.card-subtitle {
+    font-size: 0.875rem;
+    color: var(--on-surface-variant);
+    margin-top: var(--space-1);
+}
+
+/* Card Variants */
+.card-filled {
+    background: var(--surface-container);
+    border-color: var(--surface-container-high);
+}
+
+/* ========================================
+   Tool Card Components (Calculators Page)
+   ======================================== */
+
+.tool-card {
+    min-height: 240px;
+    height: auto;
+    transition: all 0.3s ease;
+}
+
+.tool-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-primary);
+}
+
+@media (max-width: 640px) {
+    .tool-card {
+        min-height: 200px;
+    }
+}
+
+/* ========================================
+   Search Components
+   ======================================== */
+
+.search-glass {
+    background: rgba(255, 242, 221, 0.82);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(201, 111, 50, 0.14);
+    border-radius: 1.5rem;
+    overflow: hidden;
+}
+
+.search-glass:focus-within {
+    border-color: var(--primary);
+}
+
+@media (max-width: 640px) {
+    .search-glass input {
+        font-size: 1rem;
+        padding: 1rem;
+    }
+}
+
+/* ========================================
+   Mobile Navigation
+   ======================================== */
+
+@media (max-width: 768px) {
+    .page-container,
+    .main-content {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-top: 6rem;
+        padding-bottom: 4rem;
+    }
+    
+    h1 {
+        font-size: 2.25rem !important;
+        line-height: 1.1 !important;
+    }
+
+    .main-content-wrapper {
+        padding-top: 6rem !important;
+        padding-bottom: 4rem !important;
+    }
+}
+
+.card-elevated {
+    box-shadow: var(--shadow-lg);
+}
+
+.card-outlined {
+    background: transparent;
+    border: 2px solid var(--surface-container-high);
+}
+
+/* ========================================
+   Form Components
+   ======================================== */
+
+.input {
+    width: 100%;
+    background: var(--surface-container-lowest);
+    border: 1px solid var(--surface-container-high);
+    border-radius: var(--border-radius);
+    padding: 1rem 1.5rem;
+    font-family: var(--font-main);
+    font-size: 0.875rem;
+    color: var(--on-surface);
+    transition: all 0.2s ease;
+}
+
+.input::placeholder {
+    color: var(--on-surface-variant);
+    opacity: 0.6;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(201, 111, 50, 0.1);
+}
+
+.input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: var(--surface-container);
+}
+
+/* Input Sizes */
+.input-sm {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+}
+
+.input-lg {
+    padding: 1.25rem 1.75rem;
+    font-size: 1rem;
+}
+
+/* Textarea */
+.textarea {
+    min-height: 120px;
+    resize: vertical;
+    background: var(--surface-container-lowest);
+    border: 1px solid var(--surface-container-high);
+    border-radius: var(--border-radius);
+    padding: 1rem 1.5rem;
+    font-family: var(--font-main);
+    font-size: 0.875rem;
+    color: var(--on-surface);
+    width: 100%;
+}
+
+/* Select */
+.select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    width: 100%;
+    background: var(--surface-container-lowest);
+    border: 1px solid var(--surface-container-high);
+    border-radius: var(--border-radius);
+    padding: 1rem 1.5rem;
+    font-family: var(--font-main);
+    font-size: 0.875rem;
+    color: var(--on-surface);
+}
+
+/* Label */
+.label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--on-surface-variant);
+    margin-bottom: var(--space-2);
+}
+
+/* Form Group */
+.form-group {
+    margin-bottom: var(--space-4);
+}
+
+/* ========================================
+   Typography
+   ======================================== */
+
+.heading-1 {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    color: var(--on-surface);
+}
+
+@media (min-width: 768px) {
+    .heading-1 {
+        font-size: 3.75rem;
+    }
+}
+
+.heading-2 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    color: var(--on-surface);
+}
+
+.heading-3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--on-surface);
+}
+
+.text-small {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.text-muted {
+    color: var(--on-surface-variant);
+}
+
+/* ========================================
+   Toast / Notifications
+   ======================================== */
+
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--slate-900);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.toast-icon {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.toast-success {
+    background: var(--success);
+}
+
+.toast-error {
+    background: var(--error);
+}
+
+.toast-warning {
+    background: var(--warning);
+}
+
+/* ========================================
+   Toast Notification System
+   ======================================== */
+
+.toast-container {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    pointer-events: none;
+}
+
+.toast-container .toast {
+    position: relative;
+    transform: none;
+    bottom: auto;
+    left: auto;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-xl);
+    max-width: 400px;
+    pointer-events: auto;
+}
+
+.toast-success {
+    background: var(--success);
+    color: white;
+}
+
+.toast-error {
+    background: var(--error);
+    color: white;
+}
+
+.toast-warning {
+    background: var(--warning);
+    color: var(--slate-900);
+}
+
+.toast-info {
+    background: var(--slate-700);
+    color: white;
+}
+
+@media (max-width: 640px) {
+    .toast-container {
+        left: 1rem;
+        right: 1rem;
+        transform: none;
+    }
+    
+    .toast {
+        max-width: none;
+        width: 100%;
+    }
+}
+
+/* ========================================
+   Utility Classes
+   ======================================== */
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.gradient-text {
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+/* ========================================
+   Animation Utilities
+   ======================================== */
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.4s ease;
+}
+
+/* ========================================
+   Screenshot Mode Styles
+   ======================================== */
+
+/* Screenshot mode class - add 'screenshot-mode' to html or body */
+.screenshot-mode,
+html.screenshot-mode,
+body.screenshot-mode {
+    /* Remove fixed positioning constraints */
+    position: relative !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 100vh !important;
+}
+
+/* Fix navbar in screenshot mode - handle both fixed and sticky */
+.screenshot-mode nav.fixed,
+.screenshot-mode nav.sticky,
+.screenshot-mode .fixed.top-0,
+.screenshot-mode .sticky.top-0,
+.screenshot-mode [class*="sticky"],
+html.screenshot-mode nav.fixed,
+html.screenshot-mode nav.sticky,
+html.screenshot-mode .fixed.top-0,
+html.screenshot-mode .sticky.top-0,
+html.screenshot-mode [class*="sticky"] {
+    position: relative !important;
+    top: auto !important;
+    z-index: auto !important;
+}
+
+/* Ensure header-placeholder is at the very top in screenshot mode */
+.screenshot-mode #header-placeholder,
+html.screenshot-mode #header-placeholder {
+    position: relative !important;
+    order: -9999 !important;
+    width: 100% !important;
+}
+
+/* Make body a flex column in screenshot mode to ensure proper order */
+.screenshot-mode body,
+html.screenshot-mode body {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Ensure footer is at the bottom */
+.screenshot-mode #footer-placeholder,
+html.screenshot-mode #footer-placeholder {
+    position: relative !important;
+    order: 9999 !important;
+    width: 100% !important;
+    margin-top: auto !important;
+}
+
+/* Disable backdrop-filter in screenshot mode */
+.screenshot-mode .backdrop-blur-xl,
+.screenshot-mode .backdrop-blur-md,
+.screenshot-mode .backdrop-blur-sm,
+.screenshot-mode [class*="backdrop-blur"],
+html.screenshot-mode .backdrop-blur-xl,
+html.screenshot-mode .backdrop-blur-md,
+html.screenshot-mode .backdrop-blur-sm,
+html.screenshot-mode [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Disable transform effects in screenshot mode */
+.screenshot-mode .hover\:scale-\[1\.02\]:hover,
+.screenshot-mode .group:hover .group-hover\:scale-110,
+.screenshot-mode .group:hover .group-hover\:scale-\[1\.02\],
+.screenshot-mode .hover\:scale-110:hover,
+.screenshot-mode .transition-transform,
+html.screenshot-mode .hover\:scale-\[1\.02\]:hover,
+html.screenshot-mode .group:hover .group-hover\:scale-110,
+html.screenshot-mode .group:hover .group-hover\:scale-\[1\.02\],
+html.screenshot-mode .hover\:scale-110:hover {
+    transform: none !important;
+}
+
+/* Ensure main content flows naturally */
+.screenshot-mode main,
+html.screenshot-mode main {
+    min-height: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+}
+
+/* Remove fixed height constraints */
+.screenshot-mode [class*="h-20"],
+.screenshot-mode [class*="h-\["],
+html.screenshot-mode [class*="h-20"] {
+    height: auto !important;
+    min-height: auto !important;
+}
+
+/* Fix any overflow hidden that might clip content */
+.screenshot-mode .overflow-hidden,
+html.screenshot-mode .overflow-hidden {
+    overflow: visible !important;
+}
+
+/* ========================================
+   Layout Fixes for Better Screenshot Compatibility
+   ======================================== */
+
+/* Replace fixed navbar with sticky alternative */
+@media screen {
+    nav.sticky-top {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+    }
+}
+
+/* Ensure page has natural scroll height */
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Fix for sections that might use 100vh */
+section.min-h-screen {
+    min-height: 100vh;
+    height: auto;
+}
+
+/* Print/Screenshot media query */
+@media print {
+    nav.fixed,
+    .fixed {
+        position: relative !important;
+    }
+    
+    .backdrop-blur-xl,
+    .backdrop-blur-md,
+    [class*="backdrop-blur"] {
+        backdrop-filter: none !important;
+    }
+    
+    * {
+        transform: none !important;
+        animation: none !important;
+    }
+}
+
+/* Icon Fill Utility */
+.icon-fill {
+    font-variation-settings: 'FILL' 1 !important;
+}
+
+/* ========================================
+   Main Layout - Navbar Padding Compensation
+   ======================================== */
+
+/* Standard Main Layout with automatic navbar padding */
+.page-container main.main-content {
+  padding-top: var(--header-height);
+  padding-bottom: var(--footer-height);
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  width: 100%;
+  margin: 0 auto;
+  max-width: var(--page-max-width);
+}
+
+/* Utility class for any main element needing navbar offset */
+.main-with-navbar {
+  padding-top: calc(var(--header-height) + 2rem);
+  padding-bottom: 4rem;
+  min-height: calc(100vh - var(--header-height));
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+/* Main content wrapper with full layout spacing */
+.main-content-wrapper {
+  padding-top: calc(var(--header-height) + 2rem);
+  padding-bottom: 8rem;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: visible;
+  box-sizing: border-box;
+}
+
+/* Grid Layout Fixes for Overflow Issues */
+.grid {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Ensure grid children don't overflow */
+.grid > * {
+  min-width: 0; /* Allow grid items to shrink below content size */
+  box-sizing: border-box;
+}
+
+/* Fix specific grid column layouts */
+.col-span-12 {
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+@media (min-width: 1024px) {
+  .lg\:col-span-4 {
+    overflow-x: hidden;
+  }
+  
+  .lg\:col-span-8 {
+    overflow-x: hidden;
+  }
+}
+
+/* Fix main element constraints */
+main {
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* ========================================
+   Page Container Utilities
+   ======================================== */
+
+.page-container {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .page-container {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .page-container {
+    padding-left: var(--space-10);
+    padding-right: var(--space-10);
+  }
+}
+
+/* Section spacing utilities */
+.page-section {
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-16);
+}
+
+@media (min-width: 640px) {
+  .page-section {
+    padding-top: var(--space-20);
+    padding-bottom: var(--space-20);
+  }
+}
+
+/* Content block with standard spacing */
+.content-block {
+  margin-bottom: var(--space-24);
+}
+
+/* ========================================
+   Spacing Utility Classes (Token-based)
+   ======================================== */
+
+/* Padding utilities */
+.p-1 { padding: var(--space-1); }
+.p-2 { padding: var(--space-2); }
+.p-3 { padding: var(--space-3); }
+.p-4 { padding: var(--space-4); }
+.p-5 { padding: var(--space-5); }
+.p-6 { padding: var(--space-6); }
+.p-8 { padding: var(--space-8); }
+.p-10 { padding: var(--space-10); }
+.p-12 { padding: var(--space-12); }
+.p-16 { padding: var(--space-16); }
+.p-20 { padding: var(--space-20); }
+
+.px-1 { padding-left: var(--space-1); padding-right: var(--space-1); }
+.px-2 { padding-left: var(--space-2); padding-right: var(--space-2); }
+.px-3 { padding-left: var(--space-3); padding-right: var(--space-3); }
+.px-4 { padding-left: var(--space-4); padding-right: var(--space-4); }
+.px-5 { padding-left: var(--space-5); padding-right: var(--space-5); }
+.px-6 { padding-left: var(--space-6); padding-right: var(--space-6); }
+.px-8 { padding-left: var(--space-8); padding-right: var(--space-8); }
+.px-10 { padding-left: var(--space-10); padding-right: var(--space-10); }
+.px-12 { padding-left: var(--space-12); padding-right: var(--space-12); }
+
+.py-1 { padding-top: var(--space-1); padding-bottom: var(--space-1); }
+.py-2 { padding-top: var(--space-2); padding-bottom: var(--space-2); }
+.py-3 { padding-top: var(--space-3); padding-bottom: var(--space-3); }
+.py-4 { padding-top: var(--space-4); padding-bottom: var(--space-4); }
+.py-6 { padding-top: var(--space-6); padding-bottom: var(--space-6); }
+.py-8 { padding-top: var(--space-8); padding-bottom: var(--space-8); }
+.py-10 { padding-top: var(--space-10); padding-bottom: var(--space-10); }
+.py-12 { padding-top: var(--space-12); padding-bottom: var(--space-12); }
+.py-16 { padding-top: var(--space-16); padding-bottom: var(--space-16); }
+.py-20 { padding-top: var(--space-20); padding-bottom: var(--space-20); }
+.py-24 { padding-top: var(--space-24); padding-bottom: var(--space-24); }
+.py-32 { padding-top: var(--space-32); padding-bottom: var(--space-32); }
+
+.pt-1 { padding-top: var(--space-1); }
+.pt-2 { padding-top: var(--space-2); }
+.pt-3 { padding-top: var(--space-3); }
+.pt-4 { padding-top: var(--space-4); }
+.pt-6 { padding-top: var(--space-6); }
+.pt-8 { padding-top: var(--space-8); }
+.pt-10 { padding-top: var(--space-10); }
+.pt-12 { padding-top: var(--space-12); }
+.pt-16 { padding-top: var(--space-16); }
+.pt-20 { padding-top: var(--space-20); }
+
+.pb-1 { padding-bottom: var(--space-1); }
+.pb-2 { padding-bottom: var(--space-2); }
+.pb-3 { padding-bottom: var(--space-3); }
+.pb-4 { padding-bottom: var(--space-4); }
+.pb-6 { padding-bottom: var(--space-6); }
+.pb-8 { padding-bottom: var(--space-8); }
+.pb-10 { padding-bottom: var(--space-10); }
+.pb-12 { padding-bottom: var(--space-12); }
+.pb-16 { padding-bottom: var(--space-16); }
+.pb-20 { padding-bottom: var(--space-20); }
+
+.pl-4 { padding-left: var(--space-4); }
+.pl-6 { padding-left: var(--space-6); }
+.pl-8 { padding-left: var(--space-8); }
+.pl-10 { padding-left: var(--space-10); }
+.pl-12 { padding-left: var(--space-12); }
+
+.pr-4 { padding-right: var(--space-4); }
+.pr-6 { padding-right: var(--space-6); }
+.pr-8 { padding-right: var(--space-8); }
+.pr-10 { padding-right: var(--space-10); }
+.pr-12 { padding-right: var(--space-12); }
+
+/* Margin utilities */
+.m-1 { margin: var(--space-1); }
+.m-2 { margin: var(--space-2); }
+.m-3 { margin: var(--space-3); }
+.m-4 { margin: var(--space-4); }
+.m-6 { margin: var(--space-6); }
+.m-8 { margin: var(--space-8); }
+.m-10 { margin: var(--space-10); }
+.m-12 { margin: var(--space-12); }
+.m-16 { margin: var(--space-16); }
+.m-20 { margin: var(--space-20); }
+
+.mx-auto { margin-left: auto; margin-right: auto; }
+.mx-1 { margin-left: var(--space-1); margin-right: var(--space-1); }
+.mx-2 { margin-left: var(--space-2); margin-right: var(--space-2); }
+.mx-3 { margin-left: var(--space-3); margin-right: var(--space-3); }
+.mx-4 { margin-left: var(--space-4); margin-right: var(--space-4); }
+.mx-6 { margin-left: var(--space-6); margin-right: var(--space-6); }
+.mx-8 { margin-left: var(--space-8); margin-right: var(--space-8); }
+
+.my-1 { margin-top: var(--space-1); margin-bottom: var(--space-1); }
+.my-2 { margin-top: var(--space-2); margin-bottom: var(--space-2); }
+.my-3 { margin-top: var(--space-3); margin-bottom: var(--space-3); }
+.my-4 { margin-top: var(--space-4); margin-bottom: var(--space-4); }
+.my-6 { margin-top: var(--space-6); margin-bottom: var(--space-6); }
+.my-8 { margin-top: var(--space-8); margin-bottom: var(--space-8); }
+.my-10 { margin-top: var(--space-10); margin-bottom: var(--space-10); }
+.my-12 { margin-top: var(--space-12); margin-bottom: var(--space-12); }
+
+.mt-1 { margin-top: var(--space-1); }
+.mt-2 { margin-top: var(--space-2); }
+.mt-3 { margin-top: var(--space-3); }
+.mt-4 { margin-top: var(--space-4); }
+.mt-6 { margin-top: var(--space-6); }
+.mt-8 { margin-top: var(--space-8); }
+.mt-10 { margin-top: var(--space-10); }
+.mt-12 { margin-top: var(--space-12); }
+.mt-16 { margin-top: var(--space-16); }
+.mt-20 { margin-top: var(--space-20); }
+
+.mb-1 { margin-bottom: var(--space-1); }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-3 { margin-bottom: var(--space-3); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-6 { margin-bottom: var(--space-6); }
+.mb-8 { margin-bottom: var(--space-8); }
+.mb-10 { margin-bottom: var(--space-10); }
+.mb-12 { margin-bottom: var(--space-12); }
+.mb-16 { margin-bottom: var(--space-16); }
+.mb-20 { margin-bottom: var(--space-20); }
+.mb-24 { margin-bottom: var(--space-24); }
+
+.ml-2 { margin-left: var(--space-2); }
+.ml-3 { margin-left: var(--space-3); }
+.ml-4 { margin-left: var(--space-4); }
+.ml-6 { margin-left: var(--space-6); }
+.ml-8 { margin-left: var(--space-8); }
+
+.mr-2 { margin-right: var(--space-2); }
+.mr-3 { margin-right: var(--space-3); }
+.mr-4 { margin-right: var(--space-4); }
+.mr-6 { margin-right: var(--space-6); }
+.mr-8 { margin-right: var(--space-8); }
+
+/* Gap utilities for flexbox/grid */
+.gap-1 { gap: var(--space-1); }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+.gap-6 { gap: var(--space-6); }
+.gap-8 { gap: var(--space-8); }
+.gap-10 { gap: var(--space-10); }
+.gap-12 { gap: var(--space-12); }
+.gap-16 { gap: var(--space-16); }
+
+@media (min-width: 640px) {
+  .page-container main.main-content {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .page-container main.main-content {
+    padding-left: var(--space-10);
+    padding-right: var(--space-10);
+  }
+}
+
+/* ========================================
+   ADMIN UI CONFIG SYSTEM STYLES
+   ======================================== */
+
+/* Layout Density Classes */
+.layout-compact {
+    --card-padding: 1rem;
+    --space-4: 0.5rem;
+    --space-6: 1rem;
+    --section-gap: 1.5rem;
+}
+
+.layout-normal {
+    --card-padding: 2rem;
+    --space-4: 1rem;
+    --space-6: 1.5rem;
+    --section-gap: 2.5rem;
+}
+
+.layout-spacious {
+    --card-padding: 3rem;
+    --space-4: 1.5rem;
+    --space-6: 2rem;
+    --section-gap: 4rem;
+}
+
+/* Button Style Variants */
+.btn-modern {
+    border-radius: 1rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-classic {
+    border-radius: 0.25rem;
+    font-weight: 500;
+    box-shadow: none;
+}
+
+.btn-classic:hover {
+    transform: none;
+}
+
+.btn-minimal {
+    border-radius: 9999px;
+    font-weight: 600;
+    padding: 0.5rem 1.25rem;
+    box-shadow: none;
+    background: transparent;
+}
+
+.btn-minimal:hover {
+    background: var(--surface-container);
+    transform: none;
+}
+
+/* Animation Control */
+.no-animations * {
+    animation: none !important;
+    transition: none !important;
+}
+
+/* Game UI Hidden State */
+[data-feature-hidden="true"],
+[data-admin-hidden="true"] {
+    display: none !important;
+}
+
+/* Fallback UI */
+.fallback-mode {
+    opacity: 0.7;
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Responsive Sync Fixes */
+@media (max-width: 640px) {
+    .layout-compact .page-container,
+    .layout-normal .page-container,
+    .layout-spacious .page-container {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+        padding-top: 5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .layout-spacious .page-container {
+        padding-left: 3rem;
+        padding-right: 3rem;
+    }
+}
+
+/* Profile Dropdown & Navbar Controls */
+/* Profile Menu & Nav Layout */
+.profile-menu-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.5rem 1rem 0.5rem 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    user-select: none;
+}
+
+.profile-trigger:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--primary);
+}
+
+.profile-trigger img {
+    border: 2px solid var(--primary);
+}
+
+.profile-trigger span {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: white;
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + 1rem);
+    right: 0;
+    width: 260px;
+    background: #0f172a; /* Slate 900 for high status dark theme */
+    border-radius: 1.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.75rem;
+    z-index: 99999;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-dropdown.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.25rem;
+    color: #cbd5e1; /* Slate 300 */
+    font-size: 0.8125rem;
+    font-weight: 700;
+    border-radius: 1rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.dropdown-item.admin-only {
+    color: var(--primary);
+    background: rgba(201, 111, 50, 0.05);
+}
+
+.dropdown-item.logout {
+    color: #fb7185; /* Rose 400 */
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 0.5rem;
+}
+
+/* Ensure navbar doesn't clip dropdown */
+nav {
+    overflow: visible !important;
+}
+
+.tool-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
+    background-color: var(--surface-container-lowest) !important;
+}
+
+.tool-card:hover {
+    transform: translateY(-8px) !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12) !important;
+}
+
+.tool-card h3 {
+    color: var(--on-surface) !important;
+    font-weight: 800 !important;
+}
+
+.tool-card p {
+    color: #475569 !important; /* Slate 600 for better visibility */
+    font-weight: 500 !important;
+    line-height: 1.5 !important;
+}
+
+.tool-action-btn {
+    font-weight: 800 !important;
+    color: var(--primary) !important;
+    border: 1.5px solid rgba(201, 111, 50, 0.2) !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 0.75rem !important;
+}
+
+.tool-card:hover .tool-action-btn {
+    background-color: var(--primary) !important;
+    color: white !important;
+    border-color: var(--primary) !important;
+}
+

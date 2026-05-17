@@ -1,0 +1,280 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
+const http = require('http');
+const cors = require('cors');
+const https = require('https');
+const rateLimit = require('express-rate-limit');
+const { Server } = require('socket.io');
+const { config } = require('./src/config/env');
+
+console.time('startup');
+console.log('🚀 Server starting...');
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, { 
+    cors: { 
+        origin: process.env.FRONTEND_URL || ['http://localhost:3000', 'http://127.0.0.1:3000'],
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        credentials: true 
+    } 
+});
+const PORT = process.env.PORT || 3000;
+const LOCAL_IP = process.env.LOCAL_IP || '192.168.29.76';
+app.locals.io = io;
+
+// Security Middleware
+app.use(require('helmet')({ contentSecurityPolicy: false }));
+
+// Skip logging for screenshot automation
+app.use((req, res, next) => {
+    if (req.query.screenshot === 'true') {
+        req.skipLog = true;
+    }
+    next();
+});
+
+app.use(require('morgan')('combined', {
+    skip: (req) => req.skipLog === true
+}));
+
+
+// Rate limiting for auth routes
+const authLimiter = require('express-rate-limit')({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 login attempts per IP
+  message: { error: 'Too many login attempts, try again later' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const apiLimiter = require('express-rate-limit')({
+  windowMs: 15 * 60 * 1000,
+  max: 100, // 100 requests per windowMs per IP
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Body parsers AFTER security
+// ✅ FIX: Explicit CORS origin allowlist (not wildcard)
+app.use(cors({
+    origin: (origin, callback) => {
+        const allowed = [
+            'http://localhost:3000',
+            'http://127.0.0.1:3000',
+            `http://${LOCAL_IP}:3000`,
+            process.env.FRONTEND_URL,
+            process.env.NGROK_URL,
+            process.env.LOCALTUNNEL_URL
+        ].filter(Boolean);
+        // Allow requests with no origin (server-to-server calls, Postman) or whitelisted origins
+        if (!origin || allowed.includes(origin)) return callback(null, true);
+        return callback(new Error(`CORS: origin '${origin}' not allowed`));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+
+
+// --- Static File Serving ---
+const publicPath = path.join(__dirname, '../frontend/public');
+const componentsPath = path.join(publicPath, 'components');
+
+// ✅ FIX: Proper Cache-Control headers per asset type
+const staticOptions = {
+    etag: true,
+    lastModified: true,
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.html')) {
+            // HTML: always revalidate — shows new content immediately
+            res.setHeader('Cache-Control', 'no-cache');
+        } else if (filePath.match(/\.(js|css)$/)) {
+            // JS/CSS: revalidate — ensures code changes are visible
+            res.setHeader('Cache-Control', 'no-cache');
+        } else if (filePath.match(/\.(png|jpg|jpeg|gif|webp|svg|ico|woff2?|ttf)$/)) {
+            // Images/fonts: cache 1 day (safe — these rarely change)
+            res.setHeader('Cache-Control', 'public, max-age=86400');
+        }
+    }
+};
+
+app.use(express.static(publicPath, staticOptions));
+app.use('/components', express.static(componentsPath, staticOptions));
+app.use('/uploads', express.static(path.join(publicPath, 'uploads'), staticOptions));
+app.use('/backend/css', express.static(path.join(__dirname, 'css'), staticOptions));
+app.use('/backend/js', express.static(path.join(__dirname, 'js'), staticOptions));
+
+// Start server FIRST before heavy operations
+server.listen(PORT, '0.0.0.0', () => {
+console.log(`✅ Server running on port ${PORT} (0.0.0.0)`);
+    console.log(`🌐 Localhost: http://localhost:${PORT}`);
+    console.log(`🌐 LAN Access: http://${LOCAL_IP}:${PORT}`);
+    console.log(`🔌 API: http://localhost:${PORT}/api`);
+    console.timeEnd('startup');
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use. Stop the other process or change PORT in backend/.env.`);
+    process.exit(1);
+  }
+  console.error('Server startup error:', err.message);
+  process.exit(1);
+});
+
+// MongoDB with retry (async - doesn't block server)
+const connectWithRetry = (retries = 10) => {
+  mongoose.connect(config.mongoUri, {
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000
+  }).then(() => {
+    console.log('✅ MongoDB connected');
+    app.locals.dbReady = mongoose.connection;
+    app.locals.db = mongoose.connection.db;
+  }).catch(err => {
+    console.error(`❌ MongoDB Attempt ${11-retries} failed:`, err.message);
+    if (retries > 0) {
+      setTimeout(() => connectWithRetry(retries - 1), 5000);
+    } else {
+      console.error('❌ MongoDB connection failed after all retries');
+    }
+  });
+};
+connectWithRetry();
+
+// --- API Routes ---
+const authRoutes = require('./src/routes/authRoutes');
+const adminRoutes = require('./src/routes/adminRoutes'); 
+const catalogRoutes = require('./src/routes/catalogRoutes'); 
+const historyRoutes = require('./src/routes/historyRoutes'); 
+const uiRoutes = require('./src/routes/uiRoutes');
+const connectorRoutes = require('./src/routes/connectorRoutes');
+const gameRoutes = require('./src/routes/gameRoutes');
+const contactRoutes = require('./src/routes/contactRoutes');
+
+// Public API for sidebar features (Fixes the ERR_CONNECTION_REFUSED)
+app.get('/api/admin/client/features', (req, res) => {
+    res.json([]); // Return empty for now to satisfy the fetch
+});
+
+app.use('/api/auth', authLimiter, authRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/catalog', catalogRoutes);
+app.use('/api/history', historyRoutes);
+app.use('/api/ui', uiRoutes);
+app.use('/api/connectors', connectorRoutes);
+app.use('/api/games', gameRoutes);
+app.use('/api/contact', contactRoutes);
+
+// Explicit routes for game pages (fix 404 on navbar links without .html)
+app.get('/GameLobby', (req, res) => {
+    res.sendFile(path.join(publicPath, 'GameLobby.html'));
+});
+app.get('/CreateGameLobby', (req, res) => {
+    res.sendFile(path.join(publicPath, 'CreateGameLobby.html'));
+});
+app.get('/JoinGameLobby', (req, res) => {
+    res.sendFile(path.join(publicPath, 'JoinGameLobby.html'));
+});
+
+// --- RDAP/Whois Proxy (Bypass CORS) ---
+const rdapLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 min
+  max: 50, // 50 req/IP
+  message: 'Too many RDAP requests, slow down.'
+});
+app.get('/api/proxy/rdap', rdapLimiter, (req, res) => {
+    const { target, mode } = req.query;
+    if (!target) return res.status(400).json({ error: 'Target is required' });
+
+    const fetchRdap = (url, depth = 0) => {
+        if (depth > 5) return res.status(500).json({ error: 'Too many redirects' });
+
+        const options = {
+            headers: { 'User-Agent': 'Mozilla/5.0 (SmartHub Lookup Tool)' }
+        };
+
+        https.get(url, options, (response) => {
+            if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
+                return fetchRdap(response.headers.location, depth + 1);
+            }
+
+            if (response.statusCode !== 200) {
+                return res.status(response.statusCode).json({ error: `RDAP Server returned ${response.statusCode} for ${url}` });
+            }
+
+            let data = '';
+            response.on('data', (chunk) => data += chunk);
+            response.on('end', () => {
+                try {
+                    res.json(JSON.parse(data));
+                } catch (e) {
+                    res.status(500).json({ error: 'Failed to parse RDAP response' });
+                }
+            });
+        }).on('error', (err) => {
+            res.status(500).json({ error: err.message });
+        });
+    };
+
+    const initialUrl = mode === 'network' ? `https://rdap.org/ip/${target}` : `https://rdap.org/domain/${target}`;
+    fetchRdap(initialUrl);
+});
+
+
+// Root Redirect
+app.get('/', (req, res) => {
+    res.sendFile(path.join(publicPath, 'index.html'));
+});
+
+// 404 Handler - Must be after all other routes
+app.use((req, res) => {
+    res.status(404).json({ 
+        error: 'Route not found',
+        path: req.path,
+        method: req.method
+    });
+});
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error('Server Error:', err.stack);
+    res.status(err.status || 500).json({ 
+        error: process.env.NODE_ENV === 'production' 
+            ? 'Internal server error' 
+            : err.message 
+    });
+});
+
+// Graceful Shutdown
+const gracefulShutdown = async (signal) => {
+    // ${signal} received, shutting down gracefully
+    
+    try {
+        await new Promise((resolve, reject) => {
+            server.close((err) => {
+                if (err) reject(err);
+                else {
+    // Server closed
+                    resolve();
+                }
+            });
+        });
+        
+        await mongoose.connection.close(false);
+    // MongoDB connection closed
+        process.exit(0);
+    } catch (err) {
+        console.error('Shutdown error:', err);
+        process.exit(1);
+    }
+};
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+

@@ -1,0 +1,317 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Auto Loan Lab (India)</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Auto Loan.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Calculate your EMI for your new car or bike in India! Understand the total cost of ownership including interest and down payment.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent simulations.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="/calculators/finance/calc_tip_calculator.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Tip Studio</div>
+                            </div>
+                        </a>
+                        <a href="/calculators/finance/calc_mortgage.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Homeloan Lab</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-orange-900 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">directions_car</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">payments</span> Indian On-Road Costs
+                     </h4>
+                     <p class="text-orange-100 text-[11px] leading-relaxed mb-4 opacity-80">
+                        Remember to add RTO registration (usually 8-15%) and Insurance (1 yr Own Damage + 3 yr Third Party) to the Ex-Showroom price for the final cost!
+                     </p>
+                     <div class="space-y-2">
+                        <div class="flex items-center gap-2 text-[10px] font-bold text-orange-200">
+                            <span class="w-1 h-1 bg-orange-400 rounded-full"></span> RTO: State-wise variation
+                        </div>
+                        <div class="flex items-center gap-2 text-[10px] font-bold text-orange-200">
+                            <span class="w-1 h-1 bg-orange-400 rounded-full"></span> Insurance: Mandated 3yr TP
+                        </div>
+                        <div class="flex items-center gap-2 text-[10px] font-bold text-orange-200">
+                            <span class="w-1 h-1 bg-orange-400 rounded-full"></span> Rates: 8.5% to 10.5% (approx)
+                        </div>
+                     </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-2xl p-2 shadow-2xl overflow-hidden mb-8">
+                    <!-- Display -->
+                    <div class="bg-surface-container-lowest m-4 rounded-xl p-12 text-right flex flex-col justify-end min-h-[300px] shadow-inner relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                        <div class="absolute top-8 left-8 flex gap-2">
+                             <span class="px-3 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase">MONTHLY EMI</span>
+                             <span class="px-3 py-1 rounded bg-slate-100 text-[#7a614d] text-[10px] font-black tracking-widest uppercase" id="loan-tag">NEW CAR</span>
+                        </div>
+                        <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]">Awaiting auto deal terms...</div>
+                        <div id="calc-display" class="text-7xl md:text-8xl font-black tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden leading-tight font-mono">
+                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>₹0
+                        </div>
+                        <div id="total-loan" class="mt-2 text-sm font-bold text-on-surface-variant uppercase tracking-widest opacity-40 italic">
+                            ₹0 TOTAL FINANCED
+                        </div>
+                    </div>
+
+                    <!-- Inputs -->
+                    <div class="p-8 space-y-12">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <div class="space-y-6">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Pricing</h4>
+                                <div class="space-y-5">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Ex-Showroom / On-Road Price (₹)</label>
+                                        <input type="number" id="price" value="" oninput="solveAuto()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-4 py-3 font-bold text-on-surface outline-none transition-all" placeholder="1000000">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Down Payment (₹)</label>
+                                        <input type="number" id="downPayment" value="" oninput="solveAuto()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-4 py-3 font-bold text-on-surface outline-none transition-all" placeholder="200000">
+                                    </div>
+                                </div>
+                                <button onclick="resetInputs()" class="w-full py-4 bg-surface-container text-on-surface-variant rounded-xl font-bold text-[10px] tracking-widest uppercase hover:bg-slate-200 transition-all">Reset Analysis</button>
+                            </div>
+
+                            <div class="space-y-6">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Financing</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Interest Rate (%)</label>
+                                        <input type="number" id="rate" placeholder="9" value="9" step="0.1" min="0" oninput="solveAuto()" class="w-full bg-white border-2 border-slate-100 focus:border-primary/30 rounded-2xl px-4 py-3 font-bold text-lg outline-none transition-all">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Term (Months)</label>
+                                        <input type="number" id="months" placeholder="60" value="60" min="1" oninput="solveAuto()" class="w-full bg-white border-2 border-slate-100 focus:border-primary/30 rounded-2xl px-4 py-3 font-bold text-lg outline-none transition-all">
+                                    </div>
+                                </div>
+                                <div class="bg-rose-50/50 border border-rose-100 rounded-2xl p-6 text-center space-y-4">
+                                    <div class="flex justify-between items-center text-[10px] font-black uppercase text-on-surface-variant">
+                                        <span>Total Interest Paid:</span>
+                                        <span id="totalInt" class="text-rose-600 font-mono">₹0</span>
+                                    </div>
+                                    <p class="text-[9px] font-bold text-on-surface-variant uppercase opacity-60 leading-relaxed">
+                                        Net Cost (incl. Down): <span id="tcoLabel" class="text-on-surface font-black">₹0</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-8 border-t border-surface-container-high">
+                            <p class="text-[10px] font-mono text-on-surface-variant font-bold max-w-xs uppercase tracking-widest leading-loose">
+                                EMI = [P*r*(1+r)^n]/[((1+r)^n)-1] | UNIT: INDIAN AUTO MARKET
+                            </p>
+                            <button onclick="saveAutoLog()" id="saveBtn" class="bg-primary text-white px-10 py-5 rounded-xl font-bold text-[10px] tracking-widest hover:shadow-xl transition-all uppercase hover:scale-[1.02] active:scale-95">Save Analysis</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Block -->
+                <div class="bg-surface-container p-10 rounded-2xl border border-surface-container-high italic text-[11px] text-on-surface-variant leading-relaxed text-center opacity-70">
+                    "Smart Buy: Interest rates for Car loans are usually 'fixed' in India. Compare 'Flat rate' vs 'Reducing balance rate' carefully before signing!"
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        function solveAuto() {
+            const price = parseFloat(document.getElementById('price').value) || 0;
+            const down = parseFloat(document.getElementById('downPayment').value) || 0;
+            const annualRate = parseFloat(document.getElementById('rate').value) || 0;
+            const months = parseFloat(document.getElementById('months').value) || 1;
+
+            const display = document.getElementById('calc-display');
+            const statusText = document.getElementById('calc-status');
+            const totalLoanEl = document.getElementById('total-loan');
+            const totalIntEl = document.getElementById('totalInt');
+            const tcoLabel = document.getElementById('tcoLabel');
+
+            if (price <= 0 || price < down) {
+                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>₹0`;
+                statusText.innerText = "Awaiting valid inputs...";
+                return;
+            }
+
+            const principal = price - down;
+            const r = (annualRate / 100) / 12;
+            let emi = 0;
+            
+            if (r > 0) {
+                emi = (principal * r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
+            } else {
+                emi = principal / months;
+            }
+
+            const totalPay = emi * months;
+            const totalInterest = totalPay - principal;
+            const tco = totalPay + down;
+
+            const f = (val) => '₹' + val.toLocaleString(undefined, { maximumFractionDigits: 0 });
+
+            display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${f(emi)}`;
+            statusText.innerText = "Auto loan model resolved";
+            totalLoanEl.innerText = `${f(principal)} TOTAL FINANCED`;
+            totalIntEl.innerText = f(totalInterest);
+            tcoLabel.innerText = f(tco);
+        }
+
+        function resetInputs() {
+            document.getElementById('price').value = 1000000;
+            document.getElementById('downPayment').value = 200000;
+            document.getElementById('rate').value = 9.0;
+            document.getElementById('months').value = 60;
+            solveAuto();
+        }
+
+        async function saveAutoLog() {
+            const val = document.getElementById('calc-display').innerText.trim();
+            if (val === '₹0') return;
+
+            const btn = document.getElementById('saveBtn');
+            const orig = btn.innerText;
+            btn.innerText = 'SAVING...';
+            btn.disabled = true;
+
+            const inputs = [
+                { label: 'On-Road Price', val: '₹' + document.getElementById('price').value },
+                { label: 'Down', val: '₹' + document.getElementById('downPayment').value },
+                { label: 'Cycle', val: document.getElementById('months').value + 'M' }
+            ];
+            const results = [
+                { label: 'Monthly EMI', val: val, highlight: true },
+                { label: 'Interest', val: document.getElementById('totalInt').innerText }
+            ];
+
+            try {
+                const ok = await window.saveCalcToHistory('Auto Loan', inputs, results);
+                if (ok) {
+                    btn.innerText = 'SAVED';
+                    btn.classList.add('bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.classList.remove('bg-emerald-600');
+                        btn.disabled = false;
+                        if (typeof initSidebarHistory === 'function') {
+                            initSidebarHistory('Auto Loan', 'sidebar-history-container');
+                        }
+                    }, 2000);
+                } else {
+                    btn.innerText = orig;
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                btn.innerText = orig;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            solveAuto();
+            try {
+                if (typeof initSidebarHistory === 'function') {
+                    initSidebarHistory('Auto Loan', 'sidebar-history-container');
+                }
+            } catch(e){}
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

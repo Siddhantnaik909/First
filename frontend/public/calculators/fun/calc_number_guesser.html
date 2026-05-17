@@ -1,0 +1,419 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en" style="--primary-color: #101293; --font-main: 'Inter', sans-serif; --ui-scale: 16; --primary-gradient: linear-gradient(135deg, #101293 0%, #101293dd 100%); font-size: 16px; --accent-purple: #c4c0ce; --btn-radius: 12px; --sidebar-bg: linear-gradient(180deg, #000000, #000000); --sidebar-text: #000000; --sidebar-active: #ebebeb; --sidebar-width: 280px; --sidebar-font-size: 15px;"><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>SMART HUB | SMART HUB</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/design-system.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; } 
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; } 
+        .guess-row-anim { animation: slide-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes slide-in { 0% { transform: translateX(20px); opacity: 0; } 100% { transform: translateX(0); opacity: 0.6; } }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}[type='text'],input:where(:not([type])),[type='email'],[type='url'],[type='password'],[type='number'],[type='date'],[type='datetime-local'],[type='month'],[type='search'],[type='tel'],[type='time'],[type='week'],[multiple],textarea,select{-webkit-appearance:none;appearance:none;background-color:#fff;border-color:#6b7280;border-width:1px;border-radius:0px;padding-top:0.5rem;padding-right:0.75rem;padding-bottom:0.5rem;padding-left:0.75rem;font-size:1rem;line-height:1.5rem;--tw-shadow:0 0 #0000;}[type='text']:focus, input:where(:not([type])):focus, [type='email']:focus, [type='url']:focus, [type='password']:focus, [type='number']:focus, [type='date']:focus, [type='datetime-local']:focus, [type='month']:focus, [type='search']:focus, [type='tel']:focus, [type='time']:focus, [type='week']:focus, [multiple]:focus, textarea:focus, select:focus{outline:2px solid transparent;outline-offset:2px;--tw-ring-inset:var(--tw-empty,/*!*/ /*!*/);--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:#2563eb;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);border-color:#2563eb}input::placeholder,textarea::placeholder{color:#6b7280;opacity:1}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-date-and-time-value{min-height:1.5em;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit,::-webkit-datetime-edit-year-field,::-webkit-datetime-edit-month-field,::-webkit-datetime-edit-day-field,::-webkit-datetime-edit-hour-field,::-webkit-datetime-edit-minute-field,::-webkit-datetime-edit-second-field,::-webkit-datetime-edit-millisecond-field,::-webkit-datetime-edit-meridiem-field{padding-top:0;padding-bottom:0}select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");background-position:right 0.5rem center;background-repeat:no-repeat;background-size:1.5em 1.5em;padding-right:2.5rem;print-color-adjust:exact}[multiple],[size]:where(select:not([size="1"])){background-image:initial;background-position:initial;background-repeat:unset;background-size:initial;padding-right:0.75rem;print-color-adjust:unset}[type='checkbox'],[type='radio']{-webkit-appearance:none;appearance:none;padding:0;print-color-adjust:exact;display:inline-block;vertical-align:middle;background-origin:border-box;-webkit-user-select:none;user-select:none;flex-shrink:0;height:1rem;width:1rem;color:#2563eb;background-color:#fff;border-color:#6b7280;border-width:1px;--tw-shadow:0 0 #0000}[type='checkbox']{border-radius:0px}[type='radio']{border-radius:100%}[type='checkbox']:focus,[type='radio']:focus{outline:2px solid transparent;outline-offset:2px;--tw-ring-inset:var(--tw-empty,/*!*/ /*!*/);--tw-ring-offset-width:2px;--tw-ring-offset-color:#fff;--tw-ring-color:#2563eb;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}[type='checkbox']:checked,[type='radio']:checked{border-color:transparent;background-color:currentColor;background-size:100% 100%;background-position:center;background-repeat:no-repeat}[type='checkbox']:checked{background-image:url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");}@media (forced-colors: active) {[type='checkbox']:checked{-webkit-appearance:auto;appearance:auto}}[type='radio']:checked{background-image:url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");}@media (forced-colors: active) {[type='radio']:checked{-webkit-appearance:auto;appearance:auto}}[type='checkbox']:checked:hover,[type='checkbox']:checked:focus,[type='radio']:checked:hover,[type='radio']:checked:focus{border-color:transparent;background-color:currentColor}[type='checkbox']:indeterminate{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 16'%3e%3cpath stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 8h8'/%3e%3c/svg%3e");border-color:transparent;background-color:currentColor;background-size:100% 100%;background-position:center;background-repeat:no-repeat;}@media (forced-colors: active) {[type='checkbox']:indeterminate{-webkit-appearance:auto;appearance:auto}}[type='checkbox']:indeterminate:hover,[type='checkbox']:indeterminate:focus{border-color:transparent;background-color:currentColor}[type='file']{background:unset;border-color:inherit;border-width:0;border-radius:0;padding:0;font-size:unset;line-height:inherit}[type='file']:focus{outline:1px solid ButtonText;outline:1px auto -webkit-focus-ring-color}.pointer-events-none{pointer-events:none}.pointer-events-auto{pointer-events:auto}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.left-8{left:2rem}.top-0{top:0px}.top-8{top:2rem}.right-0{right:0px}.top-14{top:3.5rem}.bottom-8{bottom:2rem}.right-8{right:2rem}.z-50{z-index:50}.z-\[1000\]{z-index:1000}.z-\[99999\]{z-index:99999}.col-span-12{grid-column:span 12 / span 12}.mx-auto{margin-left:auto;margin-right:auto}.my-1{margin-top:0.25rem;margin-bottom:0.25rem}.mb-12{margin-bottom:3rem}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.ml-1{margin-left:0.25rem}.mt-0\.5{margin-top:0.125rem}.ml-4{margin-left:1rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-2{height:0.5rem}.h-20{height:5rem}.h-full{height:100%}.h-9{height:2.25rem}.h-px{height:1px}.min-h-\[220px\]{min-height:220px}.min-h-\[28px\]{min-height:28px}.min-h-screen{min-height:100vh}.w-0{width:0px}.w-full{width:100%}.w-64{width:16rem}.w-80{width:20rem}.w-9{width:2.25rem}.max-w-2xl{max-width:42rem}.max-w-\[1440px\]{max-width:1440px}.flex-shrink-0{flex-shrink:0}.translate-x-12{--tw-translate-x:3rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform-gpu{transform:translate3d(var(--tw-translate-x), var(--tw-translate-y), 0) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.gap-3{gap:0.75rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.space-y-0\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.125rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.125rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-b{border-bottom-width:1px}.border-primary{--tw-border-opacity:1;border-color:rgb(139 92 246 / var(--tw-border-opacity, 1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-200\/50{border-color:rgb(226 232 240 / 0.5)}.border-primary\/20{border-color:rgb(139 92 246 / 0.2)}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.border-white\/5{border-color:rgb(255 255 255 / 0.05)}.border-white\/20{border-color:rgb(255 255 255 / 0.2)}.bg-primary{--tw-bg-opacity:1;background-color:rgb(139 92 246 / var(--tw-bg-opacity, 1))}.bg-secondary-fixed{--tw-bg-opacity:1;background-color:rgb(237 233 254 / var(--tw-bg-opacity, 1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-slate-50\/70{background-color:rgb(248 250 252 / 0.7)}.bg-surface{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-surface-container-low{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-surface-container-lowest{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-primary\/20{background-color:rgb(139 92 246 / 0.2)}.bg-[#0f172a]\/90{background-color:rgb(15 23 42 / 0.9)}.bg-white\/5{background-color:rgb(255 255 255 / 0.05)}.object-cover{object-fit:cover}.p-6{padding:1.5rem}.p-8{padding:2rem}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-5{padding:1.25rem}.px-12{padding-left:3rem;padding-right:3rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.px-4{padding-left:1rem;padding-right:1rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.pb-1{padding-bottom:0.25rem}.pb-20{padding-bottom:5rem}.pt-32{padding-top:8rem}.pt-12{padding-top:1.5rem}.pt-8{padding-top:2rem}.pr-4{padding-right:1rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-\[\'Plus_Jakarta_Sans\'\]{font-family:'Plus Jakarta Sans'}.text-2xl{font-size:1.5rem;line-height:2rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-\[10px\]{font-size:10px}.text-\[9px\]{font-size:9px}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-tight{line-height:1.25}.tracking-\[0\.03em\]{letter-spacing:0.03em}.tracking-tight{letter-spacing:-0.025em}.tracking-tighter{letter-spacing:-0.05em}.tracking-wide{letter-spacing:0.025em}.tracking-widest{letter-spacing:0.1em}.text-on-secondary-fixed{--tw-text-opacity:1;color:rgb(76 29 149 / var(--tw-text-opacity, 1))}.text-on-surface{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-on-surface-variant{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-primary{--tw-text-opacity:1;color:rgb(139 92 246 / var(--tw-text-opacity, 1))}.text-purple-800{--tw-text-opacity:1;color:rgb(107 33 168 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-[#7a614d]{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-[#1f2937]{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.opacity-60{opacity:0.6}.opacity-0{opacity:0}.opacity-50{opacity:0.5}.opacity-70{opacity:0.7}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-\[0px_20px_40px_rgba\(139\2c 92\2c 246\2c 0\.06\)\]{--tw-shadow:0px 20px 40px rgba(139,92,246,0.06);--tw-shadow-colored:0px 20px 40px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-primary\/20{--tw-shadow-color:rgb(139 92 246 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.outline-none{outline:2px solid transparent;outline-offset:2px}.backdrop-blur-xl{--tw-backdrop-blur:blur(24px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-2xl{--tw-backdrop-blur:blur(40px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.duration-500{transition-duration:500ms}.ease-out{transition-timing-function:cubic-bezier(0, 0, 0.2, 1)}.selection\:bg-primary\/20 *::selection{background-color:rgb(139 92 246 / 0.2)}.selection\:bg-primary\/20::selection{background-color:rgb(139 92 246 / 0.2)}.hover\:scale-\[1\.01\]:hover{--tw-scale-x:1.01;--tw-scale-y:1.01;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:bg-slate-50:hover{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.hover\:bg-primary\/30:hover{background-color:rgb(139 92 246 / 0.3)}.hover\:bg-rose-500\/20:hover{background-color:rgb(244 63 94 / 0.2)}.hover\:bg-white\/10:hover{background-color:rgb(255 255 255 / 0.1)}.hover\:bg-white\/5:hover{background-color:rgb(255 255 255 / 0.05)}.hover\:text-primary:hover{--tw-text-opacity:1;color:rgb(139 92 246 / var(--tw-text-opacity, 1))}.hover\:text-[#1f2937]:hover{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.hover\:opacity-100:hover{opacity:1}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-primary:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(139 92 246 / var(--tw-ring-opacity, 1))}.group:hover .group-hover\:rotate-180{--tw-rotate:180deg;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:border-primary\/50{border-color:rgb(139 92 246 / 0.5)}.group:hover .group-hover\:text-primary{--tw-text-opacity:1;color:rgb(139 92 246 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:text-rose-500{--tw-text-opacity:1;color:rgb(244 63 94 / var(--tw-text-opacity, 1))}.dark\:bg-[#0f172a]\/70:is(.dark *){background-color:rgb(15 23 42 / 0.7)}@media (min-width: 768px){.md\:col-span-2{grid-column:span 2 / span 2}.md\:flex{display:flex}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:text-6xl{font-size:3.75rem;line-height:1}}@media (min-width: 1024px){.lg\:col-span-4{grid-column:span 4 / span 4}.lg\:col-span-8{grid-column:span 8 / span 8}.lg\:block{display:block}}</style><style id="_calc-utils-css">
+        @keyframes calcFadeUp {
+            from { opacity:0; transform:translateY(24px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            opacity: 0;
+            transform: translateY(16px);
+            transition: all 0.38s ease;
+        }
+        .result-row.visible { opacity: 1; transform: translateY(0); }
+        .result-label { font-size: 0.95rem; color: var(--text-muted); }
+        .result-val-group { display: flex; align-items: center; gap: 12px; text-align: right; }
+        .result-val { font-weight: 700; }
+        .btn-copy-mini {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-muted);
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        .btn-copy-mini:hover {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            background: var(--bg-main);
+        }
+        @media (max-width: 400px) {
+            .result-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .result-val-group { width: 100%; justify-content: space-between; }
+        }
+        .calc-info-box {
+            background: rgba(99,102,241,0.07);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin-bottom: 18px;
+        }
+        .calc-info-box h4 {
+            margin: 0 0 10px;
+            color: var(--primary-color);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .calc-info-box li, .calc-info-box p { margin: 5px 0; font-size: 0.95rem; opacity:0.9; }
+        .calc-formula-box {
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 13px 18px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: var(--primary-color);
+            text-align: center;
+            margin: 10px 0;
+            line-height: 1.8;
+        }
+        .calc-tip-box {
+            background: rgba(16,185,129,0.08);
+            border-left: 4px solid #10b981;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-top: 18px;
+        }
+        .calc-tip-box h4 { color: #10b981; margin: 0 0 8px; display:flex; align-items:center; gap:8px; }
+        .calc-tip-box li { margin: 5px 0; font-size: 0.93rem; opacity: 0.9; }
+    </style></head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300 sidebar-top" style="backdrop-filter: none;">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="pt-24 pb-20 px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans'] leading-none italic">Guess the <span class="text-primary italic">Number.</span></h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Refined numerical isolation. Identify the hidden variable across the specified domain to achieve algorithmic resolution.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Match Log</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent matches.</p>
+                    </div>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="calc_magic_8_ball.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Ask the Ball</div>
+                            </div>
+                        </a>
+                        <a href="calc_random_number.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Generate</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-8">
+                    <!-- Mode Selection Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        <div onclick="startCPU()" id="mode-cpu" class="p-6 bg-primary/10 border-2 border-primary rounded-2xl cursor-pointer transition-all hover:scale-105 group">
+                            <span class="material-symbols-outlined text-primary mb-2 text-3xl">smart_toy</span>
+                            <h4 class="text-[10px] font-black uppercase text-primary tracking-widest">Single Player</h4>
+                            <p class="text-[8px] text-primary/60 font-bold uppercase mt-1">AI Picks Number</p>
+                        </div>
+                        <div onclick="startLocal()" id="mode-local" class="p-6 bg-white border border-slate-200 rounded-2xl cursor-pointer transition-all hover:scale-105 group">
+                            <span class="material-symbols-outlined text-slate-400 mb-2 text-3xl group-hover:text-primary transition-colors">group</span>
+                            <h4 class="text-[10px] font-black uppercase text-slate-800 tracking-widest">Local Friend</h4>
+                            <p class="text-[8px] text-slate-400 font-bold uppercase mt-1">Friend Picks Number</p>
+                        </div>
+                        <div onclick="startOnline()" class="p-6 bg-white border border-slate-200 rounded-2xl cursor-pointer transition-all hover:scale-105 group opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all">
+                            <span class="material-symbols-outlined text-slate-400 mb-2 text-3xl group-hover:text-primary transition-colors">hub</span>
+                            <h4 class="text-[10px] font-black uppercase text-slate-800 tracking-widest">Online Play</h4>
+                            <p class="text-[8px] text-slate-400 font-bold uppercase mt-1">Join Lobby</p>
+                        </div>
+                    </div>
+
+                    <!-- Display -->
+                    <div class="bg-white rounded-2xl p-8 text-right flex flex-col justify-end min-h-[220px] border border-slate-100 shadow-sm relative overflow-hidden uppercase group">
+                        <!-- Overlay -->
+                        <div id="game-overlay" class="absolute inset-0 z-20 bg-white/80 backdrop-blur-md flex flex-col items-center justify-center rounded-2xl opacity-0 pointer-events-none transition-all duration-500 scale-95 border-4 border-primary/20 shadow-2xl">
+                            <span id="overlay-status-icon" class="material-symbols-outlined text-6xl text-primary mb-2">military_tech</span>
+                            <h2 id="overlay-status-text" class="text-3xl font-black text-[#1f2937] tracking-tighter uppercase mb-6 leading-none italic">Success!</h2>
+                            <button onclick="startCPU()" class="bg-primary text-white px-10 py-4 rounded-xl font-bold text-xs tracking-widest hover:shadow-xl transition-all uppercase italic shadow-lg shadow-primary/20">Play New Game</button>
+                        </div>
+                        <div class="absolute top-8 left-8 flex gap-2">
+                            <span class="px-3 py-1 rounded-lg bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase" id="domain-label">DOMAIN: 1-100</span>
+                            <span class="px-3 py-1 rounded-lg bg-slate-100 text-[#7a614d] text-[10px] font-black tracking-widest uppercase" id="game-status">AWAITING INPUT</span>
+                        </div>
+                        <div id="feedback-display" class="text-on-surface-variant text-xl font-medium tracking-tight mb-4 min-h-[28px]">Initial sequence ready...</div>
+                        <div id="main-display" class="text-4xl md:text-6xl font-extrabold tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden leading-tight italic">??</div>
+                    </div>
+
+                    <!-- Input Section -->
+                    <div class="p-8 space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div id="diff-section" class="md:col-span-2 flex flex-col gap-2">
+                                <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1 block italic opacity-60">Difficulty Selection</label>
+                                <select id="cpu-difficulty" onchange="resetGame()" class="bg-white border border-slate-100 rounded-xl px-6 py-4 text-sm font-black focus:ring-2 focus:ring-primary outline-none transition-all shadow-sm">
+                                    <option value="easy">Easy (1-10)</option>
+                                    <option value="med" selected="">Medium (1-100)</option>
+                                    <option value="hard">Hard (1-500)</option>
+                                    <option value="master">Master (1-1000)</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label id="guess-label" class="text-[9px] font-black text-on-surface-variant uppercase ml-1 block italic opacity-60">Enter Guess</label>
+                                <input type="number" id="user-guess" class="w-full bg-white border border-slate-100 rounded-xl px-6 py-4 text-2xl font-black focus:ring-2 focus:ring-primary outline-none transition-all shadow-sm italic">
+                            </div>
+                        </div>
+                        <button id="main-btn" onclick="makeGuess()" class="w-full bg-primary text-white py-5 rounded-xl font-black text-xs tracking-widest uppercase shadow-lg shadow-primary/20 hover:scale-[1.01] transition-all italic">Verify Guess</button>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-200/50">
+                            <div>
+                                <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-4">Isolation Path</h4>
+                                <div id="guess-history-area" class="flex flex-wrap gap-2"></div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center text-xs font-bold">
+                                    <span class="text-on-surface-variant uppercase tracking-widest">Iterative Count</span>
+                                    <span id="attempt-counter" class="text-on-surface font-black text-xl">0</span>
+                                </div>
+                                <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden"><div id="progress-bar" class="h-full bg-primary w-0 transition-all duration-300" style="width: 0%;"></div></div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end pt-12 border-t border-slate-200/50">
+                            <button onclick="resetGame()" class="bg-white text-on-surface border border-slate-200 px-8 py-4 rounded-xl font-black text-[10px] tracking-widest uppercase hover:bg-slate-50 transition-all">Reload Game</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let targetNumber, attempts = 0, pastGuesses = [], gameWon = false, maxRange = 100;
+        let playMode = 'cpu';
+        let isSettingNumber = false;
+
+        function resetGame() {
+            const diff = document.getElementById('cpu-difficulty').value;
+            maxRange = diff === 'easy' ? 10 : (diff === 'med' ? 100 : (diff === 'hard' ? 500 : 1000));
+            targetNumber = Math.floor(Math.random() * maxRange) + 1;
+            attempts = 0; pastGuesses = []; gameWon = false;
+            document.getElementById('domain-label').innerText = `DOMAIN: 1-${maxRange}`;
+            document.getElementById('feedback-display').innerText = 'Initial sequence ready...';
+            document.getElementById('main-display').innerText = '??';
+            document.getElementById('attempt-counter').innerText = '0';
+            document.getElementById('progress-bar').style.width = '0%';
+            document.getElementById('guess-history-area').innerHTML = '';
+            document.getElementById('game-status').innerText = 'AWAITING INPUT';
+            document.getElementById('user-guess').value = '';
+        }
+
+        function makeGuess() {
+            if (gameWon) return;
+            const input = document.getElementById('user-guess');
+            const g = parseInt(input.value);
+            if (isNaN(g)) return;
+            if (g < 1 || g > maxRange) {
+                document.getElementById('feedback-display').innerText = `Enter a number between 1 and ${maxRange}.`;
+                document.getElementById('game-status').innerText = 'OUT OF RANGE';
+                input.value = '';
+                return;
+            }
+
+            if (playMode === 'local' && isSettingNumber) {
+                targetNumber = g;
+                isSettingNumber = false;
+                input.value = '';
+                document.getElementById('guess-label').innerText = "ENTER FRIEND'S GUESS";
+                document.getElementById('main-btn').innerText = "VERIFY GUESS";
+                document.getElementById('feedback-display').innerText = "Number Locked! Friend, start guessing!";
+                document.getElementById('game-status').innerText = 'LOCKED';
+                document.getElementById('main-display').innerText = '??';
+                return;
+            }
+
+            attempts++; pastGuesses.push(g);
+            input.value = '';
+            
+            const feedback = document.getElementById('feedback-display');
+            const display = document.getElementById('main-display');
+            const status = document.getElementById('game-status');
+
+            if (g === targetNumber) {
+                gameWon = true; 
+                status.innerText = 'ISOLATED'; 
+                feedback.innerText = 'Found it!';
+                display.innerText = g; 
+                showOverlay("YOU WON!", 'trophy');
+                saveMatch();
+            } else {
+                status.innerText = 'VARIATION';
+                feedback.innerText = g > targetNumber ? 'GO LOWER!' : 'GO HIGHER!';
+                display.innerText = g;
+            }
+
+            document.getElementById('attempt-counter').innerText = attempts;
+            document.getElementById('progress-bar').style.width = Math.min((attempts / 12) * 100, 100) + "%";
+            document.getElementById('guess-history-area').innerHTML = pastGuesses.map(v => `<div class="px-2 py-1 bg-slate-100 rounded text-[9px] font-bold text-slate-500">#${v}</div>`).join('');
+        }
+
+        function showOverlay(text, icon) {
+            const over = document.getElementById('game-overlay');
+            const overText = document.getElementById('overlay-status-text');
+            const overIcon = document.getElementById('overlay-status-icon');
+            overText.innerText = text;
+            overIcon.innerText = icon;
+            over.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+            over.classList.add('opacity-100', 'pointer-events-auto', 'scale-100');
+        }
+
+        function hideOverlay() {
+            const over = document.getElementById('game-overlay');
+            over.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+            over.classList.remove('opacity-100', 'pointer-events-auto', 'scale-100');
+        }
+
+        async function saveMatch() {
+            await window.saveCalcToHistory('Number Guesser', [{label: 'Mode', val: playMode.toUpperCase()}], [{label: 'Score', val: attempts + ' Tries'}]);
+            initSidebarHistory('Number Guesser', 'sidebar-history-container');
+        }
+
+        function startCPU() {
+            playMode = 'cpu';
+            isSettingNumber = false;
+            hideOverlay();
+            document.getElementById('diff-section').classList.remove('hidden');
+            document.getElementById('guess-label').innerText = "ENTER GUESS";
+            document.getElementById('main-btn').innerText = "VERIFY GUESS";
+            updateModeUI('cpu');
+            resetGame();
+        }
+
+        function startLocal() {
+            playMode = 'local';
+            isSettingNumber = true;
+            hideOverlay();
+            document.getElementById('diff-section').classList.add('hidden');
+            document.getElementById('guess-label').innerText = "SET SECRET NUMBER";
+            document.getElementById('main-btn').innerText = "LOCK NUMBER";
+            document.getElementById('feedback-display').innerText = "Awaiting Friend's Secret Number...";
+            updateModeUI('local');
+            resetGame();
+        }
+
+        function startOnline() {
+            alert("Online number guessing is not available yet.
+
+Please use the Game Lobby for multiplayer updates.");
+            window.location.href = '/GameLobby.html';
+        }
+
+        function updateModeUI(m) {
+            document.getElementById('mode-cpu').className = `p-6 ${m==='cpu'?'bg-primary/10 border-2 border-primary':'bg-white border border-slate-200'} rounded-2xl cursor-pointer transition-all hover:scale-105 group`;
+            document.getElementById('mode-local').className = `p-6 ${m==='local'?'bg-primary/10 border-2 border-primary':'bg-white border border-slate-200'} rounded-2xl cursor-pointer transition-all hover:scale-105 group`;
+            
+            const cpuIcon = document.getElementById('mode-cpu').querySelector('span');
+            const localIcon = document.getElementById('mode-local').querySelector('span');
+            const cpuText = document.getElementById('mode-cpu').querySelector('h4');
+            const localText = document.getElementById('mode-local').querySelector('h4');
+
+            if(m==='cpu') {
+                cpuIcon.className = 'material-symbols-outlined text-primary mb-2 text-3xl';
+                cpuText.className = 'text-[10px] font-black uppercase text-primary tracking-widest';
+                localIcon.className = 'material-symbols-outlined text-slate-400 mb-2 text-3xl group-hover:text-primary transition-colors';
+                localText.className = 'text-[10px] font-black uppercase text-slate-800 tracking-widest';
+            } else {
+                localIcon.className = 'material-symbols-outlined text-primary mb-2 text-3xl';
+                localText.className = 'text-[10px] font-black uppercase text-primary tracking-widest';
+                cpuIcon.className = 'material-symbols-outlined text-slate-400 mb-2 text-3xl group-hover:text-primary transition-colors';
+                cpuText.className = 'text-[10px] font-black uppercase text-slate-800 tracking-widest';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('Number Guesser', 'sidebar-history-container');
+            startCPU();
+        });
+        document.getElementById('user-guess').addEventListener('keypress', (e) => { if(e.key==='Enter') makeGuess(); });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+<div id="toast-container" class="fixed bottom-8 right-8 z-[99999] flex flex-col gap-3 pointer-events-none transform-gpu"></div>
+    
+
+
+
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body></html>
+

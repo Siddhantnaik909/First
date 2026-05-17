@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Create Account | Smart Hub</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/design-system.css">
+    <!-- DARK MODE INIT - Universal -->
+    <!-- Theme Removed -->
+    <script>
+        tailwind.config = {
+            
+            theme: {
+                extend: {
+                    colors: {
+                        ink: "#1f2937",
+                        mist: "#eef7f4",
+                        panel: "#fcfffd",
+                        pine: "#0f766e",
+                        ember: "#f97316",
+                        skywash: "#d9f0ea",
+                        steel: "#5b6472"
+                    },
+                    boxShadow: {
+                        aura: "0 28px 90px rgba(15, 23, 42, 0.14)"
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-dark: #115e59;
+            --secondary: #f97316;
+            --surface: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        body {
+            font-family: "Manrope", sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, .brand-title {
+            font-family: "Space Grotesk", sans-serif;
+        }
+
+        /* Premium Backdrop */
+        .bg-pattern {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            background-color: #f8fafc;
+        }
+
+        .bg-blob {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .blob-1 { background: var(--primary); top: -200px; left: -200px; animation: orbit 20s linear infinite; }
+        .blob-2 { background: var(--secondary); bottom: -300px; right: -100px; animation: orbit 25s linear infinite reverse; }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(100px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(100px) rotate(-360deg); }
+        }
+
+        /* Glass Container */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05);
+            border-radius: 2.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary), #ea580c);
+            box-shadow: 0 10px 20px -5px rgba(249, 115, 22, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(249, 115, 22, 0.4);
+        }
+    </style>
+</head>
+<body class="antialiased text-slate-900">
+    <div id="header-placeholder"></div>
+    <div class="bg-pattern">
+        <div class="bg-blob blob-1"></div>
+        <div class="bg-blob blob-2"></div>
+    </div>
+
+    <main class="flex min-h-screen items-center justify-center p-6 sm:p-12">
+        <div class="mx-auto w-full max-w-[1100px]">
+            <div class="glass-card flex flex-col overflow-hidden lg:flex-row-reverse">
+                
+                <!-- Brand Side (Dark Green) -->
+                <div class="relative hidden w-full bg-[#11342f] p-12 text-white lg:flex lg:w-5/12 lg:flex-col">
+                    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;"></div>
+                    
+                    <div class="relative z-10 flex h-full flex-col">
+                        <a href="index.html" class="flex items-center gap-3 group">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#11342f] shadow-xl group-hover:scale-110 transition-transform">
+                                <span class="material-symbols-outlined text-2xl font-bold">person_add</span>
+                            </div>
+                            <span class="brand-title text-2xl font-bold tracking-tighter">Smart Hub</span>
+                        </a>
+
+                        <div class="mt-20">
+                            <span class="inline-block rounded-full bg-white/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-orange-200 mb-6">Join The Workspace</span>
+                            <h1 class="text-5xl font-bold leading-[1.1] tracking-tight">Create your <br>Smart Hub <br>identity.</h1>
+                            <p class="mt-8 text-lg text-white/70 leading-relaxed font-medium">
+                                Unlock personalized tools, history tracking, and multiplayer game lobbies with one secure account.
+                            </p>
+                        </div>
+
+                        <div class="mt-auto grid grid-cols-2 gap-4">
+                            <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
+                                <p class="text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">Tools</p>
+                                <p class="text-2xl font-bold">90+ Free</p>
+                            </div>
+                            <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
+                                <p class="text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">Community</p>
+                                <p class="text-2xl font-bold">5k+ Users</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Side -->
+                <div class="flex-1 p-8 sm:p-14">
+                    <div class="mx-auto max-w-md">
+                        <div class="mb-10 text-center lg:text-left">
+                            <h2 class="text-3xl font-black tracking-tight text-slate-900 mb-2">Create Account</h2>
+                            <p class="text-sm font-medium text-slate-500">Fast, free, and secure setup.</p>
+                        </div>
+
+                        <form id="signupForm" class="space-y-6">
+                            <div class="grid grid-cols-1 gap-4">
+                                <div>
+                                    <label for="name" class="block text-[11px] font-black uppercase tracking-widest text-slate-500 mb-2 ml-1">Full Name</label>
+                                    <div class="relative">
+                                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl">person</span>
+                                        <input id="name" type="text" placeholder="Alex Smith" required
+                                            class="w-full bg-slate-50 border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-emerald-50 rounded-2xl px-12 py-4 text-sm font-bold transition-all outline-none">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="email" class="block text-[11px] font-black uppercase tracking-widest text-slate-500 mb-2 ml-1">Email Address</label>
+                                    <div class="relative">
+                                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl">mail</span>
+                                        <input id="email" type="email" placeholder="alex@example.com" required
+                                            class="w-full bg-slate-50 border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-emerald-50 rounded-2xl px-12 py-4 text-sm font-bold transition-all outline-none">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="password" class="block text-[11px] font-black uppercase tracking-widest text-slate-500 mb-2 ml-1">Password</label>
+                                    <div class="relative">
+                                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl">lock</span>
+                                        <input id="password" type="password" placeholder="••••••••" required
+                                            class="w-full bg-slate-50 border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-emerald-50 rounded-2xl px-12 py-4 text-sm font-bold transition-all outline-none">
+                                        <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary transition-colors focus:outline-none p-1" onclick="togglePasswordVisibility('password', this)">
+                                            <span class="material-symbols-outlined text-xl">visibility</span>
+                                        </button>
+                                    </div>
+                                    <p class="mt-2 text-[10px] font-bold text-slate-400 ml-1 italic">At least 6 characters required.</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-50/50 p-4 rounded-2xl border border-slate-100">
+                                <label class="flex items-start gap-3 text-xs font-bold text-slate-500 leading-relaxed" for="terms">
+                                    <input type="checkbox" id="terms" required class="mt-0.5 w-4 h-4 rounded border-slate-300 text-primary">
+                                    <span>I agree to the <a href="#" class="text-primary hover:underline">Privacy Policy</a> and <a href="#" class="text-primary hover:underline">Terms of Service</a>.</span>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn-primary w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-white font-black text-xs uppercase tracking-[0.2em]">
+                                <span class="material-symbols-outlined text-lg">person_add</span>
+                                Create My Hub Account
+                            </button>
+
+                            <p class="text-center text-sm font-bold text-slate-500 mt-8">
+                                Already member? <a href="login.html" class="text-primary hover:text-primary-dark transition-colors">Sign in here</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        window.togglePasswordVisibility = (id, btn) => {
+            const input = document.getElementById(id);
+            const icon = btn.querySelector('.material-symbols-outlined');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility';
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                window.location.href = '/index.html';
+                return;
+            }
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const original = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined text-lg">progress_activity</span> Creating...';
+            btn.disabled = true;
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value
+            };
+
+            const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                ? (window.location.port === '3001' ? 'http://localhost:3001' : 'http://localhost:3000')
+                : 'https://smart-hub-f5gw.onrender.com';
+
+            try {
+                const res = await fetch(`${API_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('smart_hub_user', JSON.stringify(data.user));
+                    localStorage.setItem('isLoggedIn', 'true');
+                    window.location.href = 'index.html';
+                } else {
+                    alert(data.message || 'Registration failed');
+                }
+            } catch (err) {
+                alert('Server error. Is backend running?');
+            } finally {
+                btn.innerHTML = original;
+                btn.disabled = false;
+            }
+        });
+    </script>
+
+    <script type="module" src="/js/script.js"></script>
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Settings - Smart Hub</title>
+    <meta name="description" content="Manage your Smart Hub account settings — update your profile, change your password, and control your preferences.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/design-system.css">
+    <!-- DARK MODE INIT - Universal -->
+    <!-- Theme Removed -->
+    <script>
+        tailwind.config = {
+            
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background:
+                radial-gradient(circle at top right, rgba(201, 111, 50, 0.16), transparent 28%),
+                radial-gradient(circle at bottom left, rgba(47, 156, 149, 0.14), transparent 20%),
+                linear-gradient(180deg, #efd8ab 0%, #ddb97a 100%);
+        }
+        .warm-card {
+            background: linear-gradient(180deg, rgba(249, 233, 200, 0.96) 0%, rgba(246, 228, 191, 0.92) 100%);
+            border-color: rgba(185, 146, 94, 0.28);
+            box-shadow: 0 18px 40px rgba(166, 112, 57, 0.10);
+        }
+        .warm-soft { background-color: #f3d9aa; }
+        /* Toast (deprecated in favor of global toast) */
+
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-24 md:pb-0">
+    <!-- Unified Navbar Component Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <main class="main-content-wrapper px-4 md:px-8 max-w-4xl mx-auto mb-12">
+        <!-- Page Title -->
+        <div class="mb-8">
+            <h1 class="text-2xl font-extrabold text-on-surface tracking-tight">Account Settings</h1>
+            <p class="text-sm text-slate-500 mt-1">Manage your profile, preferences, and security.</p>
+        </div>
+
+        <div class="space-y-6">
+            <!-- ── Profile Info ── -->
+            <div class="card warm-card rounded-2xl border shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-100">
+                    <h2 class="text-sm font-bold text-on-surface flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-base">person</span>
+                        Profile Info
+                    </h2>
+                </div>
+                <div class="p-6 space-y-5">
+                    <!-- Avatar -->
+                    <div class="flex items-center gap-5">
+                        <div class="relative">
+                            <img id="settings-avatar" src="https://via.placeholder.com/80" alt="Profile Photo" class="w-20 h-20 rounded-2xl object-cover shadow-md">
+                            <button onclick="document.getElementById('avatar-file-input').click()" class="absolute -bottom-1 -right-1 w-7 h-7 bg-primary text-white rounded-full flex items-center justify-center shadow-lg hover:brightness-110 transition-colors" title="Change photo">
+                                <i class="fas fa-camera text-xs"></i>
+                            </button>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-on-surface" id="settings-name-display">Loading...</p>
+                            <p class="text-xs text-slate-500" id="settings-email-display">...</p>
+                            <input type="file" id="avatar-file-input" aria-label="Upload Profile Photo" title="Upload Profile Photo" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="window.handleAvatarUpload(this)">
+                            <p class="text-[10px] text-slate-400 mt-1">JPG, PNG or WebP — max 5MB</p>
+                        </div>
+                    </div>
+                    <!-- Name -->
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Full Name</label>
+                        <input id="settings-name" type="text" placeholder="Your full name" class="w-full text-sm border border-[#d7bc90] rounded-xl px-4 py-2.5 bg-[#f8e8c6] focus:border-[#c96f32] focus:ring-2 focus:ring-[#f0bb73]/40 outline-none transition-all">
+                    </div>
+                    <!-- Username -->
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Username</label>
+                        <input id="settings-username" type="text" placeholder="@username" class="w-full text-sm border border-[#d7bc90] rounded-xl px-4 py-2.5 bg-[#f8e8c6] focus:border-[#c96f32] focus:ring-2 focus:ring-[#f0bb73]/40 outline-none transition-all">
+                    </div>
+                    <!-- Email -->
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Email Address</label>
+                        <input id="settings-email" type="email" placeholder="you@example.com" class="w-full text-sm border border-[#d7bc90] rounded-xl px-4 py-2.5 bg-[#f8e8c6] focus:border-[#c96f32] focus:ring-2 focus:ring-[#f0bb73]/40 outline-none transition-all">
+                    </div>
+                    <button onclick="window.saveProfile()" class="w-full md:w-auto px-8 py-2.5 bg-gradient-to-br from-[#c96f32] to-[#2f9c95] text-white font-semibold rounded-xl text-sm shadow-md active:scale-95 transition-all">
+                        Save Profile
+                    </button>
+                </div>
+            </div>
+
+            <!-- ── Change Password ── -->
+            <div class="card warm-card rounded-2xl border shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-100">
+                    <h2 class="text-sm font-bold text-on-surface flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-base">lock</span>
+                        Change Password
+                    </h2>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1.5">New Password</label>
+                        <input id="settings-password" type="password" placeholder="At least 6 characters" class="w-full text-sm border border-[#d7bc90] rounded-xl px-4 py-2.5 bg-[#f8e8c6] focus:border-[#c96f32] focus:ring-2 focus:ring-[#f0bb73]/40 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Confirm Password</label>
+                        <input id="settings-password-confirm" type="password" placeholder="Repeat your new password" class="w-full text-sm border border-[#d7bc90] rounded-xl px-4 py-2.5 bg-[#f8e8c6] focus:border-[#c96f32] focus:ring-2 focus:ring-[#f0bb73]/40 outline-none transition-all">
+                    </div>
+                    <button onclick="window.savePassword()" class="w-full md:w-auto px-8 py-2.5 bg-[#5e3023] text-white font-semibold rounded-xl text-sm shadow-md active:scale-95 transition-all hover:bg-[#4b241a]">
+                        Update Password
+                    </button>
+                </div>
+            </div>
+
+            <!-- ── Preferences ── -->
+            <div class="card warm-card rounded-2xl border shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-100">
+                    <h2 class="text-sm font-bold text-on-surface flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-base">tune</span>
+                        Preferences
+                    </h2>
+                </div>
+                <div class="p-6 space-y-5">
+
+                    <!-- Notifications -->
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-semibold text-on-surface">Notifications</p>
+                            <p class="text-xs text-slate-400">Receive updates and alerts</p>
+                        </div>
+                        <button id="notif-toggle" aria-label="Toggle Notifications" aria-checked="true" onclick="window.toggleNotifSetting()" class="toggle-track relative w-12 h-6 bg-[#d7bc90] rounded-full flex items-center px-1 toggle-on" role="switch">
+                            <div class="toggle-thumb w-4 h-4 bg-white rounded-full shadow-sm"></div>
+                        </button>
+                    </div>
+                    <div class="section-divider"></div>
+                    <!-- Public Profile -->
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-semibold text-on-surface">Public Profile</p>
+                            <p class="text-xs text-slate-400">Let others find your profile by name</p>
+                        </div>
+                        <button id="public-toggle" aria-label="Toggle Public Profile" aria-checked="true" onclick="window.togglePublicSetting()" class="toggle-track relative w-12 h-6 bg-[#d7bc90] rounded-full flex items-center px-1 toggle-on" role="switch">
+                            <div class="toggle-thumb w-4 h-4 bg-white rounded-full shadow-sm"></div>
+                        </button>
+                    </div>
+                    <div class="section-divider"></div>
+                    <!-- Weight Unit -->
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-semibold text-on-surface">Weight Unit</p>
+                            <p class="text-xs text-slate-400">Used in health and fitness tools</p>
+                        </div>
+                        <select id="pref-unit-weight" aria-label="Select Weight Unit" title="Weight Unit" onchange="window.savePrefs()" class="text-sm border border-[#d7bc90] rounded-xl px-3 py-1.5 bg-[#f8e8c6] outline-none focus:border-[#c96f32]">
+                            <option value="kg">Metric (kg)</option>
+                            <option value="lbs">Imperial (lbs)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div id="admin-settings-card" class="card warm-card rounded-2xl border shadow-sm overflow-hidden hidden">
+                <div class="px-6 py-4 border-b border-[#d7bc90]">
+                    <h2 class="text-sm font-bold text-on-surface flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-base">admin_panel_settings</span>
+                        Admin Controls
+                    </h2>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <a href="/AdminDashboard.html" class="warm-soft rounded-2xl border border-[#d7bc90] p-5 hover:border-[#c96f32] transition-all">
+                        <p class="text-[10px] font-black uppercase tracking-widest text-primary mb-2">Dashboard</p>
+                        <p class="text-sm font-bold text-on-surface">Open Admin Dashboard</p>
+                        <p class="text-xs text-on-surface-variant mt-1">Monitor stats, lobbies, and support messages.</p>
+                    </a>
+                    <a href="/admin.html" class="warm-soft rounded-2xl border border-[#d7bc90] p-5 hover:border-[#c96f32] transition-all">
+                        <p class="text-[10px] font-black uppercase tracking-widest text-primary mb-2">Editor</p>
+                        <p class="text-sm font-bold text-on-surface">Open Command Center</p>
+                        <p class="text-xs text-on-surface-variant mt-1">Manage files, tools, and content updates.</p>
+                    </a>
+                    <a href="/admin_mobile_trace.html" class="warm-soft rounded-2xl border border-[#d7bc90] p-5 hover:border-[#2f9c95] transition-all">
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[#2f9c95] mb-2">Trace</p>
+                        <p class="text-sm font-bold text-on-surface">Open Mobile Trace</p>
+                        <p class="text-xs text-on-surface-variant mt-1">Review mobile debug and activity traces.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ── Stats ── -->
+            <div class="card warm-card rounded-2xl border shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-100">
+                    <h2 class="text-sm font-bold text-on-surface flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-base">bar_chart</span>
+                        Your Stats
+                    </h2>
+                </div>
+                <div class="p-6 grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div class="p-4 bg-[#f3d9aa] rounded-xl text-center">
+                        <span id="stat-tools-used" class="text-2xl font-black text-[#c96f32]">0</span>
+                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-1">Tools Used</p>
+                    </div>
+                    <div class="p-4 bg-[#d8efe4] rounded-xl text-center">
+                        <span id="stat-games" class="text-2xl font-black text-[#2f9c95]">0</span>
+                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-1">Games Played</p>
+                    </div>
+                    <div class="p-4 bg-[#f7d9a8] rounded-xl text-center">
+                        <span id="stat-active-days" class="text-2xl font-black text-[#8a4f2b]">1</span>
+                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-1">Active Days</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Danger Zone ── -->
+            <div class="card bg-white rounded-2xl border border-red-100 shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-red-100 bg-red-50">
+                    <h2 class="text-sm font-bold text-red-700 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-red-500 text-base">warning</span>
+                        Account Actions
+                    </h2>
+                </div>
+                <div class="p-6 flex flex-col sm:flex-row gap-3">
+                    <button id="sign-out-btn" onclick="if(window.confirmLogout){window.confirmLogout();}else{localStorage.clear();window.location.href='/login.html';}" class="flex-1 py-2.5 bg-red-50 text-red-600 border border-red-200 font-semibold rounded-xl text-sm hover:bg-red-500 hover:text-white transition-all active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fas fa-sign-out-alt"></i> Sign Out
+                    </button>
+                    <button onclick="window.clearHistory()" class="flex-1 py-2.5 bg-[#f8e8c6] text-[#7a614d] border border-[#d7bc90] font-semibold rounded-xl text-sm hover:bg-[#efcf96] transition-all active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fas fa-trash-alt"></i> Clear History
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mobile Bottom Nav -->
+    
+<!-- Toast Notification -->
+    <div id="settings-toast" class="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-[100] bg-[#0f172a] text-white text-sm font-semibold px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 whitespace-nowrap">
+        <i id="toast-icon" class="fas fa-check-circle text-green-400"></i>
+        <span id="toast-msg">Saved!</span>
+    </div>
+
+    <script type="module" src="js/script.js"></script>
+    <script>
+        // ── Helpers ──────────────────────────────────────────
+        const API = window.API_URL || ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
+            ? (window.location.port === '3001' ? 'http://localhost:3001' : 'http://localhost:3000')
+            : 'https://smart-hub-f5gw.onrender.com');
+
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('settings-toast');
+            const icon = document.getElementById('toast-icon');
+            const msgEl = document.getElementById('toast-msg');
+            msgEl.textContent = msg;
+            icon.className = type === 'success'
+                ? 'fas fa-check-circle text-green-400'
+                : 'fas fa-exclamation-circle text-red-400';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function getToggle(id) {
+            return document.getElementById(id)?.classList.contains('toggle-on');
+        }
+
+        function setToggle(id, on) {
+            const btn = document.getElementById(id);
+            if (!btn) return;
+            if (on) {
+                btn.classList.add('toggle-on');
+                if (btn.hasAttribute('aria-checked')) {
+                    btn.setAttribute('aria-checked', 'true');
+                }
+            } else {
+                btn.classList.remove('toggle-on');
+                if (btn.hasAttribute('aria-checked')) {
+                    btn.setAttribute('aria-checked', 'false');
+                }
+            }
+        }
+
+        // ── Init ─────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            if (!isLoggedIn) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const user = JSON.parse(localStorage.getItem('smart_hub_user') || '{}');
+            if (user.role?.toLowerCase() === 'admin') {
+                document.getElementById('admin-settings-card')?.classList.remove('hidden');
+            }
+
+            // Populate fields
+            const populate = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+            populate('settings-name', user.name);
+            populate('settings-username', user.username);
+            populate('settings-email', user.email);
+
+            const nameDisplay = document.getElementById('settings-name-display');
+            const emailDisplay = document.getElementById('settings-email-display');
+            if (nameDisplay) nameDisplay.textContent = user.name || user.username || 'Smart User';
+            if (emailDisplay) emailDisplay.textContent = user.email || 'No email';
+
+            // Avatar
+            const avatarEl = document.getElementById('settings-avatar');
+            if (avatarEl) {
+                const src = user.photo
+                    ? (user.photo.startsWith('http') ? user.photo : `${API}${user.photo.startsWith('/') ? user.photo : '/' + user.photo}`)
+                    : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'User')}&background=random`;
+                avatarEl.src = src;
+            }
+
+            // Prefs
+            const unitEl = document.getElementById('pref-unit-weight');
+            if (unitEl && user.preferences) unitEl.value = user.preferences.unitWeight || 'kg';
+
+
+
+            // Stats
+            const history = JSON.parse(localStorage.getItem('calc_history') || '[]');
+            const tools = history.filter(h => !h.name?.toLowerCase().includes('game')).length;
+            const games = history.filter(h => h.name?.toLowerCase().includes('game')).length;
+            const el = (id) => document.getElementById(id);
+            if (el('stat-tools-used')) el('stat-tools-used').textContent = tools;
+            if (el('stat-games')) el('stat-games').textContent = games;
+        });
+
+        // ── Toggle Handlers ──────────────────────────────────
+
+
+        window.toggleNotifSetting = () => {
+            const btn = document.getElementById('notif-toggle');
+            const isOn = btn?.classList.toggle('toggle-on');
+            if (btn) btn.setAttribute('aria-checked', isOn ? 'true' : 'false');
+        };
+
+        window.togglePublicSetting = () => {
+            const btn = document.getElementById('public-toggle');
+            const isOn = btn?.classList.toggle('toggle-on');
+            if (btn) btn.setAttribute('aria-checked', isOn ? 'true' : 'false');
+        };
+
+        // ── Save Handlers ─────────────────────────────────────
+        window.savePrefs = async () => {
+            const unit = document.getElementById('pref-unit-weight').value;
+            const user = JSON.parse(localStorage.getItem('smart_hub_user') || '{}');
+            user.preferences = { ...user.preferences, unitWeight: unit };
+            localStorage.setItem('smart_hub_user', JSON.stringify(user));
+
+            const token = localStorage.getItem('token');
+            if (token && user.id) {
+                try {
+                    await fetch(`${API}/api/auth/profile`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                        body: JSON.stringify({ id: user.id, preferences: user.preferences })
+                    });
+                } catch (e) {}
+            }
+            showToast('Preferences saved!');
+        };
+
+        window.saveProfile = async () => {
+            const name = document.getElementById('settings-name').value.trim();
+            const username = document.getElementById('settings-username').value.trim();
+            const email = document.getElementById('settings-email').value.trim();
+
+            if (!name) { showToast('Name cannot be empty', 'error'); return; }
+
+            const user = JSON.parse(localStorage.getItem('smart_hub_user') || '{}');
+            const token = localStorage.getItem('token');
+
+            if (token && user.id) {
+                try {
+                    const res = await fetch(`${API}/api/auth/profile`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                        body: JSON.stringify({ id: user.id, name, username, email })
+                    });
+                    const data = await res.json();
+                    if (res.ok) {
+                        localStorage.setItem('smart_hub_user', JSON.stringify(data.user));
+                        if (data.token) localStorage.setItem('token', data.token);
+                        document.getElementById('settings-name-display').textContent = name;
+                        document.getElementById('settings-email-display').textContent = email;
+                        if (typeof window.updateUserInterface === 'function') window.updateUserInterface();
+                        if (typeof window.syncAuthUI === 'function') window.syncAuthUI();
+                        window.dispatchEvent(new Event('authStateChanged'));
+                        showToast('Profile saved!');
+                    } else {
+                        showToast(data.message || 'Save failed', 'error');
+                    }
+                } catch (e) {
+                    // Offline save
+                    Object.assign(user, { name, username, email });
+                    localStorage.setItem('smart_hub_user', JSON.stringify(user));
+                    if (typeof window.updateUserInterface === 'function') window.updateUserInterface();
+                    if (typeof window.syncAuthUI === 'function') window.syncAuthUI();
+                    window.dispatchEvent(new Event('authStateChanged'));
+                    showToast('Saved locally (offline)');
+                }
+            } else {
+                Object.assign(user, { name, username, email });
+                localStorage.setItem('smart_hub_user', JSON.stringify(user));
+                if (typeof window.updateUserInterface === 'function') window.updateUserInterface();
+                if (typeof window.syncAuthUI === 'function') window.syncAuthUI();
+                window.dispatchEvent(new Event('authStateChanged'));
+                showToast('Profile saved locally');
+            }
+        };
+
+        window.savePassword = async () => {
+            const pwd = document.getElementById('settings-password').value;
+            const confirm = document.getElementById('settings-password-confirm').value;
+            if (!pwd || pwd.length < 6) { showToast('Password must be at least 6 characters', 'error'); return; }
+            if (pwd !== confirm) { showToast('Passwords do not match', 'error'); return; }
+
+            const user = JSON.parse(localStorage.getItem('smart_hub_user') || '{}');
+            const token = localStorage.getItem('token');
+            if (!token || !user.id) { showToast('Not logged in', 'error'); return; }
+
+            try {
+                const res = await fetch(`${API}/api/auth/profile`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ id: user.id, password: pwd })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    document.getElementById('settings-password').value = '';
+                    document.getElementById('settings-password-confirm').value = '';
+                    showToast('Password updated!');
+                } else {
+                    showToast(data.message || 'Failed to update', 'error');
+                }
+            } catch (e) {
+                showToast('Network error. Try again.', 'error');
+            }
+        };
+
+        window.handleAvatarUpload = async (input) => {
+            const file = input.files[0];
+            if (!file) return;
+            const token = localStorage.getItem('token');
+            if (!token) { showToast('Not logged in', 'error'); return; }
+
+            const formData = new FormData();
+            formData.append('profilePhoto', file);
+
+            try {
+                const res = await fetch(`${API}/api/auth/upload-profile`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                });
+                const data = await res.json();
+                if (res.ok && data.photoUrl) {
+                    const avatarEl = document.getElementById('settings-avatar');
+                    if (avatarEl) avatarEl.src = data.photoUrl.startsWith('http') ? data.photoUrl : `${API}${data.photoUrl.startsWith('/') ? data.photoUrl : '/' + data.photoUrl}`;
+                    const user = JSON.parse(localStorage.getItem('smart_hub_user') || '{}');
+                    user.photo = data.photoUrl;
+                    localStorage.setItem('smart_hub_user', JSON.stringify(user));
+                    if (typeof window.updateUserInterface === 'function') window.updateUserInterface();
+                    if (typeof window.syncAuthUI === 'function') window.syncAuthUI();
+                    window.dispatchEvent(new Event('authStateChanged'));
+                    // Persist to profile too
+                    await fetch(`${API}/api/auth/profile`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                        body: JSON.stringify({ id: user.id, photo: data.photoUrl })
+                    });
+                    showToast('Photo updated!');
+                } else {
+                    showToast(data.message || 'Upload failed', 'error');
+                }
+            } catch (e) {
+                showToast('Upload failed. Try again.', 'error');
+            }
+        };
+
+        window.clearHistory = () => {
+            if (confirm('Clear all your calculation history? This cannot be undone.')) {
+                localStorage.removeItem('calc_history');
+                document.getElementById('stat-tools-used').textContent = '0';
+                document.getElementById('stat-games').textContent = '0';
+                showToast('History cleared.');
+            }
+        };
+    </script>
+
+    
+
+
+
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>

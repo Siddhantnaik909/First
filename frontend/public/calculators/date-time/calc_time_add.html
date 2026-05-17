@@ -1,0 +1,329 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Time Accumulator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2">Time Adder.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Sum up multiple time segments with ease! Perfect for video editing, project tracking, or recording workout intervals. Simply add rows for each duration.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent records.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="/calculators/date-time/calc_leap_year.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Leap Checker</div>
+                            </div>
+                        </a>
+                        <a href="/calculators/date-time/calc_time_zone.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Time Zone</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-2xl p-2 shadow-2xl overflow-hidden mb-8">
+                    <!-- Display -->
+                    <div class="bg-surface-container-lowest m-4 rounded-xl p-12 text-right flex flex-col justify-end min-h-[260px] shadow-inner relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                        <div class="absolute top-8 left-8 flex gap-2">
+                             <span class="px-3 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase" id="total-tag">TOTAL SUM</span>
+                             <span class="px-3 py-1 rounded bg-slate-100 text-[#7a614d] text-[10px] font-black tracking-widest uppercase" id="avg-tag">0.0S AVG</span>
+                        </div>
+                        <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]">Awaiting segments...</div>
+                        <div id="calc-display" class="text-7xl font-black tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden leading-tight font-mono">
+                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>00:00:00
+                        </div>
+                    </div>
+
+                    <!-- Inputs -->
+                    <div class="p-8 space-y-12">
+                        <div class="space-y-6">
+                            <div class="flex items-center justify-between px-1">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em]">Time Segments</h4>
+                                <button onclick="addRow()" class="text-[10px] font-black text-primary uppercase tracking-widest hover:underline flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm">add</span> Add Segment
+                                </button>
+                            </div>
+                            <div id="segmentsList" class="space-y-4">
+                                <!-- Default Rows -->
+                                <div class="segment-row grid grid-cols-12 gap-4 items-center bg-surface-container p-4 rounded-xl">
+                                    <div class="col-span-3 space-y-1">
+                                        <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1">Hours</label>
+                                        <input type="number" class="hr w-full bg-surface-container-lowest border-none rounded-lg px-3 py-2 font-bold text-on-surface focus:ring-2 focus:ring-primary h-10" value="0" min="0" oninput="solveSum()">
+                                    </div>
+                                    <div class="col-span-3 space-y-1">
+                                        <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1">Mins</label>
+                                        <input type="number" class="mn w-full bg-surface-container-lowest border-none rounded-lg px-3 py-2 font-bold text-on-surface focus:ring-2 focus:ring-primary h-10" value="0" min="0" oninput="solveSum()">
+                                    </div>
+                                    <div class="col-span-3 space-y-1">
+                                        <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1">Secs</label>
+                                        <input type="number" class="sc w-full bg-surface-container-lowest border-none rounded-lg px-3 py-2 font-bold text-on-surface focus:ring-2 focus:ring-primary h-10" value="0" min="0" oninput="solveSum()">
+                                    </div>
+                                    <div class="col-span-3 text-right pt-4">
+                                        <button onclick="removeRow(this)" class="material-symbols-outlined text-rose-400 hover:text-rose-600 transition-colors">remove_circle</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                             <div class="bg-surface-container p-6 rounded-2xl flex items-center gap-4">
+                                 <div class="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                                     <span class="material-symbols-outlined font-black">timer</span>
+                                 </div>
+                                 <div>
+                                     <span id="totalSecs" class="text-xl font-black text-on-surface block">0</span>
+                                     <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">Total Absolute Seconds</span>
+                                 </div>
+                             </div>
+                             <div class="bg-surface-container p-6 rounded-2xl flex items-center gap-4">
+                                 <div class="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                                     <span class="material-symbols-outlined font-black">functions</span>
+                                 </div>
+                                 <div>
+                                     <span id="decimalHrs" class="text-xl font-black text-on-surface block">0.00</span>
+                                     <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">Decimal Hours Form</span>
+                                 </div>
+                             </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-8 border-t border-surface-container-high">
+                            <p class="text-[10px] font-mono text-on-surface-variant font-bold max-w-xs uppercase tracking-widest leading-loose">
+                                MATH: (60m * 60s) BASE | Precision: MODULO
+                            </p>
+                            <div class="flex gap-4">
+                                <button onclick="resetInputs()" class="px-6 py-5 rounded-xl border-2 border-surface-container font-black text-[10px] tracking-widest uppercase text-on-surface-variant hover:bg-slate-100 transition-all">Clear All</button>
+                                <button onclick="saveSumLog()" id="saveBtn" class="bg-primary text-white px-10 py-5 rounded-xl font-bold text-[10px] tracking-widest hover:shadow-xl transition-all uppercase hover:scale-[1.02] active:scale-95">Save Accumulation</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Block -->
+                <div class="bg-surface-container p-10 rounded-2xl border border-surface-container-high italic text-[11px] text-on-surface-variant leading-relaxed text-center opacity-70">
+                    "Productivity Tip: Breaking down a large task into smaller 25-minute segments (Pomodoro Technique) can help maintain focus and reduce fatigue."
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        function addRow() {
+            const list = document.getElementById('segmentsList');
+            const div = document.createElement('div');
+            div.className = "segment-row grid grid-cols-12 gap-4 items-center bg-surface-container p-4 rounded-xl animate-in fade-in duration-300";
+            div.innerHTML = `
+                <div class="col-span-3 space-y-1">
+                    <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1">Hours</label>
+                    <input type="number" class="hr w-full bg-surface-container-lowest border-none rounded-lg px-3 py-2 font-bold text-on-surface focus:ring-2 focus:ring-primary h-10" value="0" min="0" oninput="solveSum()">
+                </div>
+                <div class="col-span-3 space-y-1">
+                    <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1">Mins</label>
+                    <input type="number" class="mn w-full bg-surface-container-lowest border-none rounded-lg px-3 py-2 font-bold text-on-surface focus:ring-2 focus:ring-primary h-10" value="0" min="0" oninput="solveSum()">
+                </div>
+                <div class="col-span-3 space-y-1">
+                    <label class="text-[9px] font-black text-on-surface-variant uppercase ml-1">Secs</label>
+                    <input type="number" class="sc w-full bg-surface-container-lowest border-none rounded-lg px-3 py-2 font-bold text-on-surface focus:ring-2 focus:ring-primary h-10" value="0" min="0" oninput="solveSum()">
+                </div>
+                <div class="col-span-3 text-right pt-4">
+                    <button onclick="removeRow(this)" class="material-symbols-outlined text-rose-400 hover:text-rose-600 transition-colors">remove_circle</button>
+                </div>
+            `;
+            list.appendChild(div);
+            solveSum();
+        }
+
+        function removeRow(btn) {
+            const rows = document.querySelectorAll('.segment-row');
+            if (rows.length > 1) {
+                btn.closest('.segment-row').remove();
+                solveSum();
+            }
+        }
+
+        function solveSum() {
+            const rows = document.querySelectorAll('.segment-row');
+            let total = 0;
+            let count = 0;
+
+            rows.forEach(row => {
+                const h = parseInt(row.querySelector('.hr').value) || 0;
+                const m = parseInt(row.querySelector('.mn').value) || 0;
+                const s = parseInt(row.querySelector('.sc').value) || 0;
+                
+                if (h > 0 || m > 0 || s > 0) count++;
+                total += (h * 3600) + (m * 60) + s;
+            });
+
+            const display = document.getElementById('calc-display');
+            const totalSecsEl = document.getElementById('totalSecs');
+            const avgTag = document.getElementById('avg-tag');
+            const decimalHrsEl = document.getElementById('decimalHrs');
+            const statusText = document.getElementById('calc-status');
+
+            totalSecsEl.innerText = total.toLocaleString();
+            decimalHrsEl.innerText = (total / 3600).toFixed(2);
+            avgTag.innerText = (count > 0 ? (total / count).toFixed(1) : "0.0") + "S AVG";
+
+            const fh = Math.floor(total / 3600);
+            const fm = Math.floor((total % 3600) / 60);
+            const fs = total % 60;
+
+            display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${fh.toString().padStart(2, '0')}:${fm.toString().padStart(2, '0')}:${fs.toString().padStart(2, '0')}`;
+            
+            if (total > 0) {
+                statusText.innerText = `Accumulated ${count} segments successfully`;
+            } else {
+                statusText.innerText = "Awaiting segments...";
+            }
+        }
+
+        function resetInputs() {
+            document.getElementById('segmentsList').innerHTML = "";
+            addRow();
+            solveSum();
+        }
+
+        async function saveSumLog() {
+            const val = document.getElementById('calc-display').innerText.trim();
+            if (val === '00:00:00') return;
+
+            const btn = document.getElementById('saveBtn');
+            const orig = btn.innerText;
+            btn.innerText = 'SAVING...';
+            btn.disabled = true;
+
+            const inputs = [
+                { label: 'Total Segments', val: document.querySelectorAll('.segment-row').length }
+            ];
+            const results = [
+                { label: 'Accumulated Time', val: val, highlight: true },
+                { label: 'Total Seconds', val: document.getElementById('totalSecs').innerText }
+            ];
+
+            try {
+                const ok = await window.saveCalcToHistory('Time Accumulator', inputs, results);
+                if (ok) {
+                    btn.innerText = 'SAVED';
+                    btn.classList.add('bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.classList.remove('bg-emerald-600');
+                        btn.disabled = false;
+                        if (typeof initSidebarHistory === 'function') {
+                            initSidebarHistory('Time Accumulator', 'sidebar-history-container');
+                        }
+                    }, 2000);
+                } else {
+                    btn.innerText = orig;
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                btn.innerText = orig;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            solveSum();
+            try {
+                if (typeof initSidebarHistory === 'function') {
+                    initSidebarHistory('Time Accumulator', 'sidebar-history-container');
+                }
+            } catch(e){}
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

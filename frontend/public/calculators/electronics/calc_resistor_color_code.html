@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Resistor Color Code Calculator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .resistor-body {
+            height: 60px;
+            width: 240px;
+            background: #d4b48d;
+            border-radius: 30px;
+            position: relative;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
+        }
+        .resistor-body::before, .resistor-body::after {
+            content: '';
+            position: absolute;
+            height: 6px;
+            width: 60px;
+            background: #94a3b8;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: -1;
+        }
+        .resistor-body::before { left: -60px; }
+        .resistor-body::after { right: -60px; }
+        .band {
+            height: 100%;
+            width: 16px;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2">Resistor Hub.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Decode the color bands on any resistor! Quickly determine the resistance value, tolerance, and temperature coefficient with our interactive visual tool.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent records.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="/calculators/electronics/calc_led_resistor_calculator.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">LED Resistor</div>
+                            </div>
+                        </a>
+                        <a href="/calculators/electronics/calc_capacitor_code.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Capacitor Code</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-2xl p-2 shadow-2xl overflow-hidden mb-8">
+                    <!-- Visualizer -->
+                    <div class="bg-surface-container-lowest m-4 rounded-xl p-12 flex items-center justify-center min-h-[280px] shadow-inner relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                        <div class="absolute top-8 left-8 flex gap-2">
+                            <span class="px-3 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase">REAL-TIME PREVIEW</span>
+                        </div>
+                        <div class="resistor-body flex items-center justify-around px-8 scale-110 md:scale-150">
+                             <div id="b1-view" class="band rounded-l-sm" style="background: #4b2e1d;"></div>
+                             <div id="b2-view" class="band" style="background: #000000;"></div>
+                             <div id="bm-view" class="band" style="background: #ef4444;"></div>
+                             <div class="w-12"></div> <!-- Spacer -->
+                             <div id="bt-view" class="band rounded-r-sm" style="background: #d4af37;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Display -->
+                    <div class="bg-surface-container-lowest m-4 rounded-xl p-8 text-right flex flex-col justify-end min-h-[160px] shadow-inner relative">
+                        <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]">1.00 kÎ©</div>
+                        <div id="calc-display" class="text-6xl font-black tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden leading-tight font-mono">
+                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>Â±5% TOL
+                        </div>
+                    </div>
+
+                    <!-- Selectors -->
+                    <div class="p-8 space-y-12">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Band 1 (Digit)</label>
+                                <select id="band1" onchange="runDecode()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-4 py-3 font-bold text-on-surface text-sm"></select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Band 2 (Digit)</label>
+                                <select id="band2" onchange="runDecode()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-4 py-3 font-bold text-on-surface text-sm"></select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Multiplier</label>
+                                <select id="bandMult" onchange="runDecode()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-4 py-3 font-bold text-on-surface text-sm"></select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Tolerance</label>
+                                <select id="bandTol" onchange="runDecode()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-4 py-3 font-bold text-on-surface text-sm"></select>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-8 border-t border-surface-container-high">
+                            <p class="text-[10px] font-mono text-on-surface-variant font-bold max-w-xs uppercase tracking-widest leading-loose">
+                                MNEMONIC: BBROYGBVGW
+                            </p>
+                            <button onclick="saveResistorLog()" id="saveBtn" class="bg-primary text-white px-10 py-5 rounded-xl font-bold text-[10px] tracking-widest hover:shadow-xl transition-all uppercase hover:scale-[1.02] active:scale-95">Save to History</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Block -->
+                <div class="bg-surface-container p-10 rounded-2xl border border-surface-container-high italic text-[11px] text-on-surface-variant leading-relaxed text-center opacity-70">
+                    "Accuracy Tip: The tolerance band (usually Gold or Silver) is always located on the right side of the resistor when reading. Gold means Â±5% and Silver means Â±10%."
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        const colors = {
+            black: { val: 0, mult: 1, tol: null, hex: '#000000' },
+            brown: { val: 1, mult: 10, tol: 1, hex: '#4b2e1d' },
+            red: { val: 2, mult: 100, tol: 2, hex: '#ef4444' },
+            orange: { val: 3, mult: 1000, tol: null, hex: '#f97316' },
+            yellow: { val: 4, mult: 10000, tol: null, hex: '#eab308' },
+            green: { val: 5, mult: 100000, tol: 0.5, hex: '#22c55e' },
+            blue: { val: 6, mult: 1000000, tol: 0.25, hex: '#3b82f6' },
+            violet: { val: 7, mult: 10000000, tol: 0.1, hex: '#a855f7' },
+            grey: { val: 8, mult: 100000000, tol: 0.05, hex: '#64748b' },
+            white: { val: 9, mult: 1000000000, tol: null, hex: '#f7f2e8' },
+            gold: { val: null, mult: 0.1, tol: 5, hex: '#d4af37' },
+            silver: { val: null, mult: 0.01, tol: 10, hex: '#94a3b8' }
+        };
+
+        function init() {
+            const b1 = document.getElementById('band1');
+            const b2 = document.getElementById('band2');
+            const bm = document.getElementById('bandMult');
+            const bt = document.getElementById('bandTol');
+
+            Object.keys(colors).forEach(color => {
+                const name = color.charAt(0).toUpperCase() + color.slice(1);
+                if (colors[color].val !== null) {
+                    b1.add(new Option(name, color));
+                    b2.add(new Option(name, color));
+                }
+                bm.add(new Option(name, color));
+                if (colors[color].tol !== null) bt.add(new Option(name, color));
+            });
+
+            b1.value = 'brown';
+            b2.value = 'black';
+            bm.value = 'red';
+            bt.value = 'gold';
+            runDecode();
+        }
+
+        function runDecode() {
+            const c1 = document.getElementById('band1').value;
+            const c2 = document.getElementById('band2').value;
+            const cm = document.getElementById('bandMult').value;
+            const ct = document.getElementById('bandTol').value;
+
+            // Update Visualizer
+            document.getElementById('b1-view').style.background = colors[c1].hex;
+            document.getElementById('b2-view').style.background = colors[c2].hex;
+            document.getElementById('bm-view').style.background = colors[cm].hex;
+            document.getElementById('bt-view').style.background = colors[ct].hex;
+
+            // Logic
+            const b1 = colors[c1].val;
+            const b2 = colors[c2].val;
+            const mult = colors[cm].mult;
+            const tol = colors[ct].tol;
+
+            const ohms = (b1 * 10 + b2) * mult;
+            let displayVal = ohms >= 1e9 ? (ohms/1e9).toFixed(2) + ' GÎ©' :
+                             ohms >= 1e6 ? (ohms/1e6).toFixed(2) + ' MÎ©' :
+                             ohms >= 1e3 ? (ohms/1e3).toFixed(2) + ' kÎ©' :
+                             ohms.toFixed(2) + ' Î©';
+
+            document.getElementById('calc-status').innerText = displayVal;
+            document.getElementById('calc-display').innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>Â±${tol}% TOL`;
+        }
+
+        async function saveResistorLog() {
+            const val = document.getElementById('calc-status').innerText;
+            if (!val) return;
+
+            const btn = document.getElementById('saveBtn');
+            const orig = btn.innerText;
+            btn.innerText = 'SAVING...';
+            btn.disabled = true;
+
+            const inputs = [
+                { label: 'Color Bands', val: `${document.getElementById('band1').value}-${document.getElementById('band2').value}-${document.getElementById('bandMult').value}` }
+            ];
+            const results = [
+                { label: 'Resistance', val: val, highlight: true },
+                { label: 'Tolerance', val: document.getElementById('calc-display').innerText }
+            ];
+
+            try {
+                const ok = await window.saveCalcToHistory('Resistor Hub', inputs, results);
+                if (ok) {
+                    btn.innerText = 'SAVED';
+                    btn.classList.add('bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.classList.remove('bg-emerald-600');
+                        btn.disabled = false;
+                        if (typeof initSidebarHistory === 'function') {
+                            initSidebarHistory('Resistor Hub', 'sidebar-history-container');
+                        }
+                    }, 2000);
+                } else {
+                    btn.innerText = orig;
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                btn.innerText = orig;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+            try {
+                if (typeof initSidebarHistory === 'function') {
+                    initSidebarHistory('Resistor Hub', 'sidebar-history-container');
+                }
+            } catch(e){}
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

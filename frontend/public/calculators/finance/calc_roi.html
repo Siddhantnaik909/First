@@ -1,0 +1,333 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Asset ROI Lab (India)</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Asset ROI.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Measure your wealth growth! Calculate Return on Investment (ROI) and annualized returns (CAGR) for Indian assets like Mutual Funds, Real Estate, or FDs.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent records.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="/calculators/finance/calc_loan_emi.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">EMI Pro</div>
+                            </div>
+                        </a>
+                        <a href="/calculators/finance/calc_salary.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Take-Home Studio</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-indigo-900 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">show_chart</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">trending_up</span> Asset Guidance
+                     </h4>
+                     <p class="text-indigo-100 text-[11px] leading-relaxed mb-4 opacity-80">
+                        Historical CAGR in India (approx): Nifty 50: 12-14%, Midcaps: 15-18%, FD: 6-7.5%, Gold: 8-10%. Always look at CAGR for long term.
+                     </p>
+                     <div class="space-y-2">
+                        <div class="flex items-center gap-2 text-[10px] font-bold text-indigo-200">
+                            <span class="w-1 h-1 bg-indigo-400 rounded-full"></span> FD: Low Risk (Safe)
+                        </div>
+                        <div class="flex items-center gap-2 text-[10px] font-bold text-indigo-200">
+                            <span class="w-1 h-1 bg-indigo-400 rounded-full"></span> Equity: High Potential
+                        </div>
+                        <div class="flex items-center gap-2 text-[10px] font-bold text-indigo-200">
+                            <span class="w-1 h-1 bg-indigo-400 rounded-full"></span> Inflation: ~5.5% (Beat it!)
+                        </div>
+                     </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-2xl p-2 shadow-2xl overflow-hidden mb-8">
+                    <!-- Display -->
+                    <div class="bg-surface-container-lowest m-4 rounded-xl p-12 text-center flex flex-col justify-center min-h-[300px] shadow-inner relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                        <div class="absolute top-8 left-8 flex gap-2">
+                             <span class="px-3 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase" id="status-tag">PROFITABLE</span>
+                             <span class="px-3 py-1 rounded bg-slate-100 text-[#7a614d] text-[10px] font-black tracking-widest uppercase" id="cagr-tag">0.0% CAGR</span>
+                        </div>
+                        <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]">Awaiting investment values...</div>
+                        <div id="calc-display" class="text-6xl md:text-8xl font-black tracking-tighter text-on-surface flex items-center justify-center gap-2 overflow-hidden leading-tight font-mono">
+                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0.0%
+                        </div>
+                        <div id="net-profit" class="mt-4 text-sm font-bold text-emerald-600 uppercase tracking-widest opacity-60">
+                            + ₹0 GAIN
+                        </div>
+                    </div>
+
+                    <!-- Inputs -->
+                    <div class="p-8 space-y-12">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <div class="space-y-6">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Capital Flow</h4>
+                                <div class="space-y-5">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Initial Investment (₹)</label>
+                                        <input type="number" id="initial" placeholder="100000" value="100000" oninput="solveROI()" class="w-full bg-white border-2 border-slate-100 focus:border-primary/30 rounded-2xl px-4 py-3 font-bold text-lg outline-none transition-all">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Final Value (₹)</label>
+                                        <input type="number" id="final" placeholder="150000" value="150000" oninput="solveROI()" class="w-full bg-white border-2 border-slate-100 focus:border-primary/30 rounded-2xl px-4 py-3 font-bold text-lg outline-none transition-all">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Holding Period (Years)</label>
+                                        <input type="number" id="period" placeholder="3" value="3" step="0.1" min="0.1" oninput="solveROI()" class="w-full bg-white border-2 border-slate-100 focus:border-primary/30 rounded-2xl px-4 py-3 font-bold text-lg outline-none transition-all">
+                                    </div>
+                                </div>
+                                <button onclick="resetInputs()" class="w-full py-4 bg-surface-container text-on-surface-variant rounded-xl font-bold text-[10px] tracking-widest uppercase hover:bg-slate-200 transition-all">Reset Analysis</button>
+                            </div>
+
+                            <div class="space-y-6">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Investment Metrics</h4>
+                                <div class="bg-indigo-50/50 border border-indigo-100 rounded-2xl p-8 space-y-6">
+                                    <div class="space-y-4">
+                                        <div class="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
+                                            <span class="text-on-surface-variant">Annualized (CAGR):</span>
+                                            <span id="cagrValue" class="text-primary">22.47%</span>
+                                        </div>
+                                        <div class="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
+                                            <span class="text-on-surface-variant">Wealth Multiple:</span>
+                                            <span id="multipleValue" class="text-on-surface">1.50x</span>
+                                        </div>
+                                    </div>
+                                    <div class="pt-4 border-t border-indigo-200/50">
+                                        <p class="text-[9px] font-bold text-on-surface-variant uppercase leading-relaxed text-center opacity-60">
+                                            CAGR (Compound Annual Growth Rate) shows your wealth's true growth velocity in the Indian market.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="p-6 bg-surface-container rounded-xl">
+                                    <p class="text-[10px] font-bold text-on-surface-variant opacity-60 leading-relaxed uppercase tracking-wider">
+                                        Insight: Mutual Funds usually beat FDs over 5+ years. Remember: Time in market > Timing the market.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-8 border-t border-surface-container-high">
+                            <p class="text-[10px] font-mono text-on-surface-variant font-bold max-w-xs uppercase tracking-widest leading-loose">
+                                ROI = (FINAL-INIT)/INIT * 100 | CAGR = (FINAL/INIT)^(1/T)-1
+                            </p>
+                            <button onclick="saveROILog()" id="saveBtn" class="bg-primary text-white px-10 py-5 rounded-xl font-bold text-[10px] tracking-widest hover:shadow-xl transition-all uppercase hover:scale-[1.02] active:scale-95">Save Valuation</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Block -->
+                <div class="bg-surface-container p-10 rounded-2xl border border-surface-container-high italic text-[11px] text-on-surface-variant leading-relaxed text-center opacity-70">
+                    "Smart Investing: In India, Long Term Capital Gains (LTCG) tax applies above ₹1.25L. Always plan your exits to optimize tax liability!"
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        function solveROI() {
+            const init = parseFloat(document.getElementById('initial').value) || 0;
+            const final = parseFloat(document.getElementById('final').value) || 0;
+            const years = parseFloat(document.getElementById('years').value) || 0;
+
+            const display = document.getElementById('calc-display');
+            const statusText = document.getElementById('calc-status');
+            const statusTag = document.getElementById('status-tag');
+            const cagrTag = document.getElementById('cagr-tag');
+            const netProfitEl = document.getElementById('net-profit');
+            const cagrValEl = document.getElementById('cagrValue');
+            const multValEl = document.getElementById('multipleValue');
+
+            if (init <= 0 || !final) {
+                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0.0%`;
+                statusText.innerText = "Awaiting investment values...";
+                return;
+            }
+
+            const roi = ((final - init) / init) * 100;
+            const profit = final - init;
+            const multiple = final / init;
+
+            display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${roi.toFixed(1)}%`;
+            statusText.innerText = "Performance metrics resolved";
+            
+            const f = (val) => '₹' + Math.abs(val).toLocaleString(undefined, {maximumFractionDigits: 0});
+
+            if (profit >= 0) {
+                statusTag.innerText = "PROFITABLE";
+                statusTag.className = "px-3 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase";
+                netProfitEl.innerText = `+ ${f(profit)} GAIN`;
+                netProfitEl.className = "mt-4 text-sm font-bold text-emerald-600 uppercase tracking-widest opacity-60";
+            } else {
+                statusTag.innerText = "DEFICIT";
+                statusTag.className = "px-3 py-1 rounded bg-rose-100 text-rose-700 text-[10px] font-black tracking-widest uppercase";
+                netProfitEl.innerText = `- ${f(profit)} LOSS`;
+                netProfitEl.className = "mt-4 text-sm font-bold text-rose-600 uppercase tracking-widest opacity-60";
+            }
+
+            multValEl.innerText = multiple.toFixed(2) + "x";
+
+            if (years > 0 && multiple > 0) {
+                const cagr = (Math.pow(multiple, 1 / years) - 1) * 100;
+                cagrTag.innerText = `${cagr.toFixed(1)}% CAGR`;
+                cagrValEl.innerText = cagr.toFixed(2) + "%";
+            } else {
+                cagrTag.innerText = "--% CAGR";
+                cagrValEl.innerText = "--";
+            }
+        }
+
+        function resetInputs() {
+            document.getElementById('initial').value = 50000;
+            document.getElementById('final').value = 75000;
+            document.getElementById('years').value = 2;
+            solveROI();
+        }
+
+        async function saveROILog() {
+            const val = document.getElementById('calc-display').innerText.trim();
+            if (val === '0.0%') return;
+
+            const btn = document.getElementById('saveBtn');
+            const orig = btn.innerText;
+            btn.innerText = 'SAVING...';
+            btn.disabled = true;
+
+            const inputs = [
+                { label: 'Initial', val: '₹' + document.getElementById('initial').value },
+                { label: 'Final', val: '₹' + document.getElementById('final').value }
+            ];
+            const results = [
+                { label: 'Total ROI', val: val, highlight: true },
+                { label: 'CAGR', val: document.getElementById('cagrValue').innerText }
+            ];
+
+            try {
+                const ok = await window.saveCalcToHistory('ROI Performance', inputs, results);
+                if (ok) {
+                    btn.innerText = 'SAVED';
+                    btn.classList.add('bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.classList.remove('bg-emerald-600');
+                        btn.disabled = false;
+                        if (typeof initSidebarHistory === 'function') {
+                            initSidebarHistory('ROI Performance', 'sidebar-history-container');
+                        }
+                    }, 2000);
+                } else {
+                    btn.innerText = orig;
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                btn.innerText = orig;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            solveROI();
+            try {
+                if (typeof initSidebarHistory === 'function') {
+                    initSidebarHistory('ROI Performance', 'sidebar-history-container');
+                }
+            } catch(e){}
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

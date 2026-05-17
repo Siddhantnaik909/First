@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Percentage Calculator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Percent Lab.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Calculate percentages, price increases, or decreases in seconds. Whether you're figuring out a tip, a sale discount, or a growth rate, we've got you covered!</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Ratio Log</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent steps.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="/calculators/general-math/tool_password.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Standard Hub</div>
+                            </div>
+                        </a>
+                        <a href="/calculators/general-math/calc_average.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Average Studio</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-xl p-2 shadow-2xl overflow-hidden">
+                    <!-- Display -->
+                    <div class="bg-surface-container-lowest m-4 rounded-xl p-8 text-right flex flex-col justify-end min-h-[220px] shadow-inner relative">
+                        <div class="absolute top-8 left-8 flex gap-2">
+                            <span id="mode-tag" class="px-2 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-bold tracking-widest uppercase">PERCENTAGE OF</span>
+                        </div>
+                        <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]">Output Value</div>
+                        <div id="calc-display" class="text-7xl font-extrabold tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden">
+                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0.00
+                        </div>
+                    </div>
+                    <!-- Inputs -->
+                    <div class="p-8 space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-4">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Logic Mode</h4>
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-bold text-on-surface-variant uppercase ml-1 block">Calculation Type</label>
+                                    <select id="calcType" onchange="updateLabels(); calculatePercent();" class="w-full bg-surface-container border-none rounded-xl px-4 py-4 text-[13px] font-bold text-on-surface focus:ring-2 focus:ring-primary transition-all">
+                                        <option value="of">What is X% of Y?</option>
+                                        <option value="is">X is what % of Y?</option>
+                                        <option value="change">Percentage Change (X to Y)</option>
+                                        <option value="add">Add X% to Y</option>
+                                        <option value="sub">Subtract X% from Y</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Numerical Data</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-2">
+                                        <label id="labelX" class="text-[10px] font-bold text-on-surface-variant uppercase ml-1 block">Value X</label>
+                                        <input type="number" id="valX" oninput="calculatePercent()" class="w-full bg-surface-container-lowest border border-surface-container-high rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold" value="20">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label id="labelY" class="text-[10px] font-bold text-on-surface-variant uppercase ml-1 block">Value Y</label>
+                                        <input type="number" id="valY" oninput="calculatePercent()" class="w-full bg-surface-container-lowest border border-surface-container-high rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold" value="100">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-8 border-t border-surface-container-high">
+                            <p class="text-[10px] text-on-surface-variant font-bold max-w-xs uppercase tracking-widest leading-loose">
+                                Rounding precision set to 2 decimal places. Use the mode selector to switch between different percentage logic.
+                            </p>
+                            <div class="flex gap-4">
+                                <button onclick="savePercentProject(event)" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest hover:shadow-xl transition-all uppercase">Save Step</button>
+                                <button onclick="window.print()" class="p-4 bg-surface-container rounded-xl text-on-surface-variant hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined">print</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+                    <div class="bg-surface-container p-8 rounded-xl border border-surface-container-high">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="material-symbols-outlined text-primary">analytics</span>
+                            <h5 class="font-bold uppercase tracking-widest text-[10px]">Result Breakdown</h5>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-on-surface-variant">Base Principal</span>
+                                <span id="resBase" class="font-bold text-on-surface">100.00</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-on-surface-variant">Difference Amount</span>
+                                <span id="resVariance" class="font-bold text-primary">20.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-surface-container p-8 rounded-xl flex items-center justify-center border border-surface-container-high italic text-xs text-on-surface-variant leading-relaxed text-center">
+                        "Mathematically, percentage represents a ratio out of 100. It is one of the most useful tools for comparing relative changes across different data points."
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        function updateLabels() {
+            const type = document.getElementById('calcType').value;
+            const lx = document.getElementById('labelX');
+            const ly = document.getElementById('labelY');
+            const tag = document.getElementById('mode-tag');
+
+            if (type === 'of') {
+                lx.innerText = 'Percentage (%)';
+                ly.innerText = 'Total Value';
+                tag.innerText = 'PERCENTAGE OF';
+            } else if (type === 'is') {
+                lx.innerText = 'Value X';
+                ly.innerText = 'Total Y';
+                tag.innerText = 'IS WHAT % OF';
+            } else if (type === 'change') {
+                lx.innerText = 'Initial Value';
+                ly.innerText = 'Final Value';
+                tag.innerText = 'PERCENT CHANGE';
+            } else if (type === 'add') {
+                lx.innerText = 'Percentage to Add';
+                ly.innerText = 'Total Value';
+                tag.innerText = 'ADD PERCENTAGE';
+            } else if (type === 'sub') {
+                lx.innerText = 'Percentage to Sub';
+                ly.innerText = 'Total Value';
+                tag.innerText = 'REMOVE PERCENTAGE';
+            }
+        }
+
+        function calculatePercent() {
+            const x = parseFloat(document.getElementById('valX').value);
+            const y = parseFloat(document.getElementById('valY').value);
+            const type = document.getElementById('calcType').value;
+
+            if (isNaN(x) || isNaN(y)) return;
+
+            let res = 0;
+            let unit = "";
+
+            if (type === 'of') {
+                res = (x / 100) * y;
+            } else if (type === 'is') {
+                res = (y === 0) ? 0 : (x / y) * 100;
+                unit = "%";
+            } else if (type === 'change') {
+                res = (x === 0) ? 0 : ((y - x) / x) * 100;
+                unit = "%";
+            } else if (type === 'add') {
+                res = y * (1 + (x / 100));
+            } else if (type === 'sub') {
+                res = y * (1 - (x / 100));
+            }
+
+            const display = document.getElementById('calc-display');
+            if (display) {
+                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${res.toFixed(2)}${unit}`;
+            }
+
+            const resBase = document.getElementById('resBase');
+            if (resBase) resBase.innerText = y.toFixed(2);
+            
+            const resVar = document.getElementById('resVariance');
+            if (resVar) resVar.innerText = Math.abs(res - y).toFixed(2);
+        }
+
+        async function savePercentProject(event) {
+            const displayEl = document.getElementById('calc-display');
+            if (!displayEl) return;
+            const val = displayEl.innerText.trim();
+            if (val === '0.00' || !val) return;
+
+            const btn = event.currentTarget;
+            const orig = btn.innerText;
+            btn.innerText = 'SAVING...';
+            btn.disabled = true;
+
+            const mode = document.getElementById('mode-tag').innerText;
+            const inputs = [{ label: 'Mode', val: mode }, { label: 'Input', val: document.getElementById('valX').value + ' and ' + document.getElementById('valY').value }];
+            const results = [{ label: 'Final Result', val: val, highlight: true }];
+
+            try {
+                const ok = await window.saveCalcToHistory('Percent Lab', inputs, results);
+                if (ok) {
+                    btn.innerText = 'SAVED';
+                    btn.classList.add('bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.classList.remove('bg-emerald-600');
+                        btn.disabled = false;
+                        if (typeof initSidebarHistory === 'function') {
+                            initSidebarHistory('Percent Lab', 'sidebar-history-container');
+                        }
+                    }, 2000);
+                } else {
+                    btn.innerText = orig;
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                btn.innerText = orig;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                if(typeof initSidebarHistory === 'function') {
+                    initSidebarHistory('Percent Lab', 'sidebar-history-container');
+                }
+            } catch(e){}
+            updateLabels();
+            calculatePercent();
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

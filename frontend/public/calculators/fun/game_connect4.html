@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Connect 4</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .token-drop { animation: drop-in 0.5s cubic-bezier(0.6, 0.04, 0.98, 0.33) forwards; }
+        @keyframes drop-in { 0% { transform: translateY(-500px); opacity: 0; } 80% { transform: translateY(10px); opacity: 1; } 100% { transform: translateY(0); } }
+        .win-glow { animation: pulse-border 1.5s infinite; }
+        @keyframes pulse-border { 0%, 100% { box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.5); } 50% { box-shadow: 0 0 0 6px rgba(139, 92, 246, 0.8); } }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2">Connect 4.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Drop tokens and align four of your color to win. Features advanced recursive AI for the ultimate challenge.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Match History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent matches.</p>
+                    </div>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="game_chess.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Chess Game</div>
+                            </div>
+                        </a>
+                        <a href="game_tic_tac_toe.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Tic Tac Toe</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-xl p-2 shadow-2xl overflow-hidden">
+                    <div class="bg-primary-container m-4 rounded-xl p-8 flex flex-col items-center justify-center min-h-[400px] shadow-2xl relative border-4 border-primary">
+                        <div class="relative group w-full max-w-[500px]">
+                            <!-- Game Over Overlay -->
+                            <div id="game-overlay" class="absolute inset-0 z-20 bg-white/80 backdrop-blur-md flex flex-col items-center justify-center rounded-2xl opacity-0 pointer-events-none transition-all duration-500 scale-95 border-4 border-primary/20 shadow-2xl">
+                                <span id="overlay-status-icon" class="material-symbols-outlined text-6xl text-primary mb-2">military_tech</span>
+                                <h2 id="overlay-status-text" class="text-3xl font-black text-[#1f2937] tracking-tighter uppercase mb-6 leading-none italic">Match Over</h2>
+                                <button onclick="resetBoard()" class="bg-primary text-white px-10 py-4 rounded-xl font-bold text-xs tracking-widest hover:shadow-xl transition-all uppercase italic shadow-lg shadow-primary/20">Play Again</button>
+                            </div>
+                            <div id="board" class="w-full bg-slate-900/40 p-4 rounded-2xl grid grid-cols-7 gap-3 shadow-2xl relative z-10 border border-white/10"></div>
+                        </div>
+                        <div id="status-text" class="text-sm font-bold text-white uppercase tracking-[0.2em] mt-8 bg-black/20 px-6 py-2 rounded-full">Red's turn</div>
+                    </div>
+
+                    <div class="p-8 space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                            <div onclick="startCPU()" id="mode-cpu" class="p-6 bg-primary/10 border-2 border-primary rounded-2xl cursor-pointer transition-all hover:scale-105 group">
+                                <span class="material-symbols-outlined text-primary mb-2 text-3xl">smart_toy</span>
+                                <h4 class="text-xs font-bold text-primary tracking-tight">Play Computer</h4>
+                                <p class="text-[10px] text-primary/60 font-medium mt-1">Play against the computer</p>
+                            </div>
+                            <div onclick="startLocal()" id="mode-local" class="p-6 bg-white border border-slate-200 rounded-2xl cursor-pointer transition-all hover:scale-105 group">
+                                <span class="material-symbols-outlined text-slate-400 mb-2 text-3xl group-hover:text-primary transition-colors">group</span>
+                                <h4 class="text-xs font-bold text-slate-800 tracking-tight">With a Friend</h4>
+                                <p class="text-[10px] text-slate-400 font-medium mt-1">Take turns on one screen</p>
+                            </div>
+                            <div onclick="startOnline()" class="p-6 bg-white border border-slate-200 rounded-2xl cursor-pointer transition-all hover:scale-105 group opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all">
+                                <span class="material-symbols-outlined text-slate-400 mb-2 text-3xl group-hover:text-primary transition-colors">hub</span>
+                                <h4 class="text-xs font-bold text-slate-800 tracking-tight">Online Match</h4>
+                                <p class="text-[10px] text-slate-400 font-medium mt-1">Available soon</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pb-6 border-b border-white/10 mb-6">
+                            <div class="flex gap-4">
+                                <select id="cpu-difficulty" class="bg-surface-container border-none rounded-xl text-xs font-bold px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all">
+                                    <option value="easy">Easy</option>
+                                    <option value="med" selected>Medium</option>
+                                    <option value="hard">Hard</option>
+                                    <option value="master">Expert</option>
+                                </select>
+                            </div>
+                            <div class="flex gap-4">
+                                <button onclick="resetBoard()" class="bg-primary text-white px-10 py-4 rounded-xl font-bold text-xs tracking-widest hover:shadow-xl transition-all uppercase italic">Restart Match</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        const COLS = 7; const ROWS = 6;
+        let boardState = Array(ROWS).fill(null).map(() => Array(COLS).fill(0));
+        let currentPlayer = 1; let isGameActive = false;
+        let playMode = 'local';
+        const boardEl = document.getElementById('board');
+        const statusText = document.getElementById('status-text');
+
+        function createBoard() {
+            boardEl.innerHTML = '';
+            for (let r = 0; r < ROWS; r++) { boardState[r] = Array(COLS).fill(0); }
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-full shadow-inner border border-white/10 cursor-pointer relative';
+                    cell.id = `cell-${r}-${c}`;
+                    cell.addEventListener('click', () => handleColumnClick(c));
+                    boardEl.appendChild(cell);
+                }
+            }
+        }
+
+        function handleColumnClick(col) {
+            if (!isGameActive) return;
+            if (playMode === 'cpu' && currentPlayer !== 1) return;
+            let row = getEmptyRow(col);
+            if (row === -1) return;
+            makeMove(row, col, currentPlayer);
+            if (isGameActive && playMode === 'cpu') {
+                statusText.innerText = 'Computer is thinking...';
+                setTimeout(makeCPUMove, 600);
+            }
+        }
+
+        function getEmptyRow(col) {
+            for (let r = ROWS - 1; r >= 0; r--) { if (boardState[r][col] === 0) return r; }
+            return -1;
+        }
+
+        function makeMove(row, col, color) {
+            boardState[row][col] = color;
+            const cell = document.getElementById(`cell-${row}-${col}`);
+            const token = document.createElement('div');
+            token.className = `w-full h-full rounded-full token-drop shadow-lg ${color === 1 ? 'bg-rose-500' : 'bg-amber-400'}`;
+            cell.appendChild(token);
+            checkGameStatus();
+        }
+
+        function checkGameStatus() {
+            const winRes = checkWin(boardState);
+            if (winRes === 1 || winRes === 2) {
+                isGameActive = false;
+                const msg = winRes === 1 ? "Red wins!" : "Yellow wins!";
+                showOverlay(msg, 'trophy');
+                saveResolution(winRes);
+            } else if (winRes === 'Draw' || !boardState[0].includes(0)) {
+                isGameActive = false;
+                showOverlay("It's a tie!", 'handshake');
+                saveResolution('Draw');
+            } else {
+                currentPlayer = currentPlayer === 1 ? 2 : 1;
+                statusText.innerText = currentPlayer === 1 ? "Red's turn" : "Yellow's turn";
+            }
+        }
+
+        function showOverlay(text, icon) {
+            const over = document.getElementById('game-overlay');
+            const overText = document.getElementById('overlay-status-text');
+            const overIcon = document.getElementById('overlay-status-icon');
+            overText.innerText = text;
+            overIcon.innerText = icon;
+            over.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+            over.classList.add('opacity-100', 'pointer-events-auto', 'scale-100');
+        }
+
+        function hideOverlay() {
+            const over = document.getElementById('game-overlay');
+            over.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+            over.classList.remove('opacity-100', 'pointer-events-auto', 'scale-100');
+        }
+
+        function resetBoard() {
+            isGameActive = true; 
+            currentPlayer = 1; 
+            createBoard(); 
+            hideOverlay();
+            statusText.innerText = "Red's turn"; 
+        }
+
+        function checkWin(board) {
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c <= COLS - 4; c++) {
+                    if (board[r][c] !== 0 && board[r][c] === board[r][c+1] && board[r][c] === board[r][c+2] && board[r][c] === board[r][c+3]) return board[r][c];
+                }
+            }
+            for (let r = 0; r <= ROWS - 4; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    if (board[r][c] !== 0 && board[r][c] === board[r+1][c] && board[r][c] === board[r+2][c] && board[r][c] === board[r+3][c]) return board[r][c];
+                }
+            }
+            for (let r = 0; r <= ROWS - 4; r++) {
+                for (let c = 0; c <= COLS - 4; c++) {
+                    if (board[r][c] !== 0 && board[r][c] === board[r+1][c+1] && board[r][c] === board[r+2][c+2] && board[r][c] === board[r+3][c+3]) return board[r][c];
+                }
+            }
+            for (let r = 3; r < ROWS; r++) {
+                for (let c = 0; c <= COLS - 4; c++) {
+                    if (board[r][c] !== 0 && board[r][c] === board[r-1][c+1] && board[r][c] === board[r-2][c+2] && board[r][c] === board[r-3][c+3]) return board[r][c];
+                }
+            }
+            if (!board[0].includes(0)) return 'Draw';
+            return null;
+        }
+
+        function makeCPUMove() {
+            const diff = document.getElementById('cpu-difficulty').value;
+            let bestCol = -1;
+            if (diff === 'easy') {
+                const valid = []; for(let c=0; c<COLS; c++) if(getEmptyRow(c)!==-1) valid.push(c);
+                bestCol = valid[Math.floor(Math.random()*valid.length)];
+            } else {
+                let depth = diff === 'med' ? 2 : (diff === 'hard' ? 4 : 6);
+                bestCol = getBestMove(depth);
+            }
+            if (bestCol !== -1) makeMove(getEmptyRow(bestCol), bestCol, 2);
+        }
+
+        function getBestMove(depth) {
+            let bestScore = -Infinity;
+            let col = -1;
+            for (let c = 0; c < COLS; c++) {
+                let r = getEmptyRow(c);
+                if (r !== -1) {
+                    boardState[r][c] = 2;
+                    let score = minimax(boardState, depth, -Infinity, Infinity, false);
+                    boardState[r][c] = 0;
+                    if (score > bestScore) { bestScore = score; col = c; }
+                }
+            }
+            return col;
+        }
+
+        function minimax(board, depth, alpha, beta, isMaximizing) {
+            const res = checkWin(board);
+            if (res === 2) return 1000 + depth;
+            if (res === 1) return -1000 - depth;
+            if (res === 'Draw' || depth === 0) return 0;
+
+            if (isMaximizing) {
+                let bestScore = -Infinity;
+                for (let c = 0; c < COLS; c++) {
+                    let r = getEmptyRowForBoard(board, c);
+                    if (r !== -1) {
+                        board[r][c] = 2;
+                        bestScore = Math.max(bestScore, minimax(board, depth - 1, alpha, beta, false));
+                        board[r][c] = 0;
+                        alpha = Math.max(alpha, bestScore);
+                        if (beta <= alpha) break;
+                    }
+                }
+                return bestScore;
+            } else {
+                let bestScore = Infinity;
+                for (let c = 0; c < COLS; c++) {
+                    let r = getEmptyRowForBoard(board, c);
+                    if (r !== -1) {
+                        board[r][c] = 1;
+                        bestScore = Math.min(bestScore, minimax(board, depth - 1, alpha, beta, true));
+                        board[r][c] = 0;
+                        beta = Math.min(beta, bestScore);
+                        if (beta <= alpha) break;
+                    }
+                }
+                return bestScore;
+            }
+        }
+
+        function getEmptyRowForBoard(board, col) {
+            for (let r = ROWS - 1; r >= 0; r--) { if (board[r][col] === 0) return r; }
+            return -1;
+        }
+
+        // resetBoard consolidated above
+        
+        function startCPU() { 
+            playMode = 'cpu'; 
+            updateModeUI('cpu');
+            resetBoard(); 
+        }
+        
+        function startLocal() {
+            playMode = 'local';
+            updateModeUI('local');
+            resetBoard();
+        }
+
+        function startOnline() {
+            alert("Online Connect 4 is not available yet. Please use the Game Lobby for multiplayer updates.");
+            window.location.href = '/GameLobby.html';
+        }
+
+        function updateModeUI(m) {
+            document.getElementById('mode-cpu').className = `p-6 ${m==='cpu'?'bg-primary/10 border-2 border-primary':'bg-white border border-slate-200'} rounded-2xl cursor-pointer transition-all hover:scale-105 group`;
+            document.getElementById('mode-local').className = `p-6 ${m==='local'?'bg-primary/10 border-2 border-primary':'bg-white border border-slate-200'} rounded-2xl cursor-pointer transition-all hover:scale-105 group`;
+            
+            const cpuIcon = document.getElementById('mode-cpu').querySelector('span');
+            const localIcon = document.getElementById('mode-local').querySelector('span');
+            const cpuText = document.getElementById('mode-cpu').querySelector('h4');
+            const localText = document.getElementById('mode-local').querySelector('h4');
+
+            if(m==='cpu') {
+                cpuIcon.className = 'material-symbols-outlined text-primary mb-2 text-3xl';
+                cpuText.className = 'text-xs font-bold text-primary tracking-tight';
+                localIcon.className = 'material-symbols-outlined text-slate-400 mb-2 text-3xl group-hover:text-primary transition-colors';
+                localText.className = 'text-xs font-bold text-slate-800 tracking-tight';
+            } else {
+                localIcon.className = 'material-symbols-outlined text-primary mb-2 text-3xl';
+                localText.className = 'text-xs font-bold text-primary tracking-tight';
+                cpuIcon.className = 'material-symbols-outlined text-slate-400 mb-2 text-3xl group-hover:text-primary transition-colors';
+                cpuText.className = 'text-xs font-bold text-slate-800 tracking-tight';
+            }
+        }
+
+        async function saveResolution(w) { await window.saveCalcToHistory('Connect 4', [{label: 'Mode', val: playMode.toUpperCase()}], [{label: 'Winner', val: w}]); initSidebarHistory('Connect 4', 'sidebar-history-container'); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('Connect 4', 'sidebar-history-container');
+            createBoard();
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    
+
+
+
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

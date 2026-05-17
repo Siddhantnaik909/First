@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Smart Hub | Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/design-system.css">
+    <!-- DARK MODE INIT - Universal -->
+    <!-- Theme Removed -->
+    <script>
+        // Immediate Auth Check to prevent unauthorized access
+        (function () {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const user = JSON.parse(localStorage.getItem('smart_hub_user') || '{}');
+            if (!isLoggedIn || user.role?.toLowerCase() !== 'admin') {
+                window.location.href = '/login.html';
+            }
+        })();
+    </script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed-variant": "#1f6d64",
+                        "on-secondary-fixed": "#5e3023",
+                        "on-tertiary": "#f7f2e8",
+                        "on-primary": "#f7f2e8",
+                        "error-container": "#ffe2d6",
+                        "on-secondary-fixed-variant": "#8a4f2b",
+                        "secondary-fixed-dim": "#cfe6d8",
+                        "surface-tint": "#c96f32",
+                        "on-primary-fixed-variant": "#8a4f2b",
+                        "on-background": "#2d2116",
+                        "primary": "#c96f32",
+                        "background": "#efd8ab",
+                        "on-surface": "#2d2116",
+                        "secondary-container": "#d8efe4",
+                        "surface-bright": "#f3e1bc",
+                        "outline-variant": "#d7bc90",
+                        "primary-fixed-dim": "#f0bb73",
+                        "on-primary-container": "#fff2df",
+                        "on-error": "#f7f2e8",
+                        "primary-fixed": "#f7d9a8",
+                        "on-secondary": "#f7f2e8",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#2f9c95",
+                        "primary-container": "#c96f32",
+                        "surface-container": "#ebcf9d",
+                        "secondary": "#8a4f2b",
+                        "on-tertiary-fixed": "#16463f",
+                        "on-primary-fixed": "#5e3023",
+                        "on-tertiary-container": "#eff9f4",
+                        "surface-container-low": "#f6e4bf",
+                        "inverse-primary": "#f0bb73",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#8fd0c7",
+                        "tertiary-fixed": "#d8efe4",
+                        "surface": "#efd8ab",
+                        "surface-container-highest": "#d8b77a",
+                        "tertiary-container": "#2f9c95",
+                        "on-secondary-container": "#fff0de",
+                        "surface-container-high": "#e2c38a",
+                        "surface-variant": "#e7c98f",
+                        "inverse-on-surface": "#fff4e4",
+                        "surface-container-lowest": "#f9e9c8",
+                        "secondary-fixed": "#f3d5b6",
+                        "on-surface-variant": "#7a614d",
+                        "inverse-surface": "#303031",
+                        "outline": "#b9925e",
+                        "surface-dim": "#d8b77a"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .glass-header {
+            background: rgba(249, 233, 200, 0.84);
+            backdrop-filter: blur(20px);
+        }
+
+        .indigo-gradient {
+            background: linear-gradient(135deg, #c96f32 0%, #2f9c95 100%);
+        }
+
+        .tonal-shadow {
+            box-shadow: 0px 20px 40px rgba(166, 112, 57, 0.12);
+        }
+
+body {
+            background:
+                radial-gradient(circle at top right, color-mix(in srgb, var(--primary-color, #c96f32) 16%, transparent), transparent 26%),
+                radial-gradient(circle at bottom left, color-mix(in srgb, var(--accent-purple, #2f9c95) 14%, transparent), transparent 20%),
+                linear-gradient(180deg, var(--bg-main, #efd8ab) 0%, color-mix(in srgb, var(--bg-main, #efd8ab) 82%, #000 18%) 100%);
+        }
+
+        .hover\:bg-slate-50\/50:hover,
+        .hover\:bg-slate-200:hover,
+        .hover\:bg-slate-200\/50:hover {
+            background: rgba(201, 111, 50, 0.10) !important;
+        }
+
+        .text-indigo-700,
+        .text-indigo-600,
+        .text-indigo-300 {
+            color: #c96f32 !important;
+        }
+
+        .bg-indigo-600\/10,
+        .bg-primary\/10,
+        .bg-secondary-fixed {
+            background: rgba(201, 111, 50, 0.14) !important;
+        }
+
+        #dashboard-notif-dropdown,
+        #avatar-dropdown {
+            background: rgba(249, 233, 200, 0.96) !important;
+            border-color: rgba(185, 146, 94, 0.28) !important;
+        }
+
+        .admin-data-table tr:hover {
+            background: rgba(201, 111, 50, 0.08) !important;
+        }
+
+        .dashboard-shell {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .dashboard-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(320px, 0.9fr);
+            gap: 1.5rem;
+            align-items: stretch;
+        }
+
+        .dashboard-hero-card {
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: 0 24px 54px rgba(166, 112, 57, 0.12);
+        }
+
+        .dashboard-hero-main {
+            background: linear-gradient(145deg, #5e3023 0%, #c96f32 58%, #2f9c95 100%);
+            color: #fff6e8;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-hero-main::after {
+            content: "";
+            position: absolute;
+            inset: auto -70px -70px auto;
+            width: 220px;
+            height: 220px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            filter: blur(4px);
+        }
+
+        .dashboard-hero-side {
+            background: linear-gradient(180deg, rgba(249, 233, 200, 0.96) 0%, rgba(246, 228, 191, 0.92) 100%);
+            border: 1px solid rgba(185, 146, 94, 0.28);
+        }
+
+        .dashboard-action-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .dashboard-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            min-height: 42px;
+            padding: 0.75rem 1rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: all 0.22s ease;
+        }
+
+        .dashboard-btn-primary {
+            background: linear-gradient(135deg, #c96f32 0%, #2f9c95 100%);
+            color: #fff;
+            box-shadow: 0 16px 28px rgba(166, 112, 57, 0.18);
+        }
+
+        .dashboard-btn-primary:hover {
+            transform: translateY(-1px);
+        }
+
+        .dashboard-btn-secondary {
+            background: rgba(249, 233, 200, 0.9);
+            color: #7a614d;
+            border: 1px solid rgba(185, 146, 94, 0.28);
+        }
+
+        .dashboard-btn-secondary:hover {
+            color: #2d2116;
+            border-color: rgba(201, 111, 50, 0.28);
+        }
+
+        .dashboard-table-action {
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(249, 233, 200, 0.9);
+            transition: all 0.2s ease;
+        }
+
+        .dashboard-table-action:hover {
+            background: rgba(201, 111, 50, 0.12);
+        }
+
+        @media (max-width: 1100px) {
+            .dashboard-hero {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .admin-sidebar {
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+
+        body.admin-shell {
+            margin: 0;
+            padding: 0;
+            align-items: stretch;
+        }
+
+        .admin-sidebar h1,
+        .admin-sidebar #sidebar-admin-name {
+            color: #fff !important;
+        }
+
+        .admin-sidebar .admin-profile-card {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.08);
+        }
+
+        .admin-sidebar .admin-nav-link {
+            color: #cbd5e1;
+        }
+
+        .admin-sidebar .admin-nav-link:hover,
+        .admin-sidebar .admin-nav-link.active {
+            color: #fff;
+            background: rgba(255,255,255,0.10);
+        }
+
+        .admin-topbar {
+            background: rgba(15, 23, 42, 0.96);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            color: #fff;
+            position: sticky;
+            top: 0;
+        }
+
+        .admin-content {
+            padding: 1.5rem 2.5rem 2.5rem !important;
+        }
+
+        .admin-topbar h1,
+        .admin-topbar h2,
+        .admin-topbar h3,
+        .admin-topbar h4,
+        .admin-topbar p,
+        .admin-topbar span {
+            color: inherit;
+        }
+
+        .admin-mobile-toggle {
+            display: none;
+        }
+
+        @media (max-width: 1023px) {
+            body.admin-shell {
+                display: block;
+            }
+
+            .admin-sidebar {
+                position: fixed;
+                inset: 0 auto 0 0;
+                transform: translateX(-100%);
+                transition: transform .25s ease;
+                z-index: 80;
+            }
+
+            body.admin-sidebar-open .admin-sidebar {
+                transform: translateX(0);
+            }
+
+            .admin-mobile-toggle {
+                display: inline-flex;
+            }
+
+            .admin-sidebar-backdrop {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(15, 23, 42, 0.55);
+                z-index: 70;
+            }
+
+            body.admin-sidebar-open .admin-sidebar-backdrop {
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body class="admin-shell no-theme-overrides bg-surface text-on-surface flex min-h-screen">
+    <!-- SideNavBar Component -->
+    <aside
+        class="admin-sidebar h-screen w-64 border-r border-white/10 flex flex-col sticky top-0 shadow-[20px_0px_40px_rgba(16,18,147,0.04)] z-50">
+        <div class="flex flex-col h-full p-4 font-plus-jakarta text-sm font-medium tracking-tight">
+            <!-- Brand Logo Area -->
+            <div class="flex items-center gap-3 px-3 py-6 mb-4">
+                <div class="w-10 h-10 indigo-gradient rounded-xl flex items-center justify-center text-white">
+<span class="material-symbols-outlined icon-fill">hub</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tighter text-[#1f2937]">SMART HUB</h1>
+                    <p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Admin Panel</p>
+                </div>
+            </div>
+            <!-- Sidebar Profile Info -->
+            <div class="px-3 mb-8">
+                <div
+                    class="admin-profile-card p-4 rounded-2xl shadow-sm border flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-primary/10 overflow-hidden ring-2 ring-primary/5">
+                        <img id="sidebar-admin-avatar" class="w-full h-full object-cover"
+                            src="/assets/admin_dashboard/admin-avatar.png">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p id="sidebar-admin-name" class="text-sm font-bold truncate text-[#1f2937]">
+                            Admin User</p>
+                        <p id="sidebar-admin-role"
+                            class="text-[10px] uppercase font-black tracking-widest text-primary">Super Admin</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Main Nav -->
+            <nav class="flex-1 space-y-1">
+                <a class="admin-nav-link active flex items-center gap-3 px-4 py-3 shadow-sm font-semibold rounded-lg transition-all duration-200 active:scale-95"
+                    href="/AdminDashboard.html">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span>Dashboard</span>
+                </a>
+                <a class="admin-nav-link flex items-center gap-3 px-4 py-3 transition-all duration-200 rounded-lg"
+                    href="/admin.html">
+                    <span class="material-symbols-outlined">monitoring</span>
+                    <span>Analytics & Files</span>
+                </a>
+                <a class="admin-nav-link flex items-center gap-3 px-4 py-3 transition-all duration-200 rounded-lg"
+                    href="/GameLobby.html">
+                    <span class="material-symbols-outlined">sports_esports</span>
+                    <span>Game Management</span>
+                </a>
+                <a class="admin-nav-link flex items-center gap-3 px-4 py-3 transition-all duration-200 rounded-lg"
+                    href="/calculators.html">
+                    <span class="material-symbols-outlined">build</span>
+                    <span>Toolbox</span>
+                </a>
+                <a class="admin-nav-link flex items-center gap-3 px-4 py-3 transition-all duration-200 rounded-lg"
+                    href="/settings.html">
+                    <span class="material-symbols-outlined">settings</span>
+                    <span>Settings</span>
+                </a>
+                <a class="admin-nav-link flex items-center gap-3 px-4 py-3 transition-all duration-200 rounded-lg"
+                    href="/admin_mobile_trace.html">
+                    <span class="material-symbols-outlined">track_changes</span>
+                    <span>Mobile Trace</span>
+                </a>
+            </nav>
+            <!-- Footer Nav -->
+            <div class="pt-4 mt-4 border-t border-slate-200/50 space-y-1">
+                <a class="admin-nav-link flex items-center gap-3 px-4 py-3 transition-all duration-200 rounded-lg"
+                    href="/contact.html">
+                    <span class="material-symbols-outlined">help</span>
+                    <span>Support</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 text-error hover:bg-error/5 transition-all duration-200"
+                    href="javascript:void(0)" onclick="confirmLogout()">
+                    <span class="material-symbols-outlined">logout</span>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+    <button class="admin-sidebar-backdrop" type="button" aria-label="Close sidebar" onclick="toggleAdminSidebar(false)"></button>
+    <!-- Main Canvas -->
+<main class="flex-1 flex flex-col min-w-0">
+        <!-- TopAppBar Component -->
+        <header
+            class="admin-topbar w-full h-16 z-20 backdrop-blur-xl shadow-sm flex justify-between items-center px-4 sm:px-8">
+            <div class="flex items-center flex-1 max-w-xl">
+                <button class="admin-mobile-toggle mr-3 p-2 rounded-lg hover:bg-white/10" type="button" aria-label="Open sidebar" onclick="toggleAdminSidebar()">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <div class="relative w-full group">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+                    <input
+                        class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all"
+                        placeholder="Search system logs, tools, or users..." type="text" />
+                </div>
+            </div>
+            <div class="flex items-center gap-4 ml-8">
+<div class="relative group">
+                    <button class="p-2 text-slate-500 hover:text-primary transition-colors relative"
+                        onclick="document.getElementById('dashboard-notif-dropdown').classList.toggle('hidden'); window.loadNotifications && window.loadNotifications(false, 'dashboard-notif-list', 'dashboard-notif-badge'); event.stopPropagation();">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span id="dashboard-notif-badge" class="hidden absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
+                    </button>
+
+                    <div id="dashboard-notif-dropdown" class="hidden absolute top-14 right-0 w-96 bg-white/95 backdrop-blur-2xl border border-slate-200 rounded-2xl shadow-2xl py-4 z-[1000] max-h-96 flex flex-col">
+                        <h4 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 px-6">Notifications</h4>
+                        <div id="dashboard-notif-list" class="flex-1 overflow-y-auto px-6 pb-2 space-y-4">
+                            <div class="py-8 text-center">
+                                <span class="material-symbols-outlined text-4xl text-slate-300 mb-2 block">notifications_off</span>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">No new notifications</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="p-2 text-slate-500 hover:text-primary transition-colors"
+                    onclick="customAlert('Admin Hub', 'Version 2.4.1 - Centralized Control Active', 'info')">
+                    <span class="material-symbols-outlined">apps</span>
+                </button>
+                <div class="h-8 w-[1px] bg-slate-200 mx-2"></div>
+                <div class="flex items-center gap-3 relative group ml-2">
+                    <div class="text-right hidden sm:block">
+                        <p id="admin-header-name" class="text-xs font-bold text-on-surface">Admin User</p>
+                        <p id="admin-header-role"
+                            class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Super Admin</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden ring-2 ring-primary/10 cursor-pointer transition-transform hover:scale-105"
+                        onclick="this.nextElementSibling.classList.toggle('hidden')">
+                        <img id="admin-top-avatar" class="w-full h-full object-cover"
+                            src="/assets/admin_dashboard/admin-avatar.png" />
+                    </div>
+                    <!-- Avatar Dropdown -->
+                    <div id="avatar-dropdown"
+                        class="hidden absolute right-0 top-14 w-48 bg-white rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.1)] border border-slate-100 p-2 z-[9999]">
+                        <a href="/settings.html"
+                            class="flex items-center gap-3 px-4 py-2 hover:bg-slate-50 rounded-lg text-sm transition-colors">
+                            <span class="material-symbols-outlined text-sm">settings</span> Settings
+                        </a>
+                        <a href="/profile.html"
+                            class="flex items-center gap-3 px-4 py-2 hover:bg-slate-50 rounded-lg text-sm transition-colors">
+                            <span class="material-symbols-outlined text-sm">person</span> Profile
+                        </a>
+                        <div class="h-[1px] bg-slate-100 dark:bg-slate-800 my-1"></div>
+                        <button onclick="confirmAdminLogout()"
+                            class="w-full flex items-center gap-3 px-4 py-2 hover:bg-error/10 text-error rounded-lg text-sm transition-colors text-left">
+                            <span class="material-symbols-outlined text-sm">logout</span> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Content Area -->
+        <div class="admin-content max-w-[1600px] mx-auto w-full dashboard-shell">
+            <section class="dashboard-hero">
+                <div class="dashboard-hero-card dashboard-hero-main">
+                    <div class="relative z-10">
+                        <div class="text-[10px] font-black uppercase tracking-[0.35em] opacity-70 mb-3">Admin Control Layer</div>
+                        <h2 class="text-4xl font-black tracking-tight mb-3 text-white">Command With Clarity.</h2>
+                        <p class="text-sm font-medium max-w-2xl text-white/80">Monitor users, tools, rooms, and support flows from one place with quicker access to the actions you actually use.</p>
+                        <div class="dashboard-action-row mt-8">
+                            <a href="/admin.html" class="dashboard-btn dashboard-btn-secondary">Open Command Center</a>
+                            <a href="/settings.html" class="dashboard-btn dashboard-btn-secondary">System Settings</a>
+                            <a href="/calculators.html" class="dashboard-btn dashboard-btn-secondary">Review Tools</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-hero-card dashboard-hero-side">
+                    <div class="text-[10px] font-black uppercase tracking-[0.28em] text-on-surface-variant mb-4">Admin Snapshot</div>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between rounded-2xl bg-surface-container-lowest px-4 py-4 border border-surface-container-high">
+                            <span class="text-xs font-bold text-on-surface">Users Online</span>
+                            <span id="hero-users-online" class="text-sm font-black text-primary">Syncing</span>
+                        </div>
+                        <div class="flex items-center justify-between rounded-2xl bg-surface-container-lowest px-4 py-4 border border-surface-container-high">
+                            <span class="text-xs font-bold text-on-surface">Tool Catalog</span>
+                            <span id="hero-tool-count" class="text-sm font-black text-primary">Syncing</span>
+                        </div>
+                        <div class="flex items-center justify-between rounded-2xl bg-surface-container-lowest px-4 py-4 border border-surface-container-high">
+                            <span class="text-xs font-bold text-on-surface">Active Rooms</span>
+                            <span id="hero-room-count" class="text-sm font-black text-primary">Syncing</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+                <!-- Hero Stats Row -->
+                <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Total Users -->
+                    <div
+                        class="bg-surface-container-lowest p-6 rounded-xl tonal-shadow border-none hover:bg-surface-bright transition-all group">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="p-3 bg-primary/5 text-primary rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">
+                                <span class="material-symbols-outlined">group</span>
+                            </div>
+                            <span class="text-xs font-bold text-success text-emerald-600 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">trending_up</span> +12%
+                            </span>
+                        </div>
+                        <p class="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-1">Total Users</p>
+                        <h2 id="stat-total-users" class="text-3xl font-extrabold tracking-tight text-on-surface">--</h2>
+                    </div>
+                    <!-- SaaS MRR -->
+                    <div
+                        class="bg-gradient-to-br from-emerald-500/10 to-green-500/10 p-6 rounded-xl tonal-shadow border border-emerald-200/50 hover:shadow-emerald-500/25 transition-all group">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="p-3 bg-emerald-500/20 text-emerald-600 rounded-lg group-hover:bg-emerald-500/30 group-hover:text-emerald-100 transition-colors">
+                                <span class="material-symbols-outlined">payments</span>
+                            </div>
+                            <span class="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">trending_up</span> Live
+                            </span>
+                        </div>
+                        <p class="text-emerald-900 text-xs font-bold uppercase tracking-wider mb-1">Monthly Revenue</p>
+                        <h2 id="stat-mrr" class="text-3xl font-extrabold tracking-tight text-emerald-900">$0</h2>
+                    </div>
+                    <!-- Active Sessions -->
+                    <div
+                        class="bg-surface-container-lowest p-6 rounded-xl tonal-shadow border-none hover:bg-surface-bright transition-all group">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="p-3 bg-secondary/5 text-secondary rounded-lg group-hover:bg-secondary group-hover:text-white transition-colors">
+                                <span class="material-symbols-outlined">bolt</span>
+                            </div>
+                            <span class="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                                Live
+                            </span>
+                        </div>
+                        <p class="text-on-surface-variant text-xs font-bold uppercase tracking-wider mb-1">Active Sessions
+                        </p>
+                        <h2 id="stat-active-sessions" class="text-3xl font-extrabold tracking-tight text-on-surface">--</h2>
+                    </div>
+                    <!-- Tier Distribution -->
+                    <div
+                        class="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 p-6 rounded-xl tonal-shadow border border-indigo-200/50 hover:shadow-indigo-500/25 transition-all group">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="p-3 bg-indigo-500/20 text-indigo-600 rounded-lg group-hover:bg-indigo-500/30 group-hover:text-indigo-100 transition-colors">
+                                <span class="material-symbols-outlined">account_circle</span>
+                            </div>
+                            <span class="text-xs font-bold text-indigo-600">Growth</span>
+                        </div>
+                        <p class="text-indigo-900 text-xs font-bold uppercase tracking-wider mb-1">Pro/Premium Users</p>
+                        <div class="space-y-1">
+                            <h2 id="stat-pro-users" class="text-2xl font-extrabold tracking-tight text-indigo-900">0</h2>
+                            <p id="stat-tier-dist" class="text-[10px] font-black text-indigo-600 uppercase tracking-widest">Loading tiers</p>
+                        </div>
+                    </div>
+                </section>
+            <!-- Main Grid: Chart & Alerts -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <!-- Performance Chart Section -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-surface-container-lowest rounded-xl tonal-shadow p-8">
+                        <div class="flex justify-between items-center mb-10">
+                            <div>
+                                <h3 class="text-xl font-bold tracking-tight text-on-surface">Platform Performance</h3>
+                                <p class="text-sm text-on-surface-variant">System load and traffic metrics (24h)</p>
+                            </div>
+                            <div class="dashboard-action-row">
+                                <button
+                                    class="dashboard-btn dashboard-btn-primary">Traffic</button>
+                                <button
+                                    class="dashboard-btn dashboard-btn-secondary">CPU
+                                    LOAD</button>
+                            </div>
+                        </div>
+                        <!-- Placeholder for a sleek line chart -->
+                        <div class="h-64 relative flex items-end gap-1">
+                            <div class="absolute inset-0 flex flex-col justify-between py-2 pointer-events-none">
+                                <div class="w-full border-t border-slate-100"></div>
+                                <div class="w-full border-t border-slate-100"></div>
+                                <div class="w-full border-t border-slate-100"></div>
+                                <div class="w-full border-t border-slate-100"></div>
+                            </div>
+                            <div class="flex-1 bg-primary/10 rounded-t-sm h-[40%] hover:bg-primary/20 transition-all">
+                            </div>
+                            <div class="flex-1 bg-primary/10 rounded-t-sm h-[55%] hover:bg-primary/20 transition-all">
+                            </div>
+                            <div class="flex-1 bg-primary/10 rounded-t-sm h-[75%] hover:bg-primary/20 transition-all">
+                            </div>
+                            <div class="flex-1 bg-primary/10 rounded-t-sm h-[60%] hover:bg-primary/20 transition-all">
+                            </div>
+                            <div class="flex-1 bg-primary/10 rounded-t-sm h-[85%] hover:bg-primary/20 transition-all">
+                            </div>
+                            <div class="flex-1 bg-primary/10 rounded-t-sm h-[95%] hover:bg-primary/20 transition-all">
+                            </div>
+                            <div class="flex-1 bg-primary/10 rounded-t-sm h-[70%] hover:bg-primary/20 transition-all">
+                            </div>
+                            <div class="flex-1 bg-primary/10 rounded-t-sm h-[50%] hover:bg-primary/20 transition-all">
+                            </div>
+                            <div class="flex-1 bg-primary/10 rounded-t-sm h-[65%] hover:bg-primary/20 transition-all">
+                            </div>
+                            <div class="flex-1 bg-primary/10 rounded-t-sm h-[80%] hover:bg-primary/20 transition-all">
+                            </div>
+                            <div class="flex-1 bg-primary/10 rounded-t-sm h-[45%] hover:bg-primary/20 transition-all">
+                            </div>
+                            <div class="flex-1 bg-primary/20 rounded-t-sm h-[30%] hover:bg-primary/30 transition-all">
+                            </div>
+                        </div>
+                        <div
+                            class="flex justify-between mt-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                            <span>00:00</span>
+                            <span>04:00</span>
+                            <span>08:00</span>
+                            <span>12:00</span>
+                            <span>16:00</span>
+                            <span>20:00</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- System Alerts Sidebar -->
+                <div class="bg-surface-container-low rounded-xl p-6 flex flex-col">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-on-surface tracking-tight">System Alerts</h3>
+                        <span class="px-2 py-0.5 bg-error text-white text-[10px] font-bold rounded-md alerts-badge">Loading</span>
+                    </div>
+                    <div id="alerts-container" class="space-y-4 flex-1 overflow-y-auto">
+                        <div class="p-4 text-center text-xs text-on-surface-variant italic">Loading alerts...</div>
+                    </div>
+                    <a href="/admin.html"
+                        class="w-full mt-6 py-3 text-xs font-bold text-primary border-2 border-primary/10 rounded-xl hover:bg-primary/5 transition-all uppercase tracking-widest text-center block">View
+                        All Logs →</a>
+                </div>
+            </div>
+            <!-- Management Modules Section -->
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-10">
+                <!-- Calculator Tools Admin -->
+                <section class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold tracking-tight text-on-surface">Calculator Tools Admin</h3>
+                        <button class="text-sm font-bold text-primary hover:underline flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">add</span> New Tool
+                        </button>
+                    </div>
+                    <div class="bg-surface-container-lowest rounded-xl tonal-shadow overflow-hidden">
+                        <table class="w-full text-left">
+                            <thead class="bg-surface-container-low">
+                                <tr>
+                                    <th
+                                        class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                                        Tool Name</th>
+                                    <th
+                                        class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                                        Status</th>
+                                    <th
+                                        class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                                        Usage</th>
+                                    <th
+                                        class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-right">
+                                        Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tools-body" class="divide-y divide-slate-50">
+                                <tr>
+                                    <td colspan="4" class="px-6 py-10 text-center text-on-surface-variant italic font-bold uppercase tracking-widest text-[10px]">Loading inventory...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <!-- Game Lobby Admin -->
+                <section class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold tracking-tight text-on-surface">Game Lobby Admin</h3>
+                        <div class="flex items-center gap-4">
+                            <span id="game-lobby-count" class="text-xs font-bold text-on-surface-variant">0 Active Rooms</span>
+                        <button onclick="createGameLobby()"
+                                class="dashboard-btn dashboard-btn-primary rounded-lg">Create
+                                Lobby</button>
+                        </div>
+                    </div>
+                    <div id="game-lobby-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="col-span-2 p-10 text-center text-on-surface-variant italic font-bold uppercase tracking-widest text-[10px] bg-surface-container-low rounded-xl">Loading lobbies...</div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- Contact Messages Management -->
+            <section class="space-y-6 pt-10">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold tracking-tight text-on-surface">Support Messages (Contact Us)</h3>
+                    <button onclick="loadContactMessages()" class="dashboard-btn dashboard-btn-secondary">
+                        <span class="material-symbols-outlined text-sm">refresh</span> Refresh
+                    </button>
+                </div>
+                <div class="bg-surface-container-lowest rounded-xl tonal-shadow overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead class="bg-surface-container-low">
+                            <tr>
+                                <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Sender</th>
+                                <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Message</th>
+                                <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-right">Date / Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contact-messages-body" class="divide-y divide-slate-50">
+                            <tr>
+                                <td colspan="4" class="px-6 py-10 text-center text-on-surface-variant italic font-bold uppercase tracking-widest text-[10px]">Loading messages...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+        <footer class="mt-auto bg-slate-900 border-t border-white/10 px-6 py-5 text-center text-xs font-bold uppercase tracking-[0.22em] text-slate-400">
+            SMART HUB ADMIN · SECURE OPERATIONS
+        </footer>
+    </main>
+        <!-- System Footer -->
+            <script type="module" src="/js/script.js"></script>
+            <script src="/js/saas-ui.js"></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', async () => {
+                // ===== 1. INITIALIZATION & AUTH =====
+                const user = JSON.parse(localStorage.getItem('smart_hub_user') || '{}'); // Get user from storage
+                const token = localStorage.getItem('token');
+                const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+                const API = window.location.origin;
+
+                // Function to update all instances of the admin's profile on the page
+                const updateAdminProfile = (currentUser) => {
+                    if (!currentUser || !currentUser.name) return;
+
+                    const displayName = currentUser.name;
+                    const displayRole = currentUser.role?.toLowerCase() === 'admin' ? 'Super Admin' : (currentUser.role || 'user').toUpperCase();
+                    const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=4f46e5&color=fff&bold=true`;
+                    const userAvatar = currentUser.photo ? (currentUser.photo.startsWith('http') ? currentUser.photo : `${API}${currentUser.photo}`) : fallbackAvatar;
+
+                    const profileElements = [
+                        { id: 'sidebar-admin-name', value: displayName },
+                        { id: 'sidebar-admin-role', value: displayRole },
+                        { id: 'sidebar-admin-avatar', value: userAvatar, isSrc: true },
+                        { id: 'admin-header-name', value: displayName },
+                        { id: 'admin-header-role', value: displayRole },
+                        { id: 'admin-top-avatar', value: userAvatar, isSrc: true },
+                    ];
+
+                    profileElements.forEach(item => {
+                        const el = document.getElementById(item.id);
+                        if (el) {
+                            if (item.isSrc) {
+                                el.src = item.value;
+                                el.onerror = () => { el.src = fallbackAvatar; }; // Fallback on error
+                            } else {
+                                el.innerText = item.value;
+                            }
+                        }
+                    });
+                };
+                if (isLoggedIn && user.name) {
+                    updateAdminProfile(user);
+                }
+
+                // ===== 2. REAL PLATFORM STATS & ALERTS (Single API Call) =====
+                try {
+                    const res = await fetch(`${API}/api/admin/stats`, { headers: { 'Authorization': `Bearer ${token}` } });
+                    if (!res.ok) throw new Error('API offline or auth issue');
+                    const statsData = await res.json();
+
+                    // Populate Stats Cards
+                    document.getElementById('stat-total-users').innerText = (statsData.users || 0).toLocaleString();
+                    document.getElementById('stat-active-sessions').innerText = (statsData.activeSessions || 0).toLocaleString();
+                    document.getElementById('stat-latency').innerText = statsData.latency || '--';
+                    document.getElementById('stat-total-tools').innerText = (statsData.tools || 0).toLocaleString();
+                    const heroUsers = document.getElementById('hero-users-online');
+                    const heroTools = document.getElementById('hero-tool-count');
+                    const heroRooms = document.getElementById('hero-room-count');
+                    if (heroUsers) heroUsers.innerText = `${(statsData.activeSessions || 0).toLocaleString()} live`;
+                    if (heroTools) heroTools.innerText = `${(statsData.tools || 0).toLocaleString()} tools`;
+                    if (heroRooms) heroRooms.innerText = `${(statsData.activeRooms || 0).toLocaleString()} rooms`;
+
+                    // Populate System Alerts
+                    const alertsBox = document.getElementById('alerts-container');
+                    if (alertsBox) {
+                        const alerts = statsData.alerts || [];
+                        const colors = { error:'border-error bg-error/5',warning:'border-amber-500 bg-amber-50',info:'border-indigo-500 bg-indigo-50/30' };
+                        const txColors = { error:'text-error',warning:'text-amber-600',info:'text-indigo-600' };
+                        const icons = { error: 'report', warning: 'warning', info: 'info' };
+
+                        if (alerts.length === 0) {
+                            alertsBox.innerHTML = '<div class="p-4 text-center text-xs italic text-on-surface-variant">System healthy</div>';
+                        } else {
+                            alertsBox.innerHTML = alerts.map(a => `
+                                <div class="p-4 rounded-lg border-l-4 ${colors[a.type]||'border-indigo-500'} shadow-sm transition-transform hover:scale-[1.01]">
+                                    <div class="flex justify-between items-start mb-1">
+                                        <div class="flex items-center gap-2">
+                                            <span class="material-symbols-outlined text-sm ${txColors[a.type]}">${icons[a.type]||'info'}</span>
+                                            <span class="text-xs font-black ${txColors[a.type]||'text-indigo-600'} uppercase tracking-tighter">${a.title}</span>
+                                        </div>
+                                        <span class="text-[10px] font-bold text-on-surface-variant tracking-widest">${a.time}</span>
+                                    </div>
+                                    <p class="text-[13px] font-medium text-on-surface/80 leading-snug">${a.body}</p>
+                                </div>
+                            `).join('');
+                        }
+                        const badge = document.querySelector('.alerts-badge');
+                        if (badge) { 
+                            const crit = alerts.filter(a=>a.type==='error').length; 
+                            badge.textContent = crit > 0 ? `${crit} CRITICAL` : `${alerts.length} LOGS`; 
+                            badge.className = `px-2 py-0.5 ${crit > 0 ? 'bg-error ring-4 ring-error/20' : 'bg-indigo-600'} text-white text-[10px] font-bold rounded-md alerts-badge animate-pulse`; 
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Stats/Alerts offline:', e.message);
+                    ['stat-total-users','stat-active-sessions','stat-total-tools'].forEach(id => { const el = document.getElementById(id); if(el) el.innerText = '0'; });
+                    const lat = document.getElementById('stat-latency'); if(lat) lat.innerText = '--';
+                    const heroUsers = document.getElementById('hero-users-online');
+                    const heroTools = document.getElementById('hero-tool-count');
+                    const heroRooms = document.getElementById('hero-room-count');
+                    if (heroUsers) heroUsers.innerText = 'Offline';
+                    if (heroTools) heroTools.innerText = 'Offline';
+                    if (heroRooms) heroRooms.innerText = 'Offline';
+                    const alertsBox = document.getElementById('alerts-container');
+                    if (alertsBox) alertsBox.innerHTML = '<div class="p-4 text-center text-xs italic text-on-surface-variant">System healthy — no alerts</div>';
+                }
+
+                // ===== 3. SYSTEM PERFORMANCE CHART =====
+                const updatePerformance = async () => {
+                   try {
+                       const res = await fetch(`${API}/api/admin/performance`, { headers: { 'Authorization': `Bearer ${token}` } });
+                        if (!res.ok) throw new Error('Performance API failed');
+                       const data = await res.json();
+                       const chartContainer = document.querySelector('.lg\\:col-span-2 .relative.flex');
+                       if (chartContainer && data.traffic) {
+                           const points = data.traffic;
+                           chartContainer.innerHTML = `
+                               <div class="absolute inset-0 flex flex-col justify-between py-2 pointer-events-none">
+                                   ${[0,1,2,3].map(()=>'<div class="w-full border-t border-slate-100"></div>').join('')}
+                               </div>
+                               ${points.map(p => `<div class="flex-1 bg-primary/20 rounded-t-sm hover:bg-primary/40 transition-all cursor-pointer group relative" style="height: ${p}%; margin-top: auto;"><div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity z-10">${p}%</div></div>`).join('')}
+                           `;
+                       }
+                   } catch (e) { console.error('Perf sync failed:', e.message); }
+                };
+                updatePerformance();
+
+                // ===== 4. CALCULATOR TOOLS INVENTORY =====
+                window.loadToolsInventory = async () => {
+                    const tbody = document.getElementById('tools-body');
+                    if (!tbody) return;
+                    try {
+                        const res = await fetch(`${API}/api/admin/calculators`, { headers: { 'Authorization': `Bearer ${token}` } });
+                        if (!res.ok) throw new Error('Re-login required');
+                        const tools = await res.json();
+                        const countEl = document.getElementById('stat-total-tools');
+                        if (countEl) countEl.innerText = tools.length.toLocaleString();
+                        tbody.innerHTML = tools.slice(0, 5).map(tool => `
+                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded bg-primary/5 text-primary flex items-center justify-center"><span class="material-symbols-outlined text-lg">calculate</span></div>
+                                        <div class="flex flex-col"><span class="font-bold text-sm">${tool.name}</span><span class="text-[8px] text-slate-400 uppercase font-black tracking-widest">${tool.category}</span></div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4"><span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full uppercase">${tool.status}</span></td>
+                                <td class="px-6 py-4 text-on-surface-variant font-mono text-[10px]">${tool.usage}</td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex justify-end gap-2">
+                                        <button class="p-2 hover:bg-slate-200 rounded-lg text-slate-500 transition-colors" onclick="window.open('/${tool.path}','_blank')" title="Preview"><span class="material-symbols-outlined text-lg">open_in_new</span></button>
+                                        <button class="p-2 hover:bg-slate-200 rounded-lg text-primary transition-colors" onclick="window.location.href='/admin.html?edit=${encodeURIComponent(tool.path)}'" title="Edit in Command Center"><span class="material-symbols-outlined text-lg">edit</span></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('');
+                        if (tools.length > 5) tbody.innerHTML += `<tr><td colspan="4" class="px-6 py-4 text-center"><a href="/admin.html" class="text-xs font-bold text-primary hover:underline uppercase tracking-widest">View all ${tools.length} tools in Command Center &rarr;</a></td></tr>`;
+                    } catch (err) { tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-10 text-center text-error italic font-bold uppercase tracking-widest text-[10px]">${err.message}</td></tr>`; }
+                };
+                loadToolsInventory();
+
+                // ===== 5. CONTACT / SUPPORT MESSAGES =====
+                window.loadContactMessages = async () => {
+                    const tbody = document.getElementById('contact-messages-body');
+                    if (!tbody) return;
+                    try {
+                        const res = await fetch(`${API}/api/admin/contact-messages`, { headers: { 'Authorization': `Bearer ${token}` } });
+                        if (!res.ok) throw new Error('Auth failed');
+                        const messages = await res.json();
+                        if (!messages || messages.length === 0) { tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-10 text-center text-on-surface-variant italic font-bold uppercase tracking-widest text-[10px]">No messages received yet.</td></tr>'; return; }
+                        tbody.innerHTML = messages.slice(0, 5).map(msg => `
+                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                <td class="px-6 py-4"><div class="flex flex-col"><span class="font-bold text-sm text-[#1f2937]">${msg.name}</span><span class="text-[10px] text-slate-400 font-mono">${msg.email}</span></div></td>
+                                <td class="px-6 py-4"><p class="text-xs text-on-surface max-w-md">${msg.message}</p></td>
+                                <td class="px-6 py-4 text-right"><div class="flex flex-col items-end gap-2"><span class="text-[10px] font-bold text-slate-400 uppercase">${new Date(msg.timestamp).toLocaleString()}</span><button onclick="customAlert('From: ${msg.name}', \`Email: ${msg.email}\
+\
+${msg.message}\`)" class="px-2 py-1 bg-primary/5 text-primary text-[10px] font-black rounded uppercase hover:bg-primary hover:text-white transition-all">View</button></div></td>
+                            </tr>
+                        `).join('');
+                        if (messages.length > 5) tbody.innerHTML += `<tr><td colspan="3" class="px-6 py-4 text-center"><a href="/admin.html#messages" class="text-xs font-bold text-primary hover:underline uppercase tracking-widest">View all ${messages.length} messages &rarr;</a></td></tr>`;
+                    } catch (err) { tbody.innerHTML = `<tr><td colspan="3" class="px-6 py-10 text-center text-error italic font-bold uppercase tracking-widest text-[10px]">${err.message}</td></tr>`; }
+                };
+                loadContactMessages();
+
+                // ===== 6. GAME LOBBY (Dynamic with Backend API) =====
+                window.createGameLobby = async () => {
+                    const name = await customPrompt('Create Game Lobby', 'Enter lobby name (e.g., "Chess Arena [IN-1]")');
+                    if (!name) return;
+                    try {
+                        const res = await fetch(`${API}/api/admin/rooms`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                            body: JSON.stringify({ name, maxPlayers: 2 })
+                        });
+                        if (res.ok) {
+                            await customAlert('Success', 'Admin lobby injected into network.', 'success');
+                            renderGameLobbies();
+                        }
+                    } catch (e) { await customAlert('Error', 'Failed to create lobby: ' + e.message, 'error'); }
+                };
+
+                window.deleteGameLobby = async (code) => {
+                    if (!await customConfirm('Confirm Deletion', 'Close this lobby and disconnect players?', 'warning')) return;
+                    try {
+                        const res = await fetch(`${API}/api/admin/rooms/${code}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        if (res.ok) renderGameLobbies();
+                    } catch (e) { await customAlert('Error', 'Action failed', 'error'); }
+                };
+
+                window.manageGameLobby = async (code) => {
+                    await customAlert('Engaged', `Management protocol for node ${code} engaged. Directing traffic to core...`, 'info');
+                };
+
+                const renderGameLobbies = async () => {
+                    const container = document.getElementById('game-lobby-grid');
+                    const countEl = document.getElementById('game-lobby-count');
+                    if (!container) return;
+
+                    try {
+                        const res = await fetch(`${API}/api/admin/rooms`, { headers: { 'Authorization': `Bearer ${token}` } });
+                        const active = await res.json();
+                        
+                        if (countEl) countEl.innerText = active.length + ' Active Rooms';
+                        if (active.length === 0) { 
+                            container.innerHTML = '<div class="col-span-1 sm:col-span-2 p-10 text-center text-on-surface-variant italic font-bold uppercase tracking-widest text-[10px] bg-surface-container-low rounded-xl">No active lobbies detected on network — click Create Lobby to start!</div>'; 
+                        } else {
+                            const sc = { Waiting:'text-amber-600', Full:'text-error', 'In Progress':'text-emerald-600' };
+                            container.innerHTML = active.map(l => `
+                                <div class="bg-surface-container-lowest p-5 rounded-xl tonal-shadow border border-transparent hover:border-primary/10 transition-all">
+                                    <div class="flex items-center gap-4 mb-4">
+                                        <div class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-black text-lg">${l.id.substring(0,2)}</div>
+                                        <div><h4 class="font-bold text-sm">${l.id}</h4><p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">${l.type}</p></div>
+                                    </div>
+                                    <div class="flex justify-between items-center mb-4">
+                                        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-slate-400">group</span><span class="text-xs font-bold">${l.players}/${l.maxPlayers}</span></div>
+                                        <span class="text-xs font-bold ${sc[l.status]||'text-slate-500'}">${l.status}</span>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button onclick="manageGameLobby('${l.id}')" class="flex-1 py-2 text-[10px] font-bold bg-surface-container-high rounded-lg hover:bg-primary hover:text-white transition-all uppercase">Analyze</button>
+                                        <button onclick="deleteGameLobby('${l.id}')" class="p-2 bg-surface-container-high rounded-lg text-error hover:bg-error hover:text-white transition-all"><span class="material-symbols-outlined text-sm">block</span></button>
+                                    </div>
+                                </div>
+                            `).join('');
+                        }
+                    } catch(e) {
+                         container.innerHTML = '<div class="col-span-1 sm:col-span-2 p-4 text-center text-error italic text-xs">Connectivity failure to game backbone.</div>';
+                    }
+                };
+                renderGameLobbies();
+                setInterval(renderGameLobbies, 5000); // Polling for real-time update
+
+                // ===== 7. CLOSE DROPDOWN =====
+                document.addEventListener('click', (e) => {
+                    const dropdown = document.getElementById('avatar-dropdown');
+                    const avatar = document.querySelector('.cursor-pointer.transition-transform');
+                    if (dropdown && avatar && !dropdown.contains(e.target) && e.target !== avatar && !avatar.parentElement.contains(e.target)) dropdown.classList.add('hidden');
+                });
+
+                // ===== 8. SEARCH FILTER =====
+                const searchInput = document.querySelector('input[placeholder*="Search system logs"]');
+                if (searchInput) {
+                    searchInput.addEventListener('input', (e) => {
+                        const term = e.target.value.toLowerCase();
+                        document.querySelectorAll('#tools-body tr').forEach(row => { row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
+                    });
+                }
+            });
+
+            async function confirmAdminLogout() {
+                if (await customConfirm('Sign Out', 'Terminate security session?', 'warning')) {
+                    if (typeof window.confirmLogout === 'function') {
+                        window.confirmLogout();
+                    } else {
+                        window.location.href = '/login.html';
+                    }
+                }
+            }
+            window.confirmAdminLogout = confirmAdminLogout;
+
+            function toggleAdminSidebar(force) {
+                document.body.classList.toggle('admin-sidebar-open', typeof force === 'boolean' ? force : !document.body.classList.contains('admin-sidebar-open'));
+            }
+            window.toggleAdminSidebar = toggleAdminSidebar;
+        </script>
+</body>
+
+</html>

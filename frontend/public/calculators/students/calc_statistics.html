@@ -1,0 +1,234 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Statistics Calculator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">List of Numbers.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Effortlessly find the Average, Median, and Range of your data. Perfect for school projects or analyzing any set of numbers!</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Past Data</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent data.</p>
+                    </div>
+                </div>
+
+                <div class="bg-indigo-900 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
+                     <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-[120px]">bar_chart</span>
+                     </div>
+                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">menu_book</span> Stats Dictionary
+                     </h4>
+                     <p class="text-indigo-100 text-[11px] leading-relaxed mb-4 opacity-80">
+                        Mean is the Average. Median is the middle number. Range is the spread from Low to High.
+                     </p>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="calc_quadratic.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Solve for X</div>
+                            </div>
+                        </a>
+                        <a href="calc_unit_conv.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Metric & More</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-6">
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block tracking-widest">Type or Paste Numbers (Separated by commas or spaces)</label>
+                            <textarea id="dataSet" placeholder="e.g. 10, 25, 30, 45, 12" class="w-full h-40 bg-white border border-slate-100 rounded-2xl px-6 py-4 font-bold text-lg outline-none focus:ring-2 focus:ring-primary shadow-sm transition-all leading-relaxed"></textarea>
+                        </div>
+                        <div class="flex items-center gap-3 bg-white p-2 rounded-2xl border border-slate-100 shadow-sm transition-all">
+                            <span class="text-[10px] font-black text-on-surface-variant uppercase ml-4 tracking-widest">Select Model</span>
+                            <select id="stdType" class="flex-1 bg-transparent border-none py-3 text-[10px] font-black tracking-widest uppercase focus:ring-0 outline-none cursor-pointer">
+                                <option value="population">Whole Group (Population)</option>
+                                <option value="sample">Small Subset (Sample)</option>
+                            </select>
+                        </div>
+                        <div class="flex gap-4 pt-4">
+                            <button onclick="analyzeData()" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">ANALYZE NUMBERS</button>
+                            <button onclick="resetForms()" class="p-5 bg-slate-100 rounded-2xl text-slate-400 hover:text-primary transition-colors shadow-sm">
+                                <span class="material-symbols-outlined">restart_alt</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Result Area -->
+                    <div id="results" class="hidden grid grid-cols-2 md:grid-cols-5 gap-4">
+                        <!-- Results injected here -->
+                    </div>
+
+                    <!-- Navigation Actions -->
+                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-end items-center gap-4">
+                        <div class="flex gap-3">
+                            <button id="save-btn" onclick="commitToHistory()" class="hidden bg-primary text-white px-8 py-4 rounded-xl font-black text-[10px] tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] transition-all">Save Result</button>
+                            <button onclick="window.print()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined">print</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let lastResultData = null;
+
+        function analyzeData() {
+            const rawData = document.getElementById('dataSet').value;
+            const type = document.getElementById('stdType').value;
+            const numbers = rawData.split(/[,\s
+\t]+/).map(n => n.trim()).filter(n => n !== "").map(n => parseFloat(n)).filter(n => !isNaN(n));
+
+            if (numbers.length === 0) return alert("Please enter some numbers.");
+
+            const n = numbers.length;
+            const sum = numbers.reduce((a, b) => a + b, 0);
+            const mean = sum / n;
+            const sorted = [...numbers].sort((a, b) => a - b);
+            const median = n % 2 === 0 ? (sorted[n / 2 - 1] + sorted[n / 2]) / 2 : sorted[Math.floor(n / 2)];
+            const range = sorted[n - 1] - sorted[0];
+
+            const sqDiffs = numbers.map(x => Math.pow(x - mean, 2));
+            const variance = sqDiffs.reduce((a, b) => a + b, 0) / (type === 'sample' ? (n - 1 || 1) : n);
+            const stdDev = Math.sqrt(variance);
+
+            const container = document.getElementById('results');
+            const data = [
+                { label: 'TotalCount', val: n },
+                { label: 'Average', val: mean.toFixed(2), highlight: true },
+                { label: 'MiddleNo', val: median.toFixed(2) },
+                { label: 'RangeSize', val: range.toFixed(2) },
+                { label: 'Deviation', val: stdDev.toFixed(2) }
+            ];
+            
+            container.innerHTML = data.map((item, i) => `
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 text-center shadow-sm fade-in" style="animation-delay: ${i * 0.1}s">
+                    <span class="text-[9px] font-black text-slate-400 uppercase block mb-1">${item.label}</span>
+                    <span class="text-xl font-black ${item.highlight ? 'text-primary' : 'text-on-surface'}">${item.val}</span>
+                </div>
+            `).join('');
+            
+            container.classList.remove('hidden');
+            document.getElementById('save-btn').classList.remove('hidden');
+            lastResultData = { n, mean, median, range, stdDev };
+        }
+
+        async function commitToHistory() {
+            if (!lastResultData) return;
+            const ok = await window.saveCalcToHistory('Stats Tool', 
+                [{ label: 'Sample', val: lastResultData.n }], 
+                [{ label: 'Average', val: lastResultData.mean.toFixed(2), highlight: true }]
+            );
+            if (ok) initSidebarHistory('Stats Tool', 'sidebar-history-container');
+        }
+
+        function resetForms() {
+            document.getElementById('dataSet').value = '';
+            document.getElementById('results').classList.add('hidden');
+            document.getElementById('save-btn').classList.add('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('Stats Tool', 'sidebar-history-container');
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

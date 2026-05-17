@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Chess Battle | Smart Hub</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/design-system.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <!-- System Scripts (MUST load first) -->
+    <script src="/js/auth-system.js"></script>
+    <script src="/js/feature-toggles.js"></script>
+    <script src="/js/version-control.js"></script>
+    <script src="/js/global-validation.js"></script>
+    <script src="/js/admin-ui-config.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        #chessboard {
+            aspect-ratio: 1 / 1;
+            max-width: 560px;
+            min-width: 280px;
+        }
+        .chess-square {
+            min-height: 0;
+            min-width: 0;
+            user-select: none;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+        }
+        .chess-square:focus-visible {
+            outline: 3px solid rgba(201, 111, 50, 0.9);
+            outline-offset: -2px;
+        }
+        .promotion-choice:focus-visible {
+            outline: 3px solid rgba(37, 99, 235, 0.9);
+            outline-offset: 2px;
+        }
+        .rotate-board {
+            transform: rotate(180deg);
+        }
+        .square-light {
+            background-color: #f7cda9;
+        }
+        .square-dark {
+            background-color: #7a614d;
+        }
+        .dark .square-light {
+            background-color: #475569;
+        }
+        .dark .square-dark {
+            background-color: #1e293b;
+        }
+        .selected-square {
+            background-color: #c96f32 !important;
+            box-shadow: inset 0 0 0 3px #fff5e7;
+        }
+        .valid-move::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: rgba(201, 111, 50, 0.5);
+            border-radius: 50%;
+        }
+        .valid-capture::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid rgba(201, 111, 50, 0.6);
+            border-radius: 0;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 min-h-screen text-slate-900 dark:text-slate-100">
+    <div id="header-placeholder"></div>
+    <main class="main-content-wrapper max-w-[1440px] mx-auto min-h-screen">
+        <div class="text-center mb-8 lg:mb-12">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black bg-gradient-to-r from-primary via-teal-600 to-primary bg-clip-text text-transparent mb-3 lg:mb-4 tracking-tight">
+                CHESS BATTLE
+            </h1>
+            <div class="flex flex-wrap justify-center items-center gap-4 lg:gap-6 mb-6 lg:mb-8">
+                <div class="flex items-center gap-2 lg:gap-3 bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl px-4 lg:px-6 py-3 lg:py-4 rounded-xl lg:rounded-2xl shadow-lg lg:shadow-2xl min-w-[140px] lg:min-w-[180px]">
+                    <div id="player1-info" class="text-left">
+                        <div class="font-bold text-sm lg:text-base text-[#1f2937] dark:text-white">White</div>
+                        <div id="white-time" class="text-lg lg:text-2xl font-mono text-primary font-black">10:00</div>
+                    </div>
+                </div>
+                <div class="w-10 h-10 lg:w-14 lg:h-14 bg-gradient-to-r from-primary to-teal-600 rounded-xl lg:rounded-2xl flex items-center justify-center shadow-lg lg:shadow-2xl">
+                    <span class="material-symbols-outlined text-xl lg:text-3xl text-white">sports_kabaddi</span>
+                </div>
+                <div class="flex items-center gap-2 lg:gap-3 bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl px-4 lg:px-6 py-3 lg:py-4 rounded-xl lg:rounded-2xl shadow-lg lg:shadow-2xl min-w-[140px] lg:min-w-[180px]">
+                    <div id="player2-info" class="text-left">
+                        <div class="font-bold text-sm lg:text-base text-[#1f2937] dark:text-white">Black</div>
+                        <div id="black-time" class="text-lg lg:text-2xl font-mono text-primary font-black">10:00</div>
+                    </div>
+                </div>
+            </div>
+            <div id="game-status" role="status" class="text-base lg:text-xl font-bold text-slate-700 dark:text-[#cbd5e1] mb-6 lg:mb-8 px-4 lg:px-8 py-2 lg:py-4 bg-white/60 dark:bg-slate-800/60 rounded-xl lg:rounded-2xl backdrop-blur-xl">
+                Ready to make the first move
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start justify-center mb-8 lg:mb-12">
+            <div class="w-full lg:w-72 space-y-4 order-2 lg:order-1">
+                <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl lg:rounded-3xl p-4 lg:p-6 shadow-2xl border border-slate-200/70 dark:border-slate-700/70">
+                    <h3 class="font-black text-lg lg:text-xl mb-3 lg:mb-4 text-[#1f2937] dark:text-white">Game Info</h3>
+                    <div class="space-y-2 lg:space-y-3 text-xs lg:text-sm text-slate-700 dark:text-slate-300">
+                        <div><span class="font-bold">Turn:</span> <span id="turn-display" class="px-2 lg:px-3 py-0.5 lg:py-1 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 rounded-full font-mono text-xs">White</span></div>
+                        <div class="flex flex-wrap gap-2 lg:gap-4 text-xs">
+                            <span>Castling: <span id="castling-display" class="font-semibold">KQkq</span></span>
+                            <span>Move: <span id="move-count" class="font-semibold">1</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl lg:rounded-3xl p-4 lg:p-6 shadow-2xl border border-slate-200/70 dark:border-slate-700/70">
+                    <h3 class="font-black text-lg lg:text-xl mb-3 lg:mb-4 text-[#1f2937] dark:text-white">Controls</h3>
+                    <div class="space-y-2 lg:space-y-3">
+                        <button id="new-game-btn" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-2 lg:py-3 px-3 lg:px-4 rounded-xl lg:rounded-2xl font-bold text-sm hover:scale-[1.02] shadow-lg transition-all flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-lg">refresh</span>New Game
+                        </button>
+                        <button id="flip-board-btn" class="w-full bg-slate-700 dark:bg-slate-200 text-white dark:text-slate-900 py-2 lg:py-3 px-3 lg:px-4 rounded-xl lg:rounded-2xl font-bold text-sm hover:scale-[1.02] shadow-lg transition-all flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-lg">sync_alt</span>Flip Board
+                        </button>
+                        <button id="copy-fen-btn" class="w-full bg-slate-500 dark:bg-slate-300 text-white dark:text-slate-900 py-2 lg:py-3 px-3 lg:px-4 rounded-xl lg:rounded-2xl font-bold text-sm hover:scale-[1.02] shadow-lg transition-all flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-lg">content_copy</span>Copy FEN
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl lg:rounded-3xl p-4 lg:p-6 shadow-2xl border border-slate-200/70 dark:border-slate-700/70 max-h-[16rem] lg:max-h-[24rem] overflow-y-auto">
+                    <h3 class="font-black text-lg lg:text-xl mb-3 lg:mb-4 text-[#1f2937] dark:text-white">Moves</h3>
+                    <div id="move-history" class="space-y-1 lg:space-y-2 text-xs lg:text-sm font-mono text-slate-700 dark:text-slate-300"></div>
+                </div>
+            </div>
+
+            <div class="order-1 lg:order-2 flex-1 w-full flex justify-center">
+                <div id="chessboard" class="grid grid-cols-8 grid-rows-8 gap-0 w-full max-w-[400px] sm:max-w-[480px] lg:max-w-[540px] mx-auto shadow-2xl rounded-2xl lg:rounded-3xl overflow-hidden bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-800"></div>
+            </div>
+        </div>
+
+        <div id="promotion-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+            <div class="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-2xl w-full max-w-sm text-center border border-slate-200/70 dark:border-slate-700/70">
+                <h3 class="text-2xl font-black mb-6 text-[#1f2937] dark:text-white">Choose Promotion</h3>
+                <div class="grid grid-cols-4 gap-4 mb-8">
+                    <button type="button" class="promotion-choice p-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white rounded-xl font-bold hover:scale-110 shadow-lg transition-all" data-piece="q">Queen</button>
+                    <button type="button" class="promotion-choice p-4 bg-gradient-to-r from-blue-400 to-blue-500 text-white rounded-xl font-bold hover:scale-110 shadow-lg transition-all" data-piece="r">Rook</button>
+                    <button type="button" class="promotion-choice p-4 bg-gradient-to-r from-green-400 to-green-500 text-white rounded-xl font-bold hover:scale-110 shadow-lg transition-all" data-piece="b">Bishop</button>
+                    <button type="button" class="promotion-choice p-4 bg-gradient-to-r from-purple-400 to-purple-500 text-white rounded-xl font-bold hover:scale-110 shadow-lg transition-all" data-piece="n">Knight</button>
+                </div>
+                <button id="cancel-promotion" type="button" class="mt-2 px-6 py-3 rounded-2xl bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-semibold hover:bg-slate-300 transition-all">Cancel</button>
+            </div>
+        </div>
+    </main>
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/chess.js"></script>
+    <script src="/js/auth-ui.js"></script>
+    <script src="/js/admin-panel.js"></script>
+    <script>
+        /**
+         * Chess Game Controller - Integrates with Smart Hub System
+         * Follows Admin UI Config rules
+         */
+
+        // Verify Auth (blocking)
+        if (!window.authSystem?.isLoggedIn) {
+            throw new Error('Authentication required');
+        }
+
+        // Verify Version (blocking)
+        if (!window.versionControl?.canExecute()) {
+            document.body.innerHTML = '<div class="fixed inset-0 flex items-center justify-center bg-black"><div class="text-center text-white"><h1 class="text-4xl font-black mb-4">Version Not Approved</h1><p>Please wait for admin approval</p></div></div>';
+            throw new Error('Version not approved');
+        }
+
+        // Verify Game Feature from Admin Config (blocking)
+        const adminConfig = window.AdminUIConfig?.getConfig() || {};
+        const features = window.AdminUIConfig?.getFeatures() || window.FeatureToggles?.FEATURES || {};
+        
+        // Check admin config for chess/game UI
+        if (adminConfig.chessUI === false || adminConfig.gameUI === false) {
+            document.body.innerHTML = '<div class="fixed inset-0 flex items-center justify-center bg-black"><div class="text-center text-white"><h1 class="text-4xl font-black mb-4">Game Disabled</h1><p>This game is currently disabled by admin</p></div></div>';
+            throw new Error('Game disabled by admin');
+        }
+        
+        // Check features toggle
+        if (features.chess === false) {
+            document.body.innerHTML = '<div class="fixed inset-0 flex items-center justify-center bg-black"><div class="text-center text-white"><h1 class="text-4xl font-black mb-4">Game Disabled</h1><p>Chess is currently disabled by admin</p></div></div>';
+            throw new Error('Chess feature disabled');
+        }
+
+        // Apply admin UI config to chess board
+        function applyChessAdminConfig() {
+            const config = adminConfig;
+            
+            // Board size controlled by admin layout density
+            if (config.layoutDensity === 'compact') {
+                document.getElementById('chessboard')?.classList.add('max-w-[360px]', 'min-w-[240px]');
+            } else if (config.layoutDensity === 'spacious') {
+                document.getElementById('chessboard')?.classList.add('max-w-[640px]');
+            }
+            
+            // Animations controlled by admin
+            if (!config.animations) {
+                document.querySelectorAll('.chess-square').forEach(sq => {
+                    sq.style.transition = 'none';
+                });
+            }
+            
+            // Colors from admin theme
+            if (config.primaryColor) {
+                document.documentElement.style.setProperty('--chess-accent', config.primaryColor);
+            }
+        }
+        
+        // Apply admin config on load
+        applyChessAdminConfig();
+        
+        // Listen for admin config changes
+        window.addEventListener('adminUIConfigChanged', applyChessAdminConfig);
+
+        const chessEngine = window.chessEngine || new window.ChessEngine();
+        let selectedSquareIdx = null;
+        let moveHistory = [];
+        let promotionMove = null;
+        let timerInterval = null;
+        let gamePaused = false;
+        const timeLeft = { w: 600, b: 600 };
+
+        // DOM Elements
+        const boardEl = document.getElementById('chessboard');
+        const statusEl = document.getElementById('game-status');
+        const turnEl = document.getElementById('turn-display');
+        const historyEl = document.getElementById('move-history');
+        const modalEl = document.getElementById('promotion-modal');
+        const castlingEl = document.getElementById('castling-display');
+        const moveCountEl = document.getElementById('move-count');
+        const whiteTimeEl = document.getElementById('white-time');
+        const blackTimeEl = document.getElementById('black-time');
+        const promotionButtons = Array.from(document.querySelectorAll('.promotion-choice'));
+        const cancelPromotionBtn = document.getElementById('cancel-promotion');
+
+        // Validate elements
+        const requiredElements = [
+            '#chessboard', '#game-status', '#turn-display',
+            '#move-history', '#promotion-modal', '#castling-display',
+            '#move-count', '#white-time', '#black-time'
+        ];
+        requiredElements.forEach(sel => {
+            if (!document.querySelector(sel)) {
+                window.globalValidation?.logError(`Missing required DOM element: ${sel}`);
+            }
+        });
+
+        const pieceImages = {
+            'P': 'â™™', 'N': 'â™˜', 'B': 'â™—', 'R': 'â™–', 'Q': 'â™•', 'K': 'â™”',
+            'p': 'â™Ÿ', 'n': 'â™ž', 'b': 'â™', 'r': 'â™œ', 'q': 'â™›', 'k': 'â™š'
+        };
+        
+        const pieceColors = {
+            'P': 'text-slate-900', 'N': 'text-slate-900', 'B': 'text-slate-900', 'R': 'text-slate-900', 'Q': 'text-slate-900', 'K': 'text-slate-900',
+            'p': 'text-slate-100', 'n': 'text-slate-100', 'b': 'text-slate-100', 'r': 'text-slate-100', 'q': 'text-slate-100', 'k': 'text-slate-100'
+        };
+        
+        function getValidMoves(idx) {
+            const moves = [];
+            const piece = chessEngine.board[idx];
+            if (!piece) return moves;
+            
+            const isWhite = piece === piece.toUpperCase();
+            const isCurrentTurnWhite = chessEngine.turn === 'w';
+            if (isWhite !== isCurrentTurnWhite) return moves;
+            
+            const pieceMoves = chessEngine.generatePieceMoves(idx, piece);
+            return pieceMoves.map(m => m.to);
+        }
+
+        function initBoard() {
+            boardEl.innerHTML = '';
+            for (let idx = 0; idx < 64; idx += 1) {
+                const row = Math.floor(idx / 8);
+                const col = idx % 8;
+                const square = document.createElement('button');
+                square.type = 'button';
+                square.className = [
+                    'chess-square',
+                    'relative',
+                    'flex',
+                    'items-center',
+                    'justify-center',
+                    'cursor-pointer',
+                    'select-none',
+                    'transition-all',
+                    'focus:outline-none',
+                    'border-0',
+                    'p-0',
+                    (row + col) % 2 === 0 ? 'square-light' : 'square-dark'
+                ].join(' ');
+                square.dataset.idx = idx;
+                square.dataset.row = row;
+                square.dataset.col = col;
+                square.setAttribute('aria-label', `${chessEngine.indexToSquare(idx)} square`);
+                square.addEventListener('click', () => handleSquareClick(idx));
+                square.addEventListener('dragover', handleDragOver);
+                square.addEventListener('drop', handleDrop);
+                boardEl.appendChild(square);
+            }
+            updateBoard();
+        }
+
+        function handleSquareClick(idx) {
+            if (gamePaused) return;
+            
+            const piece = chessEngine.board[idx];
+            const isWhiteTurn = chessEngine.turn === 'w';
+            
+            const currentPiece = selectedSquareIdx !== null ? chessEngine.board[selectedSquareIdx] : null;
+            const isCurrentPlayerWhite = currentPiece ? currentPiece === currentPiece.toUpperCase() : null;
+            const isSamePlayer = isCurrentPlayerWhite === isWhiteTurn;
+
+            if (selectedSquareIdx !== null && selectedSquareIdx !== idx && isSamePlayer) {
+                makeMove({ from: selectedSquareIdx, to: idx });
+                selectedSquareIdx = null;
+            } else if (piece) {
+                const isWhitePiece = piece === piece.toUpperCase();
+                if ((isWhiteTurn && isWhitePiece) || (!isWhiteTurn && !isWhitePiece)) {
+                    selectedSquareIdx = idx;
+                } else {
+                    selectedSquareIdx = null;
+                }
+            } else {
+                selectedSquareIdx = null;
+            }
+            updateBoard();
+        }
+
+        function makeMove(move) {
+            const fromPiece = chessEngine.board[move.from];
+            const isPawn = fromPiece && fromPiece.toLowerCase() === 'p';
+            const promotionRank = fromPiece === 'P' ? 0 : (fromPiece === 'p' ? 7 : -1);
+            
+            if (isPawn && move.to === promotionRank) {
+                return showPromotion(move);
+            }
+
+            chessEngine.makeMove(move);
+            moveHistory.push(`${chessEngine.indexToSquare(move.from)} â†’ ${chessEngine.indexToSquare(move.to)}`);
+            sendMove(move);
+            updateBoard();
+            updateDisplay();
+            window.globalValidation?.logInfo(`Move made: ${move.from} â†’ ${move.to}`);
+        }
+
+        function showPromotion(move) {
+            promotionMove = move;
+            modalEl.classList.remove('hidden');
+            window.globalValidation?.logInfo('Promotion choice required');
+        }
+
+        function confirmPromotion(pieceCode) {
+            if (!promotionMove) return;
+            
+            const fromPiece = chessEngine.board[promotionMove.from];
+            const promotionPiece = fromPiece === fromPiece.toUpperCase() ? pieceCode.toUpperCase() : pieceCode;
+            chessEngine.board[promotionMove.to] = promotionPiece;
+            chessEngine.board[promotionMove.from] = null;
+            chessEngine.turn = chessEngine.turn === 'w' ? 'b' : 'w';
+            
+            const sentMove = { ...promotionMove, promotion: promotionPiece };
+            moveHistory.push(`${chessEngine.indexToSquare(promotionMove.from)} â†’ ${chessEngine.indexToSquare(promotionMove.to)} (${promotionPiece.toUpperCase()})`);
+            promotionMove = null;
+            modalEl.classList.add('hidden');
+            sendMove(sentMove);
+            updateBoard();
+            updateDisplay();
+            window.globalValidation?.logInfo(`Pawn promoted to ${promotionPiece}`);
+        }
+
+        function cancelPromotion() {
+            promotionMove = null;
+            modalEl.classList.add('hidden');
+            updateBoard();
+        }
+
+        function sendMove(move) {
+            if (window.sendChessMove) {
+                window.sendChessMove(move);
+            }
+        }
+
+        function updateBoard() {
+            if (!window.featureToggle?.isEnabled('animations')) {
+                boardEl.style.transition = 'none';
+            }
+
+            const validMoveSquares = selectedSquareIdx !== null ? getValidMoves(selectedSquareIdx) : [];
+
+            boardEl.querySelectorAll('.chess-square').forEach((square) => {
+                const idx = Number(square.dataset.idx);
+                const piece = chessEngine.board[idx];
+                square.innerHTML = '';
+                square.classList.remove('selected-square', 'valid-move', 'valid-capture', 'ring-4', 'ring-primary/50');
+                
+                if (selectedSquareIdx === idx) {
+                    square.classList.add('selected-square');
+                }
+                if (validMoveSquares.includes(idx)) {
+                    if (piece) {
+                        square.classList.add('valid-capture');
+                    } else {
+                        square.classList.add('valid-move');
+                    }
+                }
+                if (piece) {
+                    const pieceSpan = document.createElement('span');
+                    pieceSpan.textContent = pieceImages[piece] || '';
+                    pieceSpan.className = `text-2xl lg:text-3xl font-bold ${pieceColors[piece] || 'text-slate-900'} select-none pointer-events-none`;
+                    square.appendChild(pieceSpan);
+                }
+            });
+
+            if (!window.featureToggle?.isEnabled('animations')) {
+                boardEl.style.transition = '';
+            }
+        }
+
+        function updateDisplay() {
+            turnEl.textContent = chessEngine.turn === 'w' ? 'White' : 'Black';
+            turnEl.className = `px-2 lg:px-3 py-0.5 lg:py-1 rounded-full font-mono text-xs ${chessEngine.turn === 'w' ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300' : 'bg-rose-100 dark:bg-rose-900/50 text-rose-800 dark:text-rose-300'}`;
+            
+            let status = getGameStatus();
+            if (gamePaused) {
+                status = 'Paused';
+            }
+            
+            statusEl.textContent = status;
+            const statusColor = (status.includes('wins') || status.includes('draw') || status.includes('Over')) ? 'text-emerald-600' : (status.includes('Checkmate') || status.includes('runs out')) ? 'text-rose-600' : 'text-slate-700 dark:text-[#cbd5e1]';
+            statusEl.className = `text-base lg:text-xl font-bold px-4 lg:px-8 py-2 lg:py-4 bg-white/60 dark:bg-slate-800/60 rounded-xl lg:rounded-2xl backdrop-blur-xl ${statusColor}`;
+            
+            castlingEl.textContent = Object.keys(chessEngine.castling).filter((k) => chessEngine.castling[k]).join('') || '-';
+            moveCountEl.textContent = chessEngine.fullMoves.toString();
+            updateMoveHistory();
+        }
+
+        function getGameStatus() {
+            const moves = chessEngine.generateMoves();
+            if (moves.length === 0) return 'Checkmate! Game Over';
+            return `${chessEngine.turn === 'w' ? 'White' : 'Black'} to move`;
+        }
+
+        function updateMoveHistory() {
+            if (!moveHistory.length) {
+                historyEl.innerHTML = '<div class="text-xs text-slate-500 italic">Recent moves will appear here.</div>';
+                return;
+            }
+            historyEl.innerHTML = moveHistory.slice(-12).reverse().map((move) => `<div class="px-3 py-2 rounded-2xl bg-slate-100 dark:bg-slate-900/70">${move}</div>`).join('');
+        }
+
+        function handleDragOver(e) {
+            if (window.featureToggle?.isEnabled('dragAndDrop')) {
+                e.preventDefault();
+            }
+        }
+
+        function handleDrop(e) {
+            if (!window.featureToggle?.isEnabled('dragAndDrop')) return;
+            e.preventDefault();
+            const fromIdx = Number(e.dataTransfer.getData('text/plain'));
+            const toIdx = Number(this.dataset.idx);
+            if (!Number.isFinite(fromIdx) || !Number.isFinite(toIdx)) return;
+            makeMove({ from: fromIdx, to: toIdx });
+        }
+
+        function startTimer() {
+            if (!window.featureToggle?.isEnabled('timerMode')) return;
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                if (gamePaused) return;
+                
+                const color = chessEngine.turn;
+                timeLeft[color] = Math.max(0, timeLeft[color] - 1);
+                updateTimes();
+                if (timeLeft[color] <= 0) {
+                    statusEl.textContent = `${color === 'w' ? 'White' : 'Black'} runs out of time!`;
+                    clearInterval(timerInterval);
+                    window.globalValidation?.logInfo(`${color === 'w' ? 'White' : 'Black'} timeout`);
+                }
+            }, 1000);
+        }
+
+        function updateTimes() {
+            whiteTimeEl.textContent = formatTime(timeLeft.w);
+            blackTimeEl.textContent = formatTime(timeLeft.b);
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function newGame() {
+            chessEngine.reset();
+            moveHistory = [];
+            selectedSquareIdx = null;
+            timeLeft.w = 600;
+            timeLeft.b = 600;
+            gamePaused = false;
+            updateBoard();
+            updateDisplay();
+            updateTimes();
+            startTimer();
+            window.globalValidation?.logInfo('New game started');
+        }
+
+        function resignGame() {
+            statusEl.textContent = 'You resigned. Good game!';
+            statusEl.classList.add('text-rose-600');
+            clearInterval(timerInterval);
+            window.globalValidation?.logInfo('Player resigned');
+        }
+
+        function copyFEN() {
+            navigator.clipboard.writeText(chessEngine.toFEN()).then(() => {
+                window.globalValidation?.logInfo('FEN copied to clipboard');
+            });
+        }
+
+        function flipBoard() {
+            if (window.featureToggle?.isEnabled('animations')) {
+                boardEl.classList.toggle('rotate-board');
+            }
+        }
+
+        // Admin Event Listeners
+        window.addEventListener('admin-pause-game', () => {
+            gamePaused = !gamePaused;
+            updateDisplay();
+        });
+
+        window.addEventListener('admin-reset-game', () => {
+            newGame();
+        });
+
+        window.addEventListener('features-changed', () => {
+            window.globalValidation?.logInfo('Features updated');
+        });
+
+        // Button Event Listeners
+        document.getElementById('new-game-btn')?.addEventListener('click', newGame);
+        document.getElementById('copy-fen-btn')?.addEventListener('click', copyFEN);
+        document.getElementById('flip-board-btn')?.addEventListener('click', flipBoard);
+        cancelPromotionBtn?.addEventListener('click', cancelPromotion);
+
+        promotionButtons.forEach((btn) => {
+            btn.addEventListener('click', () => confirmPromotion(btn.dataset.piece));
+        });
+
+        // Make pieces draggable
+        boardEl.addEventListener('dragstart', (e) => {
+            if ((e.target.tagName === 'SPAN' || e.target.tagName === 'IMG') && window.featureToggle?.isEnabled('dragAndDrop')) {
+                const square = e.target.closest('.chess-square');
+                if (square) e.dataTransfer.setData('text/plain', square.dataset.idx);
+            }
+        });
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            window.globalValidation?.logInfo('Chess game initializing...');
+            window.globalValidation?.logInfo(`Current version: ${window.versionControl?.getCurrentVersion()}`);
+            window.globalValidation?.logInfo(`Features: ${JSON.stringify(window.featureToggle?.getAllFeatures())}`);
+            
+            initBoard();
+            updateDisplay();
+            updateTimes();
+            startTimer();
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentRoom = urlParams.get('room');
+            if (currentRoom && window.initChessMultiplayer) {
+                window.initChessMultiplayer(currentRoom);
+                statusEl.textContent = 'Connected to room ' + currentRoom;
+                window.globalValidation?.logInfo(`Connected to room: ${currentRoom}`);
+            }
+            
+            window.globalValidation?.logInfo('Chess game ready');
+        });
+
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                newGame();
+            }
+            if (e.key === ' ') {
+                e.preventDefault();
+                flipBoard();
+            }
+            if (e.key === 'r' && window.authSystem?.isAdmin()) {
+                window.dispatchEvent(new CustomEvent('admin-reset-game'));
+            }
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

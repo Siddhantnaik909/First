@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | LED Resistor Calculator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2">LED Lab.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Protect your LEDs from burning out! Calculate the exact resistor value you need based on your power supply and the LED's specific color requirements.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent records.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="/calculators/electronics/calc_voltage_divider.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Voltage Divider</div>
+                            </div>
+                        </a>
+                        <a href="/calculators/electronics/calc_resistor_color_code.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Resistor Colors</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-2xl p-2 shadow-2xl overflow-hidden mb-8">
+                    <!-- Display -->
+                    <div class="bg-surface-container-lowest m-4 rounded-xl p-12 text-right flex flex-col justify-end min-h-[260px] shadow-inner relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                        <div class="absolute top-8 left-8 flex gap-2">
+                            <span class="px-3 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase">REQUIRED RESISTANCE</span>
+                            <span class="px-3 py-1 rounded bg-emerald-100 text-emerald-700 text-[10px] font-black tracking-widest uppercase" id="wattage-tag">0.00W RATING</span>
+                        </div>
+                        <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]">Awaiting specifications...</div>
+                        <div id="calc-display" class="text-7xl font-black tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden leading-tight font-mono">
+                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0 Î©
+                        </div>
+                    </div>
+
+                    <!-- Inputs -->
+                    <div class="p-8 space-y-12">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <div class="space-y-6">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Input Specifications</h4>
+                                <div class="space-y-5">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Source Voltage (Vin)</label>
+                                        <div class="relative group">
+                                            <input type="number" id="vin" placeholder="5" value="5" oninput="calculateLED()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-4 py-3 font-bold text-on-surface outline-none transition-all">
+                                            <span class="absolute right-5 top-1/2 -translate-y-1/2 text-xs font-black text-on-surface-variant opacity-40">Volts</span>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">LED Color / Voltage (Vf)</label>
+                                        <div class="relative">
+                                            <select id="vled" onchange="calculateLED()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-5 py-4 font-bold text-on-surface focus:ring-2 focus:ring-primary transition-all outline-none appearance-none">
+                                                <option value="1.8">Red (~1.8V)</option>
+                                                <option value="2.1">Yellow/Green (~2.1V)</option>
+                                                <option value="3.2" selected>Blue/White (~3.2V)</option>
+                                                <option value="3.8">UV/Purple (~3.8V)</option>
+                                            </select>
+                                            <span class="material-symbols-outlined absolute right-5 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Target Current (mA)</label>
+                                        <div class="relative group">
+                                            <input type="number" id="current" placeholder="20" value="20" oninput="calculateLED()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-4 py-3 font-bold text-on-surface outline-none transition-all">
+                                            <span class="absolute right-5 top-1/2 -translate-y-1/2 text-xs font-black text-on-surface-variant opacity-40">mA</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-6">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Heat Analysis</h4>
+                                <div class="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-8 space-y-6">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-lg">
+                                            <span class="material-symbols-outlined">thermostat</span>
+                                        </div>
+                                        <div>
+                                            <span id="powerValue" class="text-3xl font-black text-on-surface">0.00 mW</span>
+                                            <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest block opacity-60">Power Loss</span>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2 pt-4 border-t border-emerald-200/50">
+                                        <span class="text-[10px] font-black text-emerald-700 uppercase tracking-widest block">Pro Tip</span>
+                                        <p id="pro-tip" class="text-xs text-on-surface-variant leading-relaxed font-medium italic">Logic: The resistor absorbs the extra voltage and dissipates it as heat.</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="p-5 bg-surface-container rounded-xl text-center">
+                                        <span id="resE12" class="text-xl font-black text-on-surface block">---</span>
+                                        <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">Nearest E12</span>
+                                    </div>
+                                    <div class="p-5 bg-surface-container rounded-xl text-center">
+                                        <span id="resVdrop" class="text-xl font-black text-on-surface block">0.00 V</span>
+                                        <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">Resistor Drop</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-8 border-t border-surface-container-high">
+                            <p class="text-[10px] font-mono text-on-surface-variant font-bold max-w-xs uppercase tracking-widest leading-loose">
+                                OHM'S LAW: (Vin - Vf) / If
+                            </p>
+                            <button onclick="saveLEDLog()" id="saveBtn" class="bg-primary text-white px-10 py-5 rounded-xl font-bold text-[10px] tracking-widest hover:shadow-xl transition-all uppercase hover:scale-[1.02] active:scale-95">Save to History</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Block -->
+                <div class="bg-surface-container p-10 rounded-2xl border border-surface-container-high italic text-[11px] text-on-surface-variant leading-relaxed text-center opacity-70">
+                    "Standard Value Tip: Resistors come in standard series like E12 or E24. If the exact value isn't available, choose the next highest standard value to be safe!"
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        const E12 = [10, 12, 15, 18, 22, 27, 33, 39, 47, 56, 68, 82];
+
+        function getNearestE12(val) {
+            if (val <= 0) return "---";
+            const exp = Math.floor(Math.log10(val));
+            const base = val / Math.pow(10, exp);
+            let nearest = E12[0];
+            let minDist = Math.abs(base - E12[0]);
+            
+            for(let e of E12) {
+                if(Math.abs(base - e) < minDist) {
+                    minDist = Math.abs(base - e);
+                    nearest = e;
+                }
+            }
+            // If the calculated value is slightly above the nearest E12, we might want to round up for safety
+            // But standard "nearest" is usually fine.
+            return Math.round(nearest * Math.pow(10, exp)) + " Î©";
+        }
+
+        function calculateLED() {
+            const vin = parseFloat(document.getElementById('vin').value);
+            const vled = parseFloat(document.getElementById('vled').value);
+            const ima = parseFloat(document.getElementById('current').value);
+
+            const display = document.getElementById('calc-display');
+            const statusText = document.getElementById('calc-status');
+            const wattageTag = document.getElementById('wattage-tag');
+            const powerEl = document.getElementById('powerValue');
+            const e12El = document.getElementById('resE12');
+            const vdropEl = document.getElementById('resVdrop');
+            const tip = document.getElementById('pro-tip');
+
+            if (isNaN(vin) || isNaN(vled) || isNaN(ima) || vin <= vled || ima <= 0) {
+                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0 Î©`;
+                statusText.innerText = vin <= vled && vin > 0 ? "Source voltage too low" : "Awaiting specifications...";
+                wattageTag.innerText = "0.00W RATING";
+                powerEl.innerText = "0.00 mW";
+                e12El.innerText = "---";
+                vdropEl.innerText = "0.00 V";
+                return;
+            }
+
+            const iA = ima / 1000;
+            const vDrop = vin - vled;
+            const resistance = vDrop / iA;
+            const power = vDrop * iA;
+
+            display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${Math.ceil(resistance)} Î©`;
+            statusText.innerText = "Limiting resistance established";
+            
+            let suggestedWattage = 0.125;
+            if (power > 0.1) suggestedWattage = 0.25;
+            if (power > 0.2) suggestedWattage = 0.5;
+            if (power > 0.4) suggestedWattage = 1.0;
+            
+            wattageTag.innerText = `${suggestedWattage}W RECOMMENDED`;
+            powerEl.innerText = `${(power * 1000).toFixed(2)} mW`;
+            vdropEl.innerText = `${vDrop.toFixed(2)} V`;
+            e12El.innerText = getNearestE12(resistance);
+
+            tip.innerText = `To drive the LED safely at ${ima}mA, you'll need at least a ${Math.ceil(resistance)}Î© resistor rated for ${suggestedWattage}W.`;
+        }
+
+        function resetInputs() {
+            document.getElementById('vin').value = "9";
+            document.getElementById('vled').value = "3.2";
+            document.getElementById('current').value = "20";
+            calculateLED();
+        }
+
+        async function saveLEDLog() {
+            const val = document.getElementById('calc-display').innerText.trim();
+            if (val === '0 Î©') return;
+
+            const btn = document.getElementById('saveBtn');
+            const orig = btn.innerText;
+            btn.innerText = 'SAVING...';
+            btn.disabled = true;
+
+            const inputs = [
+                { label: 'Voltage In', val: document.getElementById('vin').value + ' V' },
+                { label: 'Target current', val: document.getElementById('current').value + ' mA' }
+            ];
+            const results = [
+                { label: 'Resistor', val: val, highlight: true },
+                { label: 'Power Loss', val: document.getElementById('powerValue').innerText }
+            ];
+
+            try {
+                const ok = await window.saveCalcToHistory('LED Lab', inputs, results);
+                if (ok) {
+                    btn.innerText = 'SAVED';
+                    btn.classList.add('bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.classList.remove('bg-emerald-600');
+                        btn.disabled = false;
+                        if (typeof initSidebarHistory === 'function') {
+                            initSidebarHistory('LED Lab', 'sidebar-history-container');
+                        }
+                    }, 2000);
+                } else {
+                    btn.innerText = orig;
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                btn.innerText = orig;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+             calculateLED();
+            try {
+                if (typeof initSidebarHistory === 'function') {
+                    initSidebarHistory('LED Lab', 'sidebar-history-container');
+                }
+            } catch(e){}
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

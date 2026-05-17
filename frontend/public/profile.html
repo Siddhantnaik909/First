@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Profile - Smart Hub</title>
+    <meta name="description" content="Manage your Smart Hub profile, track usage stats, and connect with friends using your unique Hub ID.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="/css/style.css">
+    <!-- DARK MODE INIT - Universal -->
+    <!-- Theme Removed -->
+    <script id="tailwind-config">
+          tailwind.config = {
+            
+            theme: {
+              extend: {
+                colors: {
+                  "primary": "#3525cd",
+                  "primary-container": "#4f46e5",
+                  "secondary": "#4a50c4",
+                  "background": "#f7f2e8",
+                  "surface": "#f7f2e8",
+                  "on-surface": "#1f2937"
+                },
+                fontFamily: {
+                  "headline": ["Plus Jakarta Sans"],
+                  "body": ["Plus Jakarta Sans"]
+                }
+              }
+            }
+          }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body.dark-mode { background-color: var(--surface); color: var(--on-surface); }
+        .dark .profile-card, body.dark-mode .profile-card { background: var(--bg-card) !important; border-color: var(--surface-container-high); }
+        .dark .text-slate-700, body.dark-mode .text-slate-700 { color: var(--on-surface) !important; }
+        .dark .text-slate-500, body.dark-mode .text-slate-500 { color: var(--on-surface-variant) !important; }
+        .dark .bg-white, body.dark-mode .bg-white { background-color: var(--bg-card) !important; }
+        .dark .bg-slate-50, body.dark-mode .bg-slate-50 { background-color: var(--surface-container-low) !important; }
+        .dark .border-slate-100, body.dark-mode .border-slate-100 { border-color: var(--surface-container-high) !important; }
+        .dark .text-on-surface, body.dark-mode .text-on-surface { color: var(--on-surface) !important; }
+        .friend-card { transition: all 0.2s ease; }
+        .friend-card:hover { transform: translateY(-2px); }
+        #friend-id-input:focus { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,0.15); }
+        .hub-id-badge {
+            background: linear-gradient(135deg, #4f46e5, #115e59);
+            color: white;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.05em;
+        }
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(79,70,229,0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(79,70,229,0); }
+            100% { box-shadow: 0 0 0 0 rgba(79,70,229,0); }
+        }
+        .add-friend-btn:not(:disabled):hover { animation: pulse-ring 1.2s ease; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-24 md:pb-0">
+    <header class="fixed top-0 w-full z-50 bg-[#f7f2e8] dark:bg-slate-950 shadow-[0px_20px_40px_rgba(16,18,147,0.06)] h-16 flex justify-between items-center px-8">
+        <div class="flex items-center gap-8">
+            <span class="text-xl font-bold text-[#1f2937] dark:text-slate-100 tracking-tight">Smart Hub</span>
+            
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+        </div>
+        <div class="flex items-center gap-4" id="auth-actions">
+            <!-- Populated by script.js -->
+        </div>
+        <div class="bg-gradient-to-r from-[#4f46e5] to-[#3525cd] h-1 w-full absolute bottom-0 left-0"></div>
+    </header>
+
+<main class="main-content-wrapper max-w-7xl mx-auto mb-12">
+        <!-- Profile Banner -->
+        <section class="relative rounded-xl overflow-hidden mb-8 shadow-[0px_20px_40px_rgba(16,18,147,0.06)]">
+            <div class="h-48 bg-gradient-to-br from-primary-container to-primary relative overflow-hidden">
+                <div class="absolute inset-0 opacity-20">
+                    <img alt="Header Background" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80&w=1200">
+                </div>
+            </div>
+            <div class="profile-card bg-white px-8 py-6 flex flex-col md:flex-row items-end gap-6 relative border border-slate-100">
+                <div class="absolute -top-16 left-8 p-1 bg-white rounded-2xl shadow-xl">
+                    <img id="profile-avatar-large" alt="User Profile" class="w-32 h-32 rounded-xl object-cover" src="https://via.placeholder.com/150">
+                </div>
+                <div class="mt-16 md:mt-0 ml-0 md:ml-40 flex-grow pb-2">
+                    <h1 id="profile-name" class="text-3xl font-extrabold text-[#0f172a] tracking-tight">Smart User</h1>
+                    <div class="flex items-center gap-2 mt-1 flex-wrap">
+                        <span id="profile-role" class="bg-indigo-100 text-indigo-700 px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">Member</span>
+                        <span id="profile-email" class="text-slate-600 text-sm font-semibold">user@example.com</span>
+                    </div>
+                    <!-- Hub ID Display -->
+                    <div class="flex items-center gap-2 mt-2">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Your Hub ID:</span>
+                        <code id="my-user-id" class="hub-id-badge text-[10px] font-bold px-2 py-0.5 rounded-lg select-all cursor-pointer" title="Click to copy" onclick="window.copyMyId()">Loading...</code>
+                        <button onclick="window.copyMyId()" class="w-6 h-6 bg-indigo-50 text-indigo-600 rounded-md hover:bg-indigo-100 transition-colors flex items-center justify-center" title="Copy Hub ID">
+                            <i class="fas fa-copy text-[9px]"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex gap-3 pb-2">
+                    <button onclick="window.location.href='settings.html'" class="px-6 py-2.5 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white font-semibold rounded-xl text-sm shadow-md active:scale-95 transition-all">Edit Profile</button>
+                    <button class="p-2.5 bg-slate-100 text-slate-700 rounded-xl active:scale-95 transition-all hover:bg-slate-200" onclick="navigator.share ? navigator.share({title:'Smart Hub Profile', text:'Check out my Smart Hub profile!'}) : window.copyMyId()">
+                        <span class="material-symbols-outlined">share</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- LEFT COLUMN -->
+            <div class="lg:col-span-4 space-y-6">
+                <!-- Engagement Overview -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 profile-card">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-5">Activity Overview</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-indigo-50 rounded-xl">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-sm">build</span>
+                                </div>
+                                <span class="text-sm font-semibold text-slate-700">Tools Used</span>
+                            </div>
+                            <span id="stat-tools-used" class="text-xl font-black text-indigo-600">0</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-purple-50 rounded-xl">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-sm">group</span>
+                                </div>
+                                <span class="text-sm font-semibold text-slate-700">Friends</span>
+                            </div>
+                            <span id="stat-friends-count" class="text-xl font-black text-purple-600">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preferences -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 profile-card">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-5">Preferences</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-slate-700">Weight Unit</span>
+                            <select id="pref-unit-weight" aria-label="Select Weight Unit" title="Weight Unit" class="text-sm border border-slate-200 rounded-lg px-2 py-1 bg-slate-50 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-200 outline-none focus:border-indigo-400" onchange="window.savePreferences()">
+                                <option value="kg">Metric (kg)</option>
+                                <option value="lbs">Imperial (lbs)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-5 border-t border-slate-100">
+                        <button id="sign-out-btn" onclick="if(window.confirmLogout){window.confirmLogout();}else{localStorage.clear();window.location.href='/login.html';}" class="w-full py-2.5 bg-red-50 text-red-600 border border-red-100 font-semibold rounded-xl text-sm hover:bg-red-500 hover:text-white transition-all">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Sign Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="lg:col-span-8 space-y-6">
+                <!-- Friend Management -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 profile-card">
+                    <div class="flex items-center justify-between mb-5">
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Smart Network</h3>
+                            <p class="text-xs text-slate-400 mt-0.5">Connect with others using their Hub ID</p>
+                        </div>
+                        <div class="w-9 h-9 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200">
+                            <i class="fas fa-user-friends text-white text-xs"></i>
+                        </div>
+                    </div>
+                    <!-- Add Friend Input -->
+                    <div class="flex gap-2 mb-5">
+                        <input id="friend-id-input" type="text" placeholder="Paste a friend's Hub ID here..." class="flex-1 text-sm border border-slate-200 rounded-xl px-4 py-2.5 bg-slate-50 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-200 transition-all" autocomplete="off">
+                        <button id="add-friend-btn" onclick="window.addFriendById()" class="add-friend-btn px-5 py-2.5 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white font-bold rounded-xl text-sm shadow-md active:scale-95 transition-all flex items-center gap-2 whitespace-nowrap">
+                            <i class="fas fa-user-plus"></i> Add
+                        </button>
+                    </div>
+                    <!-- Friends Grid -->
+                    <div id="friends-grid" class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <p class="text-slate-400 text-sm italic col-span-full py-4 text-center">Loading friends...</p>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 profile-card">
+                    <div class="flex items-center justify-between mb-5">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Recent Activity</h3>
+                        <a href="history.html" class="text-indigo-600 text-xs font-bold hover:underline">View All →</a>
+                    </div>
+                    <div id="profile-activity-feed" class="space-y-3">
+                        <p class="text-slate-400 text-sm italic">No recent activity found.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Nav for Mobile -->
+    
+    <!-- Unified Navbar Component Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- DARK MODE INIT - Universal across ALL pages (Moved to head) -->
+    
+    
+    <!-- Core Scripts -->
+    <script src="/js/app.js"></script>
+    <script src="/js/buttons.js"></script>
+    <script src="/js/calc-utils.js"></script>
+    <script type="module" src="/js/script.js"></script>
+
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+
+    <!-- Chat Modal -->
+    <div id="friend-chat-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#0f172a]/60 backdrop-blur-sm transition-all duration-300">
+        <div class="bg-white dark:bg-[#0f172a] w-full max-w-lg rounded-3xl shadow-2xl flex flex-col h-[600px] max-h-[85vh] overflow-hidden animate-in zoom-in duration-300 border border-slate-100 dark:border-slate-800">
+            <!-- Header -->
+            <div class="px-6 py-4 bg-indigo-600 text-white flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img id="chat-friend-avatar" src="" alt="Friend Avatar" class="w-10 h-10 rounded-full object-cover border-2 border-white/20" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=User&background=random'">
+                    <div>
+                        <h3 id="chat-friend-name" class="font-bold text-sm m-0">Friend</h3>
+                        <p class="text-[10px] font-medium text-indigo-200">Smart Hub Chat</p>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('friend-chat-modal').classList.add('hidden')" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+            </div>
+            
+            <!-- Messages Area -->
+            <div id="chat-messages-container" class="flex-1 overflow-y-auto p-4 bg-slate-50 dark:bg-slate-950 space-y-4">
+                <p class="text-center text-xs text-slate-400 font-bold uppercase tracking-widest my-10">Loading chat...</p>
+            </div>
+            
+            <!-- Input Area -->
+            <div class="p-4 bg-white dark:bg-[#0f172a] border-t border-slate-100 dark:border-slate-800 flex items-end gap-2">
+                <textarea id="chat-message-input" rows="1" placeholder="Type a message..." class="flex-1 max-h-32 min-h-[44px] bg-slate-100 dark:bg-slate-800 border-0 rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 resize-none outline-none dark:text-white transition-all"></textarea>
+                <button onclick="window.sendFriendChat()" class="w-11 h-11 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center shadow-lg shadow-indigo-200 transition-all active:scale-95 flex-shrink-0">
+                    <span class="material-symbols-outlined text-sm">send</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="module" src="/js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            if (!isLoggedIn) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const user = JSON.parse(localStorage.getItem('smart_hub_user') || '{}');
+            // Consistent ID matching
+            if (user._id && !user.id) user.id = user._id;
+            
+            // Populate basic info
+            if (document.getElementById('profile-name'))
+                document.getElementById('profile-name').innerText = user.name || user.username || 'Smart User';
+            if (document.getElementById('profile-email'))
+                document.getElementById('profile-email').innerText = user.email || 'No email provided';
+            if (document.getElementById('profile-role'))
+                document.getElementById('profile-role').innerText = user.role === 'admin' ? 'Administrator' : 'Member';
+
+            // User Hub ID
+            const idEl = document.getElementById('my-user-id');
+            if (idEl && user.id) idEl.innerText = user.id;
+            else if (idEl) idEl.innerText = 'Not synced yet';
+
+            const API_URL = window.API_URL || ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') ? (window.location.port === '3001' ? 'http://localhost:3001' : 'http://localhost:3000') : 'https://smart-hub-f5gw.onrender.com');
+
+            // Populate avatar
+            const avatarUrl = user.photo
+                ? (user.photo.startsWith('http') ? user.photo : `${API_URL}${user.photo.startsWith('/') ? user.photo : '/' + user.photo}`)
+                : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'User')}&background=random`;
+            const avatarEl = document.getElementById('profile-avatar-large');
+            if (avatarEl) avatarEl.src = avatarUrl;
+
+            // Set preferences
+            const selectUnit = document.getElementById('pref-unit-weight');
+            if (selectUnit && user.preferences) selectUnit.value = user.preferences.unitWeight || 'kg';
+
+            // Load Stats
+            const history = JSON.parse(localStorage.getItem('calc_history') || '[]');
+            if (document.getElementById('stat-tools-used'))
+                document.getElementById('stat-tools-used').innerText = history.length;
+
+            // Activity Feed
+            const feedEl = document.getElementById('profile-activity-feed');
+            if (feedEl && history.length > 0) {
+                feedEl.innerHTML = history.slice(0, 5).map(item => {
+                    const time = new Date(item.timestamp || Date.now()).toLocaleString([], { 
+                        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+                    });
+                    const result = item.results && item.results[0] ? item.results[0].val : '&#8364;'; // Fix broken euro symbol
+                    return `
+                    <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl hover:bg-indigo-50 transition-all cursor-pointer border border-transparent hover:border-indigo-100">
+                        <div class="w-9 h-9 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <span class="material-symbols-outlined text-sm">bolt</span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-bold text-on-surface truncate">${item.name || 'Tool'}</p>
+                            <p class="text-[10px] text-slate-400 font-medium truncate">${result}</p>
+                        </div>
+                        <span class="text-[9px] font-bold text-slate-300 uppercase whitespace-nowrap">${time}</span>
+                    </div>`;
+                }).join('');
+            }
+
+            // ─── FRIENDS SYSTEM ───
+            const API = API_URL;
+
+            const renderFriends = (friends) => {
+                const container = document.getElementById('friends-grid');
+                const countEl = document.getElementById('stat-friends-count');
+                if (!container) return;
+                if (countEl) countEl.innerText = friends.length || 0;
+
+                if (!friends || friends.length === 0) {
+                    container.innerHTML = '<p class="text-slate-400 text-sm italic col-span-full text-center py-6">No friends yet. Share your Hub ID to connect!</p>';
+                    return;
+                }
+                container.innerHTML = friends.map(f => {
+                    const name = f.name || f.username || 'User';
+                    const targetId = String(f._id || f.id);
+                    const avatarSrc = f.photo
+                        ? (f.photo.startsWith('http') ? f.photo : `${API}${f.photo.startsWith('/') ? f.photo : '/' + f.photo}`)
+                        : `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
+                    return `
+                    <div onclick="window.openFriendChat('${targetId}', '${name.replace(/'/g, "\\'")}', '${avatarSrc.replace(/'/g, "\\'")}')" class="friend-card p-3 bg-slate-50 rounded-2xl border border-slate-100 flex items-center gap-3 hover:border-indigo-200 hover:bg-indigo-50 cursor-pointer shadow-sm">
+                        <img src="${avatarSrc}" alt="${name}" class="w-10 h-10 rounded-full object-cover flex-shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random'">
+                        <div class="overflow-hidden">
+                            <p class="text-xs font-bold text-on-surface truncate">${name}</p>
+                            <p class="text-[9px] text-slate-400 font-medium truncate">@${f.username || 'user'}</p>
+                        </div>
+                        <div class="ml-auto flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span class="material-symbols-outlined text-[10px]">chat</span>
+                        </div>
+                    </div>`;
+                }).join('');
+            };
+
+
+            const loadFriends = async () => {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    renderFriends([]);
+                    return;
+                }
+                try {
+                    const res = await fetch(`${API}/api/auth/friends`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (!res.ok) throw new Error('Fetch failed');
+                    const friends = await res.json();
+                    localStorage.setItem('friend_list', JSON.stringify(friends));
+                    renderFriends(friends);
+                } catch (e) {
+                    // Offline fallback: use cached list
+                    const cached = JSON.parse(localStorage.getItem('friend_list') || '[]');
+                    renderFriends(cached);
+                }
+            };
+
+            window.addFriendById = async () => {
+                const btn = document.getElementById('add-friend-btn');
+                const idInput = document.getElementById('friend-id-input');
+                const targetId = idInput ? idInput.value.trim() : '';
+                if (!targetId) { 
+                    alert('Please paste a Hub ID first!'); 
+                    return; 
+                }
+
+                const orig = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+                try {
+                    const token = localStorage.getItem('token');
+                    const res = await fetch(`${API}/api/auth/friends/add`, {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}` 
+                        },
+                        body: JSON.stringify({ targetId })
+                    });
+                    const data = await res.json();
+                    if (res.ok) {
+                        idInput.value = '';
+                        btn.innerHTML = '<i class="fas fa-check"></i> Added!';
+                        btn.classList.add('bg-green-500');
+                        setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('bg-green-500'); }, 2000);
+                        loadFriends();
+                    } else {
+                        alert(data.message || 'Could not add friend.');
+                        btn.innerHTML = orig;
+                    }
+                } catch (e) {
+                    alert('Network error. Check your connection.');
+                    btn.innerHTML = orig;
+                } finally {
+                    btn.disabled = false;
+                }
+            };
+
+            window.copyMyId = () => {
+                const idText = document.getElementById('my-user-id').innerText;
+                if (!idText || idText === 'Not synced yet') {
+                    alert('Hub ID not available. Make sure you are logged in.');
+                    return;
+                }
+                navigator.clipboard.writeText(idText).then(() => {
+                    const badge = document.getElementById('my-user-id');
+                    const orig = badge.style.background;
+                    badge.style.background = '#10b981';
+                    setTimeout(() => badge.style.background = orig, 1500);
+                }).catch(() => {
+                    prompt('Copy your Hub ID:', idText);
+                });
+            };
+
+            window.savePreferences = async () => {
+                const unit = document.getElementById('pref-unit-weight').value;
+                const token = localStorage.getItem('token');
+                const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+                if (!token || !currentUser.id) return;
+                try {
+                    const res = await fetch(`${API}/api/auth/profile`, {
+                        method: 'PUT',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}` 
+                        },
+                        body: JSON.stringify({ 
+                            id: currentUser.id, 
+                            preferences: { ...currentUser.preferences, unitWeight: unit } 
+                        })
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                        if (data.token) localStorage.setItem('token', data.token);
+                    }
+                } catch (e) {
+                    // Offline - save locally only
+                    currentUser.preferences = { ...currentUser.preferences, unitWeight: unit };
+                    localStorage.setItem('user', JSON.stringify(currentUser));
+                }
+            };
+
+            // ─── CHAT FUNCTIONALITY ───
+            let currentChatUserId = null;
+            
+            window.openFriendChat = async (friendId, friendName, avatarSrc) => {
+                currentChatUserId = friendId;
+                document.getElementById('chat-friend-name').innerText = friendName;
+                
+                const avatarEl = document.getElementById('chat-friend-avatar');
+                avatarEl.src = avatarSrc;
+                avatarEl.onerror = function() {
+                    this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(friendName)}&background=random`;
+                };
+                document.getElementById('friend-chat-modal').classList.remove('hidden');
+                
+                const msgArea = document.getElementById('chat-messages-container');
+                msgArea.innerHTML = '<p class="text-center text-xs text-slate-400 font-bold uppercase tracking-widest my-10">Loading chat...</p>';
+                
+                try {
+                    const token = localStorage.getItem('token');
+                    const res = await fetch(`${API}/api/auth/messages/chat/${friendId}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    const history = await res.json();
+                    
+                    const myId = user.id;
+                    
+                    if (!Array.isArray(history) || history.length === 0) {
+                        msgArea.innerHTML = `<div class="text-center my-10"><span class="material-symbols-outlined text-indigo-200 text-4xl mb-2">waving_hand</span><p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Say hi to ${friendName}!</p></div>`;
+                    } else {
+                        msgArea.innerHTML = history.map(m => {
+                            const isMe = String(m.fromId) === String(myId);
+                            return `
+                            <div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
+                                <div class="max-w-[80%] ${isMe ? 'bg-indigo-600 text-white rounded-l-2xl rounded-tr-2xl' : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-100 dark:border-[#1e293b] rounded-r-2xl rounded-tl-2xl'} px-4 py-2.5 shadow-sm text-sm">
+                                    <p style="word-break: break-word;">${m.message}</p>
+                                    <span class="text-[9px] ${isMe ? 'text-indigo-200' : 'text-slate-400'} mt-1 block ${isMe ? 'text-right' : 'text-left'}">${new Date(m.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                </div>
+                            </div>`;
+                        }).join('');
+                        msgArea.scrollTop = msgArea.scrollHeight;
+                    }
+                } catch(e) {
+                    msgArea.innerHTML = '<p class="text-center text-red-500 text-xs">Could not load messages.</p>';
+                }
+            };
+            
+            window.sendFriendChat = async () => {
+                if (!currentChatUserId) return;
+                const input = document.getElementById('chat-message-input');
+                const message = input.value.trim();
+                if (!message) return;
+                
+                const btn = input.nextElementSibling;
+                btn.disabled = true;
+                
+                try {
+                    const token = localStorage.getItem('token');
+                    const res = await fetch(`${API}/api/auth/messages/chat`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                        body: JSON.stringify({ toUserId: currentChatUserId, message })
+                    });
+                    if (!res.ok) throw new Error('Failed');
+                    
+                    input.value = '';
+                    input.style.height = 'auto'; // reset textarea
+                    
+                    // Render message locally
+                    const msgArea = document.getElementById('chat-messages-container');
+                    const placeholder = msgArea.querySelector('.text-center.my-10');
+                    if (placeholder) placeholder.remove();
+                    
+                    const html = `
+                    <div class="flex justify-end">
+                        <div class="max-w-[80%] bg-indigo-600 text-white rounded-l-2xl rounded-tr-2xl px-4 py-2.5 shadow-sm text-sm" style="animation: zoomIn 0.2s ease-out">
+                            <p style="word-break: break-word;">${message}</p>
+                            <span class="text-[9px] text-indigo-200 mt-1 block text-right">Just now</span>
+                        </div>
+                    </div>`;
+                    msgArea.insertAdjacentHTML('beforeend', html);
+                    msgArea.scrollTop = msgArea.scrollHeight;
+                } catch (e) {
+                    alert('Failed to send message.');
+                } finally {
+                    btn.disabled = false;
+                }
+            };
+
+            // Auto-resize chat textarea
+            const chatInput = document.getElementById('chat-message-input');
+            if(chatInput) {
+                chatInput.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = (this.scrollHeight) + 'px';
+                });
+                chatInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        window.sendFriendChat();
+                    }
+                });
+            }
+
+            // Initial load
+            loadFriends();
+        });
+    </script>
+
+    
+
+
+
+
+
+
+
+
+    <script src="/js/app.js"></script>
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>

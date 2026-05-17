@@ -1,0 +1,419 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | Tic Tac Toe</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .cell-pop { animation: cell-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes cell-in { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .win-glow { animation: win-pulse 2s infinite; }
+        @keyframes win-pulse { 0%, 100% { background-color: rgba(139, 92, 246, 0.1); } 50% { background-color: rgba(139, 92, 246, 0.3); } }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="pt-24 pb-20 px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2">Tic Tac Toe.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Classic Tic Tac Toe with unbeatable CPU AI.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">Match History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent games.</p>
+                    </div>
+                </div>
+            
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="game_connect4.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Connect 4</div>
+                            </div>
+                        </a>
+                        <a href="calc_coin_flipper.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Coin Flip</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-xl p-2 shadow-2xl overflow-hidden">
+                    <div class="bg-surface-container-lowest m-4 rounded-xl p-8 flex flex-col items-center justify-center min-h-[350px] shadow-inner relative">
+                        <div class="absolute top-8 left-8 flex gap-2">
+                            <span class="px-2 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-bold tracking-widest uppercase">Tic Tac Toe</span>
+                            <span class="px-2 py-1 rounded bg-slate-100 text-[#7a614d] text-[10px] font-bold tracking-widest uppercase" id="game-status">Ready</span>
+                        </div>
+                        <div id="status-text" class="mb-8 text-xs font-black text-on-surface-variant uppercase tracking-[0.2em]">Player X's turn</div>
+                        <div class="relative group w-full max-w-[350px] aspect-square">
+                            <!-- Game Over Overlay -->
+                            <div id="game-overlay" class="absolute inset-0 z-20 bg-white/80 backdrop-blur-md flex flex-col items-center justify-center rounded-2xl opacity-0 pointer-events-none transition-all duration-500 scale-95 border-4 border-primary/20 shadow-2xl">
+                                <span id="overlay-status-icon" class="material-symbols-outlined text-6xl text-primary mb-2">military_tech</span>
+                                <h2 id="overlay-status-text" class="text-3xl font-black text-[#1f2937] tracking-tighter uppercase mb-6 leading-none italic text-center">Match Over</h2>
+                                <button onclick="resetBoard()" class="bg-primary text-white px-10 py-4 rounded-xl font-bold text-xs tracking-widest hover:shadow-xl transition-all uppercase italic shadow-lg shadow-primary/20">Play Again</button>
+                            </div>
+                            <div id="board" class="grid grid-cols-3 gap-3 w-full h-full relative z-10">
+                                <!-- Cells will go here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-8 space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                            <div onclick="startCPU()" id="mode-cpu" class="p-6 bg-primary/10 border-2 border-primary rounded-2xl cursor-pointer transition-all hover:scale-105 group">
+                                <span class="material-symbols-outlined text-primary mb-2 text-3xl">smart_toy</span>
+                                <h4 class="text-xs font-bold text-primary tracking-tight">Play Computer</h4>
+                                <p class="text-[10px] text-primary/60 font-medium mt-1">Unbeatable AI</p>
+                            </div>
+                            <div onclick="startLocal()" id="mode-local" class="p-6 bg-white border border-slate-200 rounded-2xl cursor-pointer transition-all hover:scale-105 group">
+                                <span class="material-symbols-outlined text-slate-400 mb-2 text-3xl group-hover:text-primary transition-colors">group</span>
+                                <h4 class="text-xs font-bold text-slate-800 tracking-tight">With a Friend</h4>
+                                <p class="text-[10px] text-slate-400 font-medium mt-1">Take turns on one screen</p>
+                            </div>
+                            <div onclick="startOnline()" class="p-6 bg-white border border-slate-200 rounded-2xl cursor-pointer transition-all hover:scale-105 group opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all">
+                                <span class="material-symbols-outlined text-slate-400 mb-2 text-3xl group-hover:text-primary transition-colors">hub</span>
+                                <h4 class="text-xs font-bold text-slate-800 tracking-tight">Online Match</h4>
+                                <p class="text-[10px] text-slate-400 font-medium mt-1">Available soon</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pb-6 border-b border-surface-container-high mb-6">
+                            <div class="flex gap-4 items-center">
+                                <div class="px-4 py-2 bg-on-secondary-fixed/5 border border-on-secondary-fixed/20 rounded-lg">
+                                    <span class="text-[9px] font-black text-on-surface-variant uppercase block">Player X</span>
+                                    <strong id="label-x" class="text-xs font-bold text-rose-500 uppercase tracking-widest italic">You</strong>
+                                </div>
+                                <div class="px-4 py-2 bg-on-secondary-fixed/5 border border-on-secondary-fixed/20 rounded-lg">
+                                    <span class="text-[9px] font-black text-on-surface-variant uppercase block">Player O</span>
+                                    <strong id="label-o" class="text-xs font-bold text-primary uppercase tracking-widest italic">AI</strong>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <select id="cpu-difficulty" class="bg-surface-container border-none rounded-xl text-xs font-bold px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all">
+                                    <option value="easy">Easy</option>
+                                    <option value="med">Medium</option>
+                                    <option value="hard">Hard</option>
+                                    <option value="master" selected>Expert</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center justify-between gap-4">
+                            <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Game in progress</div>
+                            <div class="flex gap-4">
+                                <button onclick="resetBoard()" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-xs tracking-widest hover:shadow-xl transition-all uppercase italic">Restart Game</button>
+                                <button onclick="quitGame()" class="p-4 bg-surface-container rounded-xl text-on-surface-variant hover:text-rose-500 transition-colors">
+                                    <span class="material-symbols-outlined">power_settings_new</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let boardState = ['', '', '', '', '', '', '', '', ''];
+        let currentPlayer = 'X';
+        let isGameActive = false;
+        let playMode = 'local';
+
+        const boardEl = document.getElementById('board');
+        const statusText = document.getElementById('status-text');
+        const labelX = document.getElementById('label-x');
+        const labelO = document.getElementById('label-o');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('Tic Tac Toe', 'sidebar-history-container');
+            createBoard();
+        });
+
+        function createBoard() {
+            boardEl.innerHTML = '';
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'bg-surface-container-low border border-surface-container-high rounded-xl flex items-center justify-center text-4xl font-extrabold cursor-pointer transition-all hover:border-primary/50';
+                cell.dataset.index = i;
+                cell.addEventListener('click', handleCellClick);
+                boardEl.appendChild(cell);
+            }
+        }
+
+        function handleCellClick(e) {
+            if (!isGameActive) return;
+            const index = e.target.dataset.index;
+            if (boardState[index] !== '') return;
+            if (playMode === 'cpu' && currentPlayer !== 'X') return;
+
+            makeMove(index, currentPlayer);
+            
+            if (playMode === 'cpu' && isGameActive) {
+                statusText.innerText = "Computer is thinking...";
+                setTimeout(makeCPUMove, 600);
+            }
+        }
+
+        function makeMove(index, symbol) {
+            boardState[index] = symbol;
+            const cell = boardEl.children[index];
+            cell.textContent = symbol;
+            cell.classList.add('cell-pop');
+            cell.classList.add(symbol === 'X' ? 'text-rose-500' : 'text-primary');
+            currentPlayer = symbol === 'X' ? 'O' : 'X';
+            checkGameState();
+        }
+
+        function checkGameState() {
+            const lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            let winObj = null;
+            for (let l of lines) {
+                if (boardState[l[0]] && boardState[l[0]] === boardState[l[1]] && boardState[l[0]] === boardState[l[2]]) {
+                    winObj = { winner: boardState[l[0]], pattern: l };
+                    break;
+                }
+            }
+
+            if (winObj) {
+                isGameActive = false;
+                winObj.pattern.forEach(i => boardEl.children[i].classList.add('win-glow')); 
+                
+                let resultText = "";
+                if(playMode === 'cpu') resultText = winObj.winner === 'X' ? "You Won!" : "AI Won!";
+                else resultText = winObj.winner === 'X' ? "Player X Won!" : "Player O Won!";
+                
+                showOverlay(resultText, winObj.winner === 'X' ? 'trophy' : 'sentiment_very_dissatisfied');
+                saveResolution(winObj.winner);
+            } else if (!boardState.includes('')) {
+                isGameActive = false;
+                showOverlay("It's a tie!", 'handshake');
+                saveResolution('TIE');
+            } else {
+                statusText.innerText = `${currentPlayer === 'X' ? 'Your' : 'AI'} turn`;
+            }
+        }
+
+        function showOverlay(text, icon) {
+            const over = document.getElementById('game-overlay');
+            const overText = document.getElementById('overlay-status-text');
+            const overIcon = document.getElementById('overlay-status-icon');
+            
+            overText.innerText = text;
+            overIcon.innerText = icon;
+            
+            over.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+            over.classList.add('opacity-100', 'pointer-events-auto', 'scale-100');
+        }
+
+        function hideOverlay() {
+            const over = document.getElementById('game-overlay');
+            over.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+            over.classList.remove('opacity-100', 'pointer-events-auto', 'scale-100');
+        }
+
+        function resetBoard() {
+            boardState = ['', '', '', '', '', '', '', '', ''];
+            currentPlayer = 'X';
+            isGameActive = true;
+            hideOverlay();
+            document.getElementById('game-status').innerText = "Ready";
+            Array.from(boardEl.children).forEach((cell, idx) => {
+                cell.textContent = '';
+                cell.className = 'bg-surface-container-low border border-surface-container-high rounded-xl flex items-center justify-center text-4xl font-extrabold cursor-pointer transition-all hover:border-primary/50';
+            });
+            statusText.innerText = "Your turn!";
+        }
+
+        function startCPU() {
+            playMode = 'cpu';
+            labelX.textContent = "You";
+            labelO.textContent = "AI";
+            updateModeUI('cpu');
+            resetBoard();
+        }
+
+        function startLocal() {
+            playMode = 'local';
+            labelX.textContent = "Player X";
+            labelO.textContent = "Player O";
+            updateModeUI('local');
+            resetBoard();
+        }
+
+        function startOnline() {
+            alert("Online Tic Tac Toe coming soon!");
+            window.location.href = '/GameLobby.html';
+        }
+
+        function updateModeUI(m) {
+            document.getElementById('mode-cpu').className = `p-6 ${m==='cpu'?'bg-primary/10 border-2 border-primary':'bg-white border border-slate-200'} rounded-2xl cursor-pointer transition-all hover:scale-105 group`;
+            document.getElementById('mode-local').className = `p-6 ${m==='local'?'bg-primary/10 border-2 border-primary':'bg-white border border-slate-200'} rounded-2xl cursor-pointer transition-all hover:scale-105 group`;
+            
+            const cpuIcon = document.getElementById('mode-cpu').querySelector('span');
+            const localIcon = document.getElementById('mode-local').querySelector('span');
+            const cpuText = document.getElementById('mode-cpu').querySelector('h4');
+            const localText = document.getElementById('mode-local').querySelector('h4');
+
+            if(m==='cpu') {
+                cpuIcon.className = 'material-symbols-outlined text-primary mb-2 text-3xl';
+                cpuText.className = 'text-xs font-bold text-primary tracking-tight';
+                localIcon.className = 'material-symbols-outlined text-slate-400 mb-2 text-3xl group-hover:text-primary transition-colors';
+                localText.className = 'text-xs font-bold text-slate-800 tracking-tight';
+            } else {
+                localIcon.className = 'material-symbols-outlined text-primary mb-2 text-3xl';
+                localText.className = 'text-xs font-bold text-primary tracking-tight';
+                cpuIcon.className = 'material-symbols-outlined text-slate-400 mb-2 text-3xl group-hover:text-primary transition-colors';
+                cpuText.className = 'text-xs font-bold text-slate-800 tracking-tight';
+            }
+        }
+
+        function quitGame() { location.reload(); }
+
+        function minimax(board, depth, isMaximizingPlayer) {
+            const winner = getWinner(board);
+            if (winner === 'O') return 10 - depth;
+            if (winner === 'X') return depth - 10;
+            if (!board.includes('')) return 0;
+            if (depth > 8) return 0;
+
+            let bestScore = isMaximizingPlayer ? -Infinity : Infinity;
+            for (let i = 0; i < 9; i++) {
+                if (board[i] === '') {
+                    board[i] = isMaximizingPlayer ? 'O' : 'X';
+                    const score = minimax(board, depth + 1, !isMaximizingPlayer);
+                    board[i] = '';
+                    if (isMaximizingPlayer) {
+                        bestScore = Math.max(score, bestScore);
+                    } else {
+                        bestScore = Math.min(score, bestScore);
+                    }
+                }
+            }
+            return bestScore;
+        }
+
+        function getWinner(board) {
+            const lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            for(let l of lines) { 
+                if(board[l[0]] && board[l[0]] === board[l[1]] && board[l[0]] === board[l[2]]) return board[l[0]]; 
+            }
+            return null;
+        }
+
+        function makeCPUMove() {
+            if (!isGameActive) return;
+            const diff = document.getElementById('cpu-difficulty').value;
+            const avail = boardState.map((v, i) => v === '' ? i : null).filter(Boolean);
+            
+            let move = avail[Math.floor(Math.random() * avail.length)];
+            let bestScore = -Infinity;
+            let bestMoves = [];
+
+            if (diff !== 'easy') {
+                for (let i = 0; i < 9; i++) {
+                    if (boardState[i] === '') {
+                        boardState[i] = 'O';
+                        let score = minimax(boardState, 0, false);
+                        boardState[i] = '';
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestMoves = [i];
+                        } else if (score === bestScore) {
+                            bestMoves.push(i);
+                        }
+                    }
+                }
+                move = bestMoves[Math.floor(Math.random() * bestMoves.length)] || move;
+            }
+
+            if (move !== undefined && move !== null) makeMove(move, 'O');
+        }
+
+        async function saveResolution(winner) {
+            const inputs = [{ label: 'Mode', val: playMode.toUpperCase() }];
+            const results = [{ label: 'Winner', val: winner }];
+            try {
+                await window.saveCalcToHistory('Tic Tac Toe', inputs, results);
+                initSidebarHistory('Tic Tac Toe', 'sidebar-history-container');
+            } catch (e) {
+                console.log('History save failed:', e);
+            }
+        }
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    
+
+
+
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+

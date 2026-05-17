@@ -1,0 +1,343 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Hub | 555 Timer Calculator</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/design-system.css">
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c96f32",
+                        surface: "#f7f2e8",
+                        "on-surface": "#1f2937",
+                        "on-surface-variant": "#7a614d",
+                        "surface-container-low": "#fbe9cd",
+                        "surface-container-lowest": "#fff2dd",
+                        "surface-container-high": "#e7cda9",
+                        "surface-container": "#f4dfbe",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root { --primary-color: #0f766e; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .mode-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mode-btn.active { 
+            background: #0f766e; 
+            color: white; 
+            box-shadow: 0 10px 20px -5px rgba(139, 92, 246, 0.4);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
+    <div id="header-placeholder"></div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+
+            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+        <div class="mb-12">
+            
+<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2">555 Timer.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Design stable oscillators and timers with ease! Calculate the frequency, duty cycle, and period for Astable and Monostable 555 timer circuits.</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <!-- Sidebar -->
+            <div class="col-span-12 lg:col-span-4 space-y-8">
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(139,92,246,0.06)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800">History</h3>
+                        <span onclick="clearSidebarHistory()" class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" title="Clear History">delete_sweep</span>
+                    </div>
+                    <div class="space-y-6" id="sidebar-history-container">
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent records.</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <div class="space-y-4">
+                        <a href="/calculators/electronics/calc_capacitor_code.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Capacitor Code</div>
+                            </div>
+                        </a>
+                        <a href="/calculators/electronics/calc_frequency.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
+                            <div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
+                                <div class="text-xs font-bold text-on-surface uppercase">Frequency Calc</div>
+                            </div>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-span-12 lg:col-span-8">
+                <div class="bg-surface-container-low rounded-2xl p-2 shadow-2xl overflow-hidden mb-8">
+                    <!-- Display -->
+                    <div class="bg-surface-container-lowest m-4 rounded-xl p-12 text-right flex flex-col justify-end min-h-[260px] shadow-inner relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                        <div class="absolute top-8 left-8 flex gap-2">
+                            <span class="px-3 py-1 rounded bg-secondary-fixed text-on-secondary-fixed text-[10px] font-black tracking-widest uppercase" id="mode-tag">ASTABLE MODE</span>
+                            <span class="px-3 py-1 rounded bg-slate-100 text-[#7a614d] text-[10px] font-black tracking-widest uppercase" id="duty-tag">--- DUTY</span>
+                        </div>
+                        <div id="calc-status" class="text-on-surface-variant text-xl font-medium tracking-tight mb-2 min-h-[28px]">Enter values above...</div>
+                        <div id="calc-display" class="text-7xl font-black tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden leading-tight font-mono">
+                            <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0.00 Hz
+                        </div>
+                    </div>
+
+                    <!-- Mode Toggle -->
+                    <div class="px-8 flex gap-4">
+                        <button onclick="setMode('astable')" id="btn-astable" class="mode-btn active flex-1 py-4 rounded-xl font-bold text-[10px] tracking-widest uppercase border-2 border-surface-container-high hover:border-primary/20 transition-all">Astable</button>
+                        <button onclick="setMode('monostable')" id="btn-monostable" class="mode-btn flex-1 py-4 rounded-xl font-bold text-[10px] tracking-widest uppercase border-2 border-surface-container-high hover:border-primary/20 transition-all">Monostable</button>
+                    </div>
+
+                    <!-- Inputs -->
+                    <div class="p-8 space-y-12">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <div class="space-y-6">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Core Components</h4>
+                                <div class="space-y-5">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Resistor R1 (Î©)</label>
+                                        <div class="relative group">
+                    <input type="number" id="r1" value="" oninput="calculate555()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-5 py-4 font-bold text-on-surface focus:ring-2 focus:ring-primary transition-all outline-none" placeholder="10000">
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2" id="r2-box">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Resistor R2 (Î©)</label>
+                                        <div class="relative group">
+                                            <input type="number" id="r2" value="" oninput="calculate555()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-5 py-4 font-bold text-on-surface focus:ring-2 focus:ring-primary transition-all outline-none" placeholder="10000">
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Capacitor C1 (ÂµF)</label>
+                                        <div class="relative group">
+                                            <input type="number" id="c1" value="" oninput="calculate555()" class="w-full bg-surface-container border-2 border-transparent focus:border-primary/30 rounded-xl px-5 py-4 font-bold text-on-surface focus:ring-2 focus:ring-primary transition-all outline-none" placeholder="1">
+                                            <span class="absolute right-5 top-1/2 -translate-y-1/2 text-xs font-black text-on-surface-variant opacity-40">ÂµF</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-6">
+                                <h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Signal Analysis</h4>
+                                <div class="bg-primary/5 border border-primary/20 rounded-2xl p-8 space-y-6">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center shadow-lg">
+                                            <span class="material-symbols-outlined">analytics</span>
+                                        </div>
+                                        <div>
+                                            <span id="periodValue" class="text-3xl font-black text-on-surface">0.00 ms</span>
+                                            <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest block opacity-60">Total Period (T)</span>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2 pt-4 border-t border-primary/10">
+                                        <span class="text-[10px] font-black text-primary uppercase tracking-widest block">Pro Tip</span>
+                                        <p id="pro-tip" class="text-xs text-on-surface-variant leading-relaxed font-medium italic">Astable mode creates a continuous square wave. Monostable creates a single pulse.</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="p-5 bg-surface-container rounded-xl text-center">
+                                        <span id="resHigh" class="text-xl font-black text-on-surface block truncate">0.00 ms</span>
+                                        <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">High Time</span>
+                                    </div>
+                                    <div class="p-5 bg-surface-container rounded-xl text-center">
+                                        <span id="resLow" class="text-xl font-black text-on-surface block truncate">0.00 ms</span>
+                                        <span class="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">Low Time</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-8 border-t border-surface-container-high">
+                            <p class="text-[10px] font-mono text-on-surface-variant font-bold max-w-xs uppercase tracking-widest leading-loose">
+                                LIMIT: MIN DC > 50% (ASTABLE)
+                            </p>
+                            <button onclick="save555Log()" id="saveBtn" class="bg-primary text-white px-10 py-5 rounded-xl font-bold text-[10px] tracking-widest hover:shadow-xl transition-all uppercase hover:scale-[1.02] active:scale-95">Save to History</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Block -->
+                <div class="bg-surface-container p-10 rounded-2xl border border-surface-container-high italic text-[11px] text-on-surface-variant leading-relaxed text-center opacity-70">
+                    "Circuit Tip: In Astable mode, the high time (output = high) is always longer than the low time because C1 charges through R1+R2 but only discharges through R2. To get close to 50% duty cycle, make R2 much larger than R1."
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    
+    
+
+
+    <script src="/js/calc-utils.js"></script>
+    <script>
+        let currentMode = 'astable';
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('btn-astable').classList.toggle('active', mode === 'astable');
+            document.getElementById('btn-monostable').classList.toggle('active', mode === 'monostable');
+            document.getElementById('r2-box').style.display = (mode === 'astable' ? 'block' : 'none');
+            document.getElementById('mode-tag').innerText = mode.toUpperCase() + ' MODE';
+            calculate555();
+        }
+
+        function calculate555() {
+            const r1 = parseFloat(document.getElementById('r1').value);
+            const r2 = parseFloat(document.getElementById('r2').value) || 0;
+            const cuf = parseFloat(document.getElementById('c1').value);
+
+            const display = document.getElementById('calc-display');
+            const statusText = document.getElementById('calc-status');
+            const dutyTag = document.getElementById('duty-tag');
+            const periodEl = document.getElementById('periodValue');
+            const highEl = document.getElementById('resHigh');
+            const lowEl = document.getElementById('resLow');
+            const tip = document.getElementById('pro-tip');
+
+            if (isNaN(r1) || isNaN(cuf) || r1 <= 0 || cuf <= 0) {
+                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0.00 Hz`;
+                statusText.innerText = "Awaiting components...";
+                periodEl.innerText = "0.00 ms";
+                highEl.innerText = "0.00 ms";
+                lowEl.innerText = "0.00 ms";
+                dutyTag.innerText = "--- DUTY";
+                return;
+            }
+
+            const c = cuf * 1e-6; // Convert ÂµF to F
+
+            if (currentMode === 'astable') {
+                if (r2 <= 0) {
+                    display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>ERROR`;
+                    statusText.innerText = "R2 must be > 0";
+                    return;
+                }
+
+                const log2 = Math.LN2;
+                const th = 0.693 * (r1 + r2) * c;
+                const tl = 0.693 * r2 * c;
+                const period = th + tl;
+                const freq = 1 / period;
+                const duty = (th / period) * 100;
+
+                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${freq > 1000 ? (freq/1000).toFixed(2) + ' kHz' : freq.toFixed(2) + ' Hz'}`;
+                statusText.innerText = "Oscillation frequency resolved";
+                dutyTag.innerText = duty.toFixed(1) + "% DUTY";
+                periodEl.innerText = (period * 1000).toFixed(2) + " ms";
+                highEl.innerText = (th * 1000).toFixed(2) + " ms";
+                lowEl.innerText = (tl * 1000).toFixed(2) + " ms";
+                
+                tip.innerText = `At ${freq.toFixed(2)}Hz, each cycle lasts ${(period * 1000).toFixed(2)}ms. The output is HIGH for ${duty.toFixed(1)}% of the time.`;
+
+            } else {
+                // Monostable: pulse width T = 1.1 * R1 * C
+                const t = 1.1 * r1 * c;
+                display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${t.toFixed(4)} s`;
+                statusText.innerText = "One-shot pulse duration (T)";
+                dutyTag.innerText = "ONE-SHOT";
+                periodEl.innerText = (t * 1000).toFixed(2) + " ms";
+                highEl.innerText = (t * 1000).toFixed(2) + " ms";
+                lowEl.innerText = "N/A";
+
+                tip.innerText = `A trigger will generate a single square pulse lasting for ${t.toFixed(3)} seconds.`;
+            }
+        }
+
+        async function save555Log() {
+            const val = document.getElementById('calc-display').innerText.trim();
+            if (val.includes('0.00') || val === 'ERROR') return;
+
+            const btn = document.getElementById('saveBtn');
+            const orig = btn.innerText;
+            btn.innerText = 'SAVING...';
+            btn.disabled = true;
+
+            const inputs = [
+                { label: 'Mode', val: currentMode.toUpperCase() },
+                { label: 'R1/C1', val: `${document.getElementById('r1').value}Î© / ${document.getElementById('c1').value}ÂµF` }
+            ];
+            const results = [
+                { label: 'Value', val: val, highlight: true },
+                { label: 'High Time', val: document.getElementById('resHigh').innerText }
+            ];
+
+            try {
+                const ok = await window.saveCalcToHistory('555 Timer', inputs, results);
+                if (ok) {
+                    btn.innerText = 'SAVED';
+                    btn.classList.add('bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerText = orig;
+                        btn.classList.remove('bg-emerald-600');
+                        btn.disabled = false;
+                        if (typeof initSidebarHistory === 'function') {
+                            initSidebarHistory('555 Timer', 'sidebar-history-container');
+                        }
+                    }, 2000);
+                } else {
+                    btn.innerText = orig;
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                btn.innerText = orig;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            calculate555();
+            try {
+                if (typeof initSidebarHistory === 'function') {
+                    initSidebarHistory('555 Timer', 'sidebar-history-container');
+                }
+            } catch(e){}
+        });
+    </script>
+    <script type="module" src="/js/script.js"></script>
+
+    <!-- Unified Footer -->
+    
+
+    <script src="/js/app.js"></script>
+    
+
+    <script src="/js/component-loader.js"></script>
+</body>
+</html>
+
