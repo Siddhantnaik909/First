@@ -89,14 +89,7 @@ body:not(.dark-mode):not(.no-theme-overrides) .bg-surface-container {
     color: var(--text-header) !important;
 }
 
-body:not(.dark-mode):not(.no-theme-overrides) nav.fixed {
-    background: rgba(239, 207, 150, 0.92) !important;
-    border-bottom: 1px solid rgba(166, 112, 57, 0.16);
-}
 
-body:not(.dark-mode):not(.no-theme-overrides) footer {
-    background-color: #efcf96 !important;
-}
 
 body:not(.dark-mode):not(.no-theme-overrides) .border-slate-100,
 body:not(.dark-mode):not(.no-theme-overrides) .border-slate-200,
