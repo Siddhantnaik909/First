@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 
 <head>
@@ -138,7 +138,7 @@
             <div id="calc-display"
               class="text-7xl font-extrabold tracking-tighter text-on-surface flex items-center justify-end gap-2 overflow-hidden">
               <span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>0.0 <span
-                class="text-2xl font-bold text-on-surface-variant uppercase tracking-widest ml-4">ftÂ²</span>
+                 class="text-2xl font-bold text-on-surface-variant uppercase tracking-widest ml-4">ft²</span>
             </div>
           </div>
           <!-- Controls -->
@@ -152,13 +152,13 @@
                     <label class="text-[10px] font-bold text-on-surface-variant uppercase ml-1">Length (ft)</label>
                     <input type="number" id="buildLength" oninput="calculateRoof()"
                       class="w-full bg-surface-container-lowest border border-surface-container-high rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-lg"
-                      placeholder="40" value="">
+                      placeholder="40" value="40">
                   </div>
                   <div class="space-y-2">
                     <label class="text-[10px] font-bold text-on-surface-variant uppercase ml-1">Width (ft)</label>
                     <input type="number" id="buildWidth" oninput="calculateRoof()"
                       class="w-full bg-surface-container-lowest border border-surface-container-high rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-lg"
-                      placeholder="30" value="">
+                      placeholder="30" value="30">
                   </div>
                 </div>
               </div>
@@ -202,8 +202,7 @@
             <div class="flex items-center gap-3 mb-4">
               <span class="material-symbols-outlined text-primary">analytics</span>
               <h5 class="font-bold uppercase tracking-widest text-[10px]">Slope Analysis</h5>
-            </div>
-            <table class="pitch-table w-full">
+            </div>            <table class="pitch-table w-full">
               <thead>
                 <tr class="bg-surface-container-high">
                   <th>Metric</th>
@@ -214,6 +213,14 @@
                 <tr>
                   <td>Slope Factor</td>
                   <td id="resSlopeFactor">1.1180</td>
+                </tr>
+                <tr>
+                  <td>Pitch Angle</td>
+                  <td id="resAngle">26.6°</td>
+                </tr>
+                <tr>
+                  <td>Rake Length (Per Side)</td>
+                  <td id="resRake">17.9 ft</td>
                 </tr>
                 <tr>
                   <td>Roof Squares</td>
@@ -242,6 +249,7 @@
 
   
     
+ 
 
 
   <script src="/js/calc-utils.js"></script>
@@ -270,15 +278,24 @@
       const roofArea = totalLen * totalWid * slopeFactor;
       const squares = roofArea / 100;
       const bundles = Math.ceil(squares * 3 * 1.1); // +10% waste
+      
+      const angle = (Math.atan(pitch / 12) * (180 / Math.PI)).toFixed(1);
+      const rake = ((totalWid / 2) * slopeFactor).toFixed(1);
 
       // Update UI
       const display = document.getElementById('calc-display');
       if (display) {
-        display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${roofArea.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} <span class="text-2xl font-bold text-on-surface-variant uppercase tracking-widest ml-4">ftÂ²</span>`;
+        display.innerHTML = `<span class="w-1 h-14 bg-primary animate-pulse rounded-full mr-2"></span>${roofArea.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} <span class="text-2xl font-bold text-on-surface-variant uppercase tracking-widest ml-4">ft²</span>`;
       }
 
       const resSlopeFactor = document.getElementById('resSlopeFactor');
       if (resSlopeFactor) resSlopeFactor.innerText = slopeFactor.toFixed(4);
+
+      const resAngle = document.getElementById('resAngle');
+      if (resAngle) resAngle.innerText = `${angle}°`;
+
+      const resRake = document.getElementById('resRake');
+      if (resRake) resRake.innerText = `${rake} ft`;
 
       const resSquares = document.getElementById('resSquares');
       if (resSquares) resSquares.innerText = `${squares.toFixed(2)} SQ`;
@@ -290,7 +307,7 @@
     async function saveRoofProject(event) {
       const displayEl = document.getElementById('calc-display');
       if (!displayEl) return;
-      const area = displayEl.innerText.replace(/ftÂ²/gi, '').trim();
+      const area = displayEl.innerText.replace(/ft²/gi, '').trim();
       if (area === '0.0' || !area) return;
 
       const btn = event.currentTarget;
@@ -303,7 +320,7 @@
         { label: 'Pitch', val: `${document.getElementById('roofPitch').value}/12` }
       ];
       const results = [
-        { label: 'Surface Area', val: area + ' ftÂ²', highlight: true },
+        { label: 'Surface Area', val: area + ' ft²', highlight: true },
         { label: 'Roof Squares', val: document.getElementById('resSquares').innerText }
       ];
 

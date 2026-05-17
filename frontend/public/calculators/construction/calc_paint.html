@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 
 <head>
@@ -148,9 +148,9 @@
                                         class="text-[10px] font-bold text-on-surface-variant uppercase ml-1">Material
                                         Porosity</label> <select id="porosity" onchange="updatePaint()"
                                         class="w-full bg-white border border-surface-container-high rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all font-bold">
-                                        <option value="400">Smooth / Primed (400 ftÂ²/gal)</option>
-                                        <option value="300">Rough / Unprimed (300 ftÂ²/gal)</option>
-                                        <option value="250">Textured / Brick (250 ftÂ²/gal)</option>
+                                        <option value="400">Smooth / Primed (400 ft²/gal)</option>
+                                        <option value="300">Rough / Unprimed (300 ft²/gal)</option>
+                                        <option value="250">Textured / Brick (250 ft²/gal)</option>
                                     </select> </div>
                             </div>
                             <div class="space-y-4">
@@ -204,7 +204,7 @@
                                     Req.</span><span id="resLiters" class="font-bold">0.00 L</span></div>
                             <div class="flex justify-between items-center"><span
                                     class="text-on-surface-variant">Paintable area</span><span id="resNetArea"
-                                    class="font-bold">0.00 ftÂ²</span></div>
+                                    class="font-bold">0.00 ft²</span></div>
                         </div>
                     </div>
                     <div
@@ -281,7 +281,7 @@
             if (resLiters) resLiters.innerText = `${liters.toFixed(2)} L`;
 
             const resNetArea = document.getElementById('resNetArea');
-            if (resNetArea) resNetArea.innerText = `${netArea.toFixed(0)} ftÂ²`;
+            if (resNetArea) resNetArea.innerText = `${netArea.toFixed(0)} ft²`;
         }
 
         async function savePaintProject(event) {
