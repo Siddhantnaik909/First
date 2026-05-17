@@ -86,7 +86,7 @@ const AuthSystem = {
             container.innerHTML = `
                 <div class="relative group" id="user-nav-dropdown">
                     <button class="flex items-center gap-3 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-all cursor-pointer" id="nav-profile-trigger">
-                        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xs">
+                        <div class="w-8 h-8 rounded-full bg-[#c96f32] flex items-center justify-center text-white font-bold text-xs">
                             ${(user.name || 'U').charAt(0).toUpperCase()}
                         </div>
                         <div class="text-left hidden sm:block">
@@ -109,7 +109,7 @@ const AuthSystem = {
                                 <span class="material-symbols-outlined text-sm">history</span> My History
                             </a>
                             ${user.role === 'admin' ? `
-                            <a href="/AdminDashboard.html" class="flex items-center gap-3 px-4 py-3 text-xs font-bold text-primary hover:bg-primary/10 rounded-xl transition-all">
+                            <a href="/AdminDashboard.html" class="flex items-center gap-3 px-4 py-3 text-xs font-bold text-[#c96f32] hover:bg-[#c96f32]/10 rounded-xl transition-all">
                                 <span class="material-symbols-outlined text-sm">dashboard</span> Admin Panel
                             </a>` : ''}
                             <div class="h-px bg-white/5 my-2"></div>
@@ -128,7 +128,7 @@ const AuthSystem = {
                         <div class="flex flex-col gap-2">
                             <a href="/profile.html" class="text-slate-400 text-sm font-bold py-2">Profile</a>
                             <a href="/history.html" class="text-slate-400 text-sm font-bold py-2">History</a>
-                            ${user.role === 'admin' ? '<a href="/AdminDashboard.html" class="text-primary text-sm font-bold py-2">Admin Panel</a>' : ''}
+                            ${user.role === 'admin' ? '<a href="/AdminDashboard.html" class="text-[#c96f32] text-sm font-bold py-2">Admin Panel</a>' : ''}
                             <button onclick="AuthSystem.logout()" class="text-rose-400 text-sm font-bold py-2 text-left">Logout</button>
                         </div>
                     </div>
@@ -139,14 +139,14 @@ const AuthSystem = {
             container.innerHTML = `
                 <div class="flex items-center gap-2">
                     <a href="/login.html" class="px-5 py-2 text-sm font-bold text-slate-300 hover:text-white transition-colors">Login</a>
-                    <a href="/signup.html" class="px-5 py-2 text-xs font-black bg-primary text-white rounded-xl shadow-lg shadow-primary/20 hover:scale-105 transition-all uppercase tracking-widest">Sign Up</a>
+                    <a href="/signup.html" class="px-5 py-2 text-xs font-black bg-[#c96f32] text-white rounded-xl shadow-lg shadow-[#c96f32]/20 hover:scale-105 transition-all uppercase tracking-widest">Sign Up</a>
                 </div>
             `;
             if (mobileContainer) {
                 mobileContainer.innerHTML = `
                     <div class="grid grid-cols-2 gap-4">
                         <a href="/login.html" class="flex items-center justify-center py-4 bg-slate-800 text-white font-bold rounded-xl">Login</a>
-                        <a href="/signup.html" class="flex items-center justify-center py-4 bg-primary text-white font-bold rounded-xl">Sign Up</a>
+                        <a href="/signup.html" class="flex items-center justify-center py-4 bg-[#c96f32] text-white font-bold rounded-xl">Sign Up</a>
                     </div>
                 `;
             }

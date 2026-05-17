@@ -168,8 +168,8 @@
                         <div class="max-w-[1440px] mx-auto w-full flex items-center justify-between">
                             <a href="/" class="font-black text-lg text-white uppercase tracking-tighter">SMART HUB</a>
                             <div class="flex gap-4">
-                                <a href="/login.html" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-primary">Login</a>
-                                <a href="/signup.html" class="px-4 py-2 text-sm font-semibold bg-primary text-white rounded-lg hover:bg-primary/90">Sign Up</a>
+                                <a href="/login.html" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-[#c96f32]">Login</a>
+                                <a href="/signup.html" class="px-4 py-2 text-sm font-semibold bg-[#c96f32] text-white rounded-lg hover:bg-[#c96f32]/90">Sign Up</a>
                             </div>
                         </div>
                     </nav>
