@@ -103,8 +103,8 @@ router.post('/register', async (req, res) => {
             user: { id: result.insertedId, name, email, role: role }
         });
     } catch (error) {
-        console.error('[Auth] Register error:', error.message);
-        res.status(error.status || 500).json({ message: 'Registration failed' });
+        console.error('[Auth] Register error:', error);
+        res.status(error.status || 500).json({ message: error.message || 'Registration failed' });
     }
 });
 
