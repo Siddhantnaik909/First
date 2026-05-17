@@ -247,6 +247,13 @@ app.get('/settings', (req, res) => res.sendFile(path.join(publicPath, 'settings.
 app.get('/contact',  (req, res) => res.sendFile(path.join(publicPath, 'contact.html')));
 app.get('/about',    (req, res) => res.sendFile(path.join(publicPath, 'about.html')));
 app.get('/admin',    (req, res) => res.sendFile(path.join(publicPath, 'admin.html')));
+app.get('/AdminDashboard', (req, res) => res.sendFile(path.join(publicPath, 'AdminDashboard.html')));
+app.get('/admin_mobile_trace', (req, res) => res.sendFile(path.join(publicPath, 'admin_mobile_trace.html')));
+app.get('/auth-callback', (req, res) => res.sendFile(path.join(publicPath, 'auth-callback.html')));
+app.get('/knowledge_base', (req, res) => res.sendFile(path.join(publicPath, 'knowledge_base.html')));
+app.get('/privacy', (req, res) => res.sendFile(path.join(publicPath, 'privacy.html')));
+app.get('/terms', (req, res) => res.sendFile(path.join(publicPath, 'terms.html')));
+
 
 
 // --- RDAP/Whois Proxy (Bypass CORS) ---
