@@ -663,23 +663,37 @@
                 // ===== 5. CONTACT / SUPPORT MESSAGES =====
                 window.loadContactMessages = async () => {
                     const tbody = document.getElementById('contact-messages-body');
+                    const btn = document.querySelector('button[onclick="loadContactMessages()"]');
                     if (!tbody) return;
                     try {
+                        if (btn) btn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin">refresh</span> Loading...';
                         const res = await fetch(`${API}/api/admin/contact-messages`, { headers: { 'Authorization': `Bearer ${token}` } });
                         if (!res.ok) throw new Error('Auth failed');
                         const messages = await res.json();
+                        if (btn) btn.innerHTML = '<span class="material-symbols-outlined text-sm">refresh</span> Refresh';
+                        
                         if (!messages || messages.length === 0) { tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-10 text-center text-on-surface-variant italic font-bold uppercase tracking-widest text-[10px]">No messages received yet.</td></tr>'; return; }
-                        tbody.innerHTML = messages.slice(0, 5).map(msg => `
+                        
+                        tbody.innerHTML = messages.slice(0, 5).map(msg => {
+                            const dateStr = new Date(msg.createdAt || msg.timestamp || Date.now()).toLocaleString();
+                            const safeName = (msg.name || 'Unknown').replace(/['"`]/g, '');
+                            const safeEmail = (msg.email || 'No email').replace(/['"`]/g, '');
+                            const safeMsg = (msg.message || '').replace(/['"`]/g, '').replace(/(\r\n|\n|\r)/gm, ' ');
+                            
+                            return `
                             <tr class="hover:bg-slate-50/50 transition-colors">
                                 <td class="px-6 py-4"><div class="flex flex-col"><span class="font-bold text-sm text-[#1f2937]">${msg.name}</span><span class="text-[10px] text-slate-400 font-mono">${msg.email}</span></div></td>
-                                <td class="px-6 py-4"><p class="text-xs text-on-surface max-w-md">${msg.message}</p></td>
-                                <td class="px-6 py-4 text-right"><div class="flex flex-col items-end gap-2"><span class="text-[10px] font-bold text-slate-400 uppercase">${new Date(msg.timestamp).toLocaleString()}</span><button onclick="customAlert('From: ${msg.name}', \`Email: ${msg.email}\
-\
-${msg.message}\`)" class="px-2 py-1 bg-primary/5 text-primary text-[10px] font-black rounded uppercase hover:bg-primary hover:text-white transition-all">View</button></div></td>
+                                <td class="px-6 py-4"><p class="text-xs text-on-surface max-w-md truncate">${msg.message}</p></td>
+                                <td class="px-6 py-4 text-right"><div class="flex flex-col items-end gap-2"><span class="text-[10px] font-bold text-slate-400 uppercase">${dateStr}</span><button onclick="customAlert('From: ${safeName}', 'Email: ${safeEmail}<br><br>${safeMsg}')" class="px-2 py-1 bg-primary/5 text-primary text-[10px] font-black rounded uppercase hover:bg-primary hover:text-white transition-all">View</button></div></td>
                             </tr>
-                        `).join('');
+                            `;
+                        }).join('');
+                        
                         if (messages.length > 5) tbody.innerHTML += `<tr><td colspan="3" class="px-6 py-4 text-center"><a href="/admin.html#messages" class="text-xs font-bold text-primary hover:underline uppercase tracking-widest">View all ${messages.length} messages &rarr;</a></td></tr>`;
-                    } catch (err) { tbody.innerHTML = `<tr><td colspan="3" class="px-6 py-10 text-center text-error italic font-bold uppercase tracking-widest text-[10px]">${err.message}</td></tr>`; }
+                    } catch (err) { 
+                        if (btn) btn.innerHTML = '<span class="material-symbols-outlined text-sm">refresh</span> Refresh';
+                        tbody.innerHTML = `<tr><td colspan="3" class="px-6 py-10 text-center text-error italic font-bold uppercase tracking-widest text-[10px]">${err.message}</td></tr>`; 
+                    }
                 };
                 loadContactMessages();
 
