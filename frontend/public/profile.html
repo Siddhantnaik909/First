@@ -62,27 +62,7 @@
     </style>
 </head>
 <body class="bg-background text-on-background min-h-screen pb-24 md:pb-0">
-    <header class="fixed top-0 w-full z-50 bg-[#f7f2e8] dark:bg-slate-950 shadow-[0px_20px_40px_rgba(16,18,147,0.06)] h-16 flex justify-between items-center px-8">
-        <div class="flex items-center gap-8">
-            <span class="text-xl font-bold text-[#1f2937] dark:text-slate-100 tracking-tight">Smart Hub</span>
-            
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-        </div>
-        <div class="flex items-center gap-4" id="auth-actions">
-            <!-- Populated by script.js -->
-        </div>
-        <div class="bg-gradient-to-r from-[#4f46e5] to-[#3525cd] h-1 w-full absolute bottom-0 left-0"></div>
-    </header>
+    <div id="header-placeholder"></div>
 
 <main class="main-content-wrapper max-w-7xl mx-auto mb-12">
         <!-- Profile Banner -->
@@ -207,25 +187,6 @@
             </div>
         </div>
     </main>
-
-    <!-- Bottom Nav for Mobile -->
-    
-    <!-- Unified Navbar Component Placeholder -->
-    <div id="header-placeholder"></div>
-
-    <!-- DARK MODE INIT - Universal across ALL pages (Moved to head) -->
-    
-    
-    <!-- Core Scripts -->
-    <script src="/js/app.js"></script>
-    <script src="/js/buttons.js"></script>
-    <script src="/js/calc-utils.js"></script>
-    <script type="module" src="/js/script.js"></script>
-
-
-    <!-- Footer Placeholder -->
-    <div id="footer-placeholder"></div>
-
 
     <!-- Chat Modal -->
     <div id="friend-chat-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#0f172a]/60 backdrop-blur-sm transition-all duration-300">
@@ -585,7 +546,9 @@
 
 
 
+    <div id="footer-placeholder"></div>
     <script src="/js/app.js"></script>
     <script src="/js/component-loader.js"></script>
 </body>
 </html>
+
