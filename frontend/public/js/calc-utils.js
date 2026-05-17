@@ -102,6 +102,17 @@ window.saveCalcToHistory = async function (toolName, inputs, resultRows, btn) {
         btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> SAVING...';
     }
     try {
+        const rawInputs = {};
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            if (el.id && el.value !== undefined && el.type !== 'button' && el.type !== 'submit') {
+                if (el.type === 'checkbox' || el.type === 'radio') {
+                    rawInputs[el.id] = { type: el.type, checked: el.checked, value: el.value };
+                } else {
+                    rawInputs[el.id] = { type: el.type, value: el.value };
+                }
+            }
+        });
+
         const entry = {
             id: Date.now(),
             name: toolName,
@@ -109,6 +120,7 @@ window.saveCalcToHistory = async function (toolName, inputs, resultRows, btn) {
             timestamp: Date.now(),
             inputs: inputs,       // array of {label, val}
             results: resultRows,  // array of {label, val, highlight}
+            rawInputs: rawInputs, // structured inputs for click-to-load history
             // backward-compat details string
             details: `${inputs.map(i => i.val).join(', ')} -> ${(resultRows.find(r => r.highlight) || resultRows[0])?.val || ''}`,
         };
@@ -171,6 +183,182 @@ window.getUserPreference = function(key, defaultValue) {
     } catch (e) { return defaultValue; }
 };
 
+window.restoreCalcHistoryItem = function (id) {
+    const history = JSON.parse(localStorage.getItem('calc_history') || '[]');
+    const item = history.find(h => String(h.id || h.timestamp) === String(id));
+    if (!item) return;
+    
+    let loadedAny = false;
+    if (item.rawInputs) {
+        // We have raw input data saved! Just load it directly.
+        for (const [key, val] of Object.entries(item.rawInputs)) {
+            const el = document.getElementById(key);
+            if (!el) continue;
+            if (val.type === 'checkbox' || val.type === 'radio') {
+                el.checked = val.checked;
+            } else {
+                el.value = val.value;
+            }
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+            loadedAny = true;
+        }
+    } 
+    
+    // Backward-compatibility / Extra mapping: parse the readable inputs
+    if (item.inputs && item.inputs.length > 0) {
+        item.inputs.forEach(inp => {
+            if (inp.label === 'Trip' && inp.val.includes(' km @ ')) {
+                // e.g. "300 km @ 25 km/L"
+                const parts = inp.val.split(' km @ ');
+                const dist = parseFloat(parts[0]);
+                const eff = parseFloat(parts[1]);
+                const distEl = document.getElementById('distance');
+                const effEl = document.getElementById('efficiency');
+                if (distEl) { distEl.value = dist; distEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                if (effEl) { effEl.value = eff; effEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                loadedAny = true;
+            } else if (inp.label === 'Fuel Price') {
+                // e.g. "₹105.00"
+                const price = parseFloat(inp.val.replace(/[^\d.]/g, ''));
+                const priceEl = document.getElementById('price');
+                if (priceEl) { priceEl.value = price; priceEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                loadedAny = true;
+            } else if (inp.label === 'Wall' && inp.val.includes(' x ')) {
+                // e.g. "10 x 10 ft"
+                const parts = inp.val.replace(/[^\d.x\s]/g, '').split(' x ');
+                const len = parseFloat(parts[0]);
+                const h = parseFloat(parts[1]);
+                const lenEl = document.getElementById('length');
+                const hEl = document.getElementById('height');
+                if (lenEl) { lenEl.value = len; lenEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                if (hEl) { hEl.value = h; hEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                loadedAny = true;
+            } else if (inp.label === 'Brick Type') {
+                const select = document.getElementById('brickSize');
+                if (select) {
+                    for (let i = 0; i < select.options.length; i++) {
+                        if (select.options[i].text.includes(inp.val)) {
+                            select.selectedIndex = i;
+                            select.dispatchEvent(new Event('change', { bubbles: true }));
+                            break;
+                        }
+                    }
+                }
+                loadedAny = true;
+            } else if (inp.label === 'Surface' && inp.val.includes(' x ')) {
+                // e.g. "10 x 10 ft"
+                const parts = inp.val.replace(/[^\d.x\s]/g, '').split(' x ');
+                const len = parseFloat(parts[0]);
+                const w = parseFloat(parts[1]);
+                const lenEl = document.getElementById('length');
+                const wEl = document.getElementById('width');
+                if (lenEl) { lenEl.value = len; lenEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                if (wEl) { wEl.value = w; wEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                loadedAny = true;
+            } else if (inp.label === 'Depth') {
+                const d = parseFloat(inp.val);
+                const dEl = document.getElementById('thickness');
+                if (dEl) { dEl.value = d; dEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                loadedAny = true;
+            } else if (inp.label === 'Layering') {
+                // e.g. "2 coats"
+                const coats = parseInt(inp.val);
+                if (typeof window.setCoats === 'function' && !isNaN(coats)) {
+                    window.setCoats(coats);
+                }
+                loadedAny = true;
+            } else if (inp.label === 'Lumber Details') {
+                // e.g. "2 x 4 x 8 ft"
+                const parts = inp.val.replace(/[^\d.x\s]/g, '').split(' x ');
+                const th = parseFloat(parts[0]);
+                const w = parseFloat(parts[1]);
+                const l = parseFloat(parts[2]);
+                const thEl = document.getElementById('thickness');
+                const wEl = document.getElementById('width');
+                const lEl = document.getElementById('length');
+                if (thEl) { thEl.value = th; thEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                if (wEl) { wEl.value = w; wEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                if (lEl) { lEl.value = l; lEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                loadedAny = true;
+            } else if (inp.label === 'Quantity') {
+                const qtyEl = document.getElementById('quantity');
+                if (qtyEl) { qtyEl.value = parseFloat(inp.val); qtyEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                loadedAny = true;
+            } else if (inp.label === 'Total Length') {
+                const lEl = document.getElementById('length');
+                if (lEl) { lEl.value = parseFloat(inp.val); lEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                loadedAny = true;
+            } else if (inp.label === 'Stud Spacing') {
+                const spSelect = document.getElementById('spacing');
+                if (spSelect) {
+                    for (let i = 0; i < spSelect.options.length; i++) {
+                        if (spSelect.options[i].text.includes(inp.val)) {
+                            spSelect.selectedIndex = i;
+                            spSelect.dispatchEvent(new Event('change', { bubbles: true }));
+                            break;
+                        }
+                    }
+                }
+                loadedAny = true;
+            } else if (inp.label === 'Roof Dimensions') {
+                // e.g. "20 x 30 ft"
+                const parts = inp.val.replace(/[^\d.x\s]/g, '').split(' x ');
+                const base = parseFloat(parts[0]);
+                const run = parseFloat(parts[1]);
+                const bEl = document.getElementById('baseLength');
+                const rEl = document.getElementById('runLength');
+                if (bEl) { bEl.value = base; bEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                if (rEl) { rEl.value = run; rEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                loadedAny = true;
+            } else if (inp.label === 'Roof Pitch') {
+                const pitchEl = document.getElementById('pitch');
+                if (pitchEl) { pitchEl.value = parseFloat(inp.val); pitchEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                loadedAny = true;
+            } else if (inp.label === 'Flooring Geometry') {
+                // e.g. "10 x 10 ft"
+                const parts = inp.val.replace(/[^\d.x\s]/g, '').split(' x ');
+                const len = parseFloat(parts[0]);
+                const w = parseFloat(parts[1]);
+                const lenEl = document.getElementById('length');
+                const wEl = document.getElementById('width');
+                if (lenEl) { lenEl.value = len; lenEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                if (wEl) { wEl.value = w; wEl.dispatchEvent(new Event('input', { bubbles: true })); }
+                loadedAny = true;
+            }
+        });
+    }
+    
+    // Special check for setCoats layering
+    if (item.inputs && item.inputs.length > 0) {
+        const layeringInput = item.inputs.find(i => i.label === 'Layering');
+        if (layeringInput) {
+            const coats = parseInt(layeringInput.val);
+            if (typeof window.setCoats === 'function' && !isNaN(coats)) {
+                window.setCoats(coats);
+            }
+        }
+    }
+    
+    // Trigger calculation updates universally
+    const updateFns = [
+        'updateFuel', 'calculateBricks', 'calculateConcrete', 'updatePaint', 
+        'calculateFlooring', 'updateLumber', 'calculateStuds', 'calculateRoof'
+    ];
+    updateFns.forEach(fnName => {
+        if (typeof window[fnName] === 'function') {
+            window[fnName]();
+        }
+    });
+
+    // Visual feedback
+    if (typeof window.showAlert === 'function') {
+        window.showAlert('Estimate inputs loaded from history!', 'success');
+    } else {
+        alert('Estimate inputs loaded from history!');
+    }
+};
+
 window.initSidebarHistory = function (toolName, containerId, partialMatch = false) {
     window.currentToolName = toolName;
     window.historyContainerId = containerId;
@@ -200,7 +388,7 @@ window.initSidebarHistory = function (toolName, containerId, partialMatch = fals
             let subLabel = item.results && item.results[1] ? item.results[1].val : (item.inputs && item.inputs[0] ? item.inputs[0].val : 'History');
             
             return `
-                <div class="flex flex-col gap-1 border-l-2 ${border} pl-4 ${opacity} transition-all hover:opacity-100">
+                <div onclick="window.restoreCalcHistoryItem('${item.id || item.timestamp}')" class="flex flex-col gap-1 border-l-2 ${border} pl-4 ${opacity} transition-all hover:opacity-100 cursor-pointer hover:border-primary">
                     <span class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest">${time}</span>
                     <p class="text-xs font-bold text-on-surface truncate pr-4">${item.name || toolName}: ${mainVal}</p>
                     <p class="text-[9px] font-black text-primary tracking-tighter uppercase font-mono">${subLabel}</p>
@@ -208,7 +396,7 @@ window.initSidebarHistory = function (toolName, containerId, partialMatch = fals
         }).join('');
     };
 
-window.clearSidebarHistory = async function () {
+    window.clearSidebarHistory = async function () {
         if (!await window.showConfirm('Are you sure you want to clear your calculation history?', `Purge ${toolName} records? This cannot be undone.`)) return;
         let history = JSON.parse(localStorage.getItem('calc_history') || '[]');
         history = history.filter(h => {

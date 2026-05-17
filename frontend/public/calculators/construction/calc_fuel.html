@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
     <meta charset="utf-8" />
@@ -241,6 +241,7 @@
         async function saveFuelProject(event) {
             const displayEl = document.getElementById('calc-display');
             if (!displayEl) return;
+            const total = displayEl.innerText.replace(/[^\d.]/g, '').trim();
             if (total === '0.00' || !total) {
                 alert('✓ Please enter values and calculate first');
                 return;

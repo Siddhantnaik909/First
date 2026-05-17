@@ -162,11 +162,16 @@ Smart Hub is fully optimized for containerized cloud deployment on **Render**:
    * `MONGO_URI`: Your production MongoDB Atlas connection string.
    * `JWT_SECRET`: A secure key used for signing session tokens.
    * `PORT`: `3000` (Render will map this automatically).
+   * `RENDER_EXTERNAL_URL`: Set automatically by Render (our backend's CORS system whitelists this URL and all `*.onrender.com` domains dynamically to prevent any Cross-Origin blocks for both REST API and Socket.io!).
 
 ### 2. MongoDB Atlas Configuration
 1. Create a free M1/M0 cluster.
 2. Navigate to **Network Access** and select **Allow Access from Anywhere** (`0.0.0.0/0`) since Render IP locations dynamically scale during builds.
 3. Copy the Atlas connection string and paste it into Render’s `MONGO_URI` field.
+
+### 3. Integrated Security & Diagnostics
+* **CORS Protection**: The system automatically whitelists Local Host, LAN IPs, Ngrok, and Render domains.
+* **Unmasked Diagnostics**: The `/api/auth/register` endpoint has been upgraded to expose precise database exception messages (such as indexing errors or connection timeouts) directly in client-side alerts, facilitating instant full-stack troubleshooting.
 
 ---
 
