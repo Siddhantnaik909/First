@@ -4,6 +4,7 @@ const path = require('path');
 const http = require('http');
 const cors = require('cors');
 const https = require('https');
+const fs = require('fs');
 const rateLimit = require('express-rate-limit');
 const { Server } = require('socket.io');
 const { config } = require('./src/config/env');
@@ -98,6 +99,40 @@ const staticOptions = {
     }
 };
 
+// --- Universal HTML Rewrite & Redirection Middleware ---
+app.use((req, res, next) => {
+    // 1. If requesting a top-level .html file with /calculators/ prefix (e.g., /calculators/GameLobby.html)
+    if (req.path.startsWith('/calculators/') && req.path.endsWith('.html')) {
+        const parts = req.path.split('/');
+        const fileName = parts[parts.length - 1];
+        // Check if this file exists directly in the public root folder
+        const rootFilePath = path.join(publicPath, fileName);
+        if (fs.existsSync(rootFilePath)) {
+            // Redirect cleanly to the root version without .html (e.g., /GameLobby)
+            const cleanName = fileName.replace(/\.html$/, '');
+            return res.redirect(301, `/${cleanName}`);
+        }
+    }
+
+    // 2. Redirect any direct .html request to its clean URL equivalent
+    // (e.g., /login.html -> /login, /about.html -> /about)
+    // Make sure we exclude static resources like /components/ or /uploads/ or /backend/
+    if (req.path.endsWith('.html') && !req.path.startsWith('/components/') && !req.path.startsWith('/uploads/')) {
+        const fileName = path.basename(req.path);
+        const cleanName = req.path.substring(0, req.path.length - 5); // strip .html
+        
+        // Special case: index.html -> /
+        if (fileName.toLowerCase() === 'index.html') {
+            return res.redirect(301, '/');
+        }
+        
+        // Redirect to clean path
+        return res.redirect(301, cleanName);
+    }
+
+    next();
+});
+
 app.use(express.static(publicPath, staticOptions));
 app.use('/components', express.static(componentsPath, staticOptions));
 app.use('/uploads', express.static(path.join(publicPath, 'uploads'), staticOptions));
@@ -186,21 +221,6 @@ app.get('/settings', (req, res) => res.sendFile(path.join(publicPath, 'settings.
 app.get('/contact',  (req, res) => res.sendFile(path.join(publicPath, 'contact.html')));
 app.get('/about',    (req, res) => res.sendFile(path.join(publicPath, 'about.html')));
 app.get('/admin',    (req, res) => res.sendFile(path.join(publicPath, 'admin.html')));
-
-// ── Misrouted page redirect (stale browser cache safety net) ─────────────────
-// If a top-level .html page is requested under /calculators/ (e.g. /calculators/GameLobby.html),
-// redirect it to the correct root path (/GameLobby.html).
-const fs = require('fs');
-app.get('/calculators/:page', (req, res, next) => {
-    const page = req.params.page;
-    // Only handle .html files; let actual calculator subdirs pass through
-    if (!page.endsWith('.html')) return next();
-    const rootFile = path.join(publicPath, page);
-    if (fs.existsSync(rootFile)) {
-        return res.redirect(301, `/${page}`);
-    }
-    next();
-});
 
 
 // --- RDAP/Whois Proxy (Bypass CORS) ---

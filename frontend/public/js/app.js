@@ -233,12 +233,10 @@ function initTheme() {
     if (isGlass) {
         document.documentElement.style.setProperty('--bg-card', 'rgba(30, 41, 59, 0.4)');
         document.documentElement.style.setProperty('--bg-sidebar', 'rgba(15, 23, 42, 0.6)');
-        document.body.style.backdropFilter = "blur(10px)";
         document.body.classList.add('sidebar-glass');
     } else {
         document.documentElement.style.removeProperty('--bg-card');
         document.documentElement.style.removeProperty('--bg-sidebar');
-        document.body.style.backdropFilter = "none";
         document.body.classList.remove('sidebar-glass');
     }
 

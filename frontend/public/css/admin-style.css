@@ -28,6 +28,9 @@
 body.admin-shell, 
 body.no-theme-overrides {
     font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+body.admin-shell {
     background:
         radial-gradient(circle at top right, rgba(201, 111, 50, 0.14), transparent 26%),
         radial-gradient(circle at bottom left, rgba(47, 156, 149, 0.12), transparent 20%),
@@ -348,7 +351,7 @@ body.admin-sidebar-open .admin-sidebar-backdrop {
 
 /* --- MAIN WRAPPER --- */
 .admin-main,
-main {
+body.admin-shell main {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -401,7 +404,7 @@ main {
 
 /* --- CONTENT CONTAINERS --- */
 .admin-content {
-    padding: 2.5rem !important;
+    padding: 1.25rem 2.5rem 2.5rem 2.5rem !important;
     max-width: 1600px;
     margin: 0 auto;
     width: 100%;
@@ -1045,8 +1048,7 @@ main {
     }
 
     .admin-content {
-        padding-left: 0.5rem !important;
-        padding-right: 0.5rem !important;
+        padding: 0.75rem 0.5rem 1.5rem 0.5rem !important;
         gap: 1rem !important;
     }
 
