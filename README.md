@@ -45,6 +45,11 @@ Utilizes custom Service Workers (`sw.js`) with fine-tuned caching logic:
 * **HTML/JS/CSS**: Uses `no-cache` revalidation to ensure active code edits load instantly.
 * **Media Assets & Fonts**: Cached for 24 hours to secure offline capabilities and visual loading speeds.
 
+### 4. Unified Mobile-Responsive UI Architecture
+The entire platform relies on a centralized component-loading system (`auth.js` and `component-loader.js`) ensuring:
+* **Global Consistency**: A single source of truth for navigation, footers, and authentication states across 50+ pages.
+* **Mobile Responsiveness**: `calc-responsive.css` ensures seamless fluid scaling, proper grid stacking, and safe screen-edge padding on all mobile devices (360px - 768px viewports).
+
 ---
 
 ## 🇮🇳 Indian Market Localization
