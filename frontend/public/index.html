@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/design-system.css">
+    <link rel="stylesheet" href="/css/calc-responsive.css">
     <script src="/js/auth.js"></script>
     <script>
         tailwind.config = {
@@ -48,6 +49,130 @@
             box-shadow: 0 20px 25px -5px rgb(201 111 50 / 0.1);
             border-color: rgba(201, 111, 50, 0.3);
         }
+        /* Favorite Tool Cards */
+        .fav-tool-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: #fff;
+            border: 1px solid rgba(201,111,50,0.12);
+            border-radius: 20px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .fav-tool-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(201,111,50,0.04), transparent);
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+        .fav-tool-card:hover {
+            transform: translateY(-3px) scale(1.01);
+            border-color: rgba(201,111,50,0.35);
+            box-shadow: 0 12px 28px rgba(201,111,50,0.12);
+        }
+        .fav-tool-card:hover::before { opacity: 1; }
+        .fav-tool-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 14px;
+            background: rgba(201,111,50,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #c96f32;
+            font-size: 22px;
+        }
+        .fav-tool-name {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 800;
+            color: #0f172a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .fav-tool-badge {
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            background: rgba(201,111,50,0.08);
+            color: #c96f32;
+            padding: 3px 8px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+        .fav-remove-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 10px;
+            color: #f59e0b;
+            display: flex;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .fav-remove-btn:hover {
+            background: rgba(245,158,11,0.1);
+            transform: scale(1.15);
+        }
+        /* How-to guide strip */
+        .how-to-strip {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 14px 18px;
+            border-radius: 18px;
+            background: linear-gradient(135deg,rgba(201,111,50,0.06),rgba(47,156,149,0.04));
+            border: 1px dashed rgba(201,111,50,0.25);
+        }
+        .how-to-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            text-align: center;
+        }
+        .how-to-step-num {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #c96f32;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .how-to-step-text {
+            font-size: 10px;
+            font-weight: 700;
+            color: #475569;
+            line-height: 1.4;
+        }
+        .how-to-divider {
+            width: 1px;
+            height: 40px;
+            background: rgba(201,111,50,0.2);
+            margin-top: 15px;
+        }
+        /* Pulse dot animation */
+        @keyframes pulseRing {
+            0%   { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(201,111,50,0.5); }
+            70%  { transform: scale(1);   box-shadow: 0 0 0 8px rgba(201,111,50,0); }
+            100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(201,111,50,0); }
+        }
+        .pulse-ring { animation: pulseRing 2s infinite; }
     </style>
 </head>
 <body class="bg-surface text-on-surface hero-gradient">
@@ -131,11 +256,32 @@
                         Show All <span class="material-symbols-outlined text-sm">arrow_forward</span>
                     </a>
                 </div>
-                <div id="pinned-tools-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                    <a href="/calculators.html" class="col-span-1 sm:col-span-2 p-12 rounded-3xl border-4 border-dashed border-surface-container-high flex flex-col items-center justify-center gap-4 text-[#a78b6c] hover:border-primary/20 hover:text-primary transition-all group">
-                        <span class="material-symbols-outlined text-5xl group-hover:scale-110 transition-transform">add_circle</span>
-                        <span class="text-xs font-black uppercase tracking-[0.2em]">Add your favorite tools here</span>
-                    </a>
+                <!-- How-to guide always visible at top -->
+                <div class="how-to-strip mb-6" id="fav-how-to">
+                    <div class="how-to-step">
+                        <div class="how-to-step-num">1</div>
+                        <p class="how-to-step-text">Go to<br><strong>Calculators</strong></p>
+                    </div>
+                    <div class="how-to-divider"></div>
+                    <div class="how-to-step">
+                        <div class="how-to-step-num">2</div>
+                        <p class="how-to-step-text">Click the<br><strong>⭐ Star</strong> icon</p>
+                    </div>
+                    <div class="how-to-divider"></div>
+                    <div class="how-to-step">
+                        <div class="how-to-step-num">3</div>
+                        <p class="how-to-step-text">Tools appear<br><strong>here instantly</strong></p>
+                    </div>
+                    <div class="how-to-divider"></div>
+                    <div class="how-to-step">
+                        <div class="how-to-step-num">4</div>
+                        <p class="how-to-step-text">Click a card<br><strong>to open it</strong></p>
+                    </div>
+                </div>
+
+                <!-- Dynamic favorites grid -->
+                <div id="pinned-tools-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- Populated by loadHomeFavorites() below -->
                 </div>
             </section>
 
@@ -235,6 +381,104 @@
                     </div>`).join('') + `</div>`;
                 recentContainer.classList.remove('items-center', 'justify-center', 'text-center');
             }
+            // ── FAVORITES PANEL ─────────────────────────────────────────
+            function loadHomeFavorites() {
+                const grid = document.getElementById('pinned-tools-grid');
+                if (!grid) return;
+
+                const favLinks = JSON.parse(localStorage.getItem('favorites') || '[]');
+
+                if (favLinks.length === 0) {
+                    grid.innerHTML = `
+                        <a href="/calculators.html"
+                           class="col-span-1 sm:col-span-2 p-10 rounded-3xl border-4 border-dashed border-surface-container-high
+                                  flex flex-col items-center justify-center gap-3 text-[#a78b6c]
+                                  hover:border-primary/20 hover:text-primary transition-all group">
+                            <span class="material-symbols-outlined text-5xl pulse-ring group-hover:scale-110 transition-transform">add_circle</span>
+                            <span class="text-xs font-black uppercase tracking-[0.2em]">Browse Tools &amp; Star Your Favourites</span>
+                            <span class="text-[10px] text-on-surface-variant">Follow the 4-step guide above ↑</span>
+                        </a>`;
+                    return;
+                }
+
+                // Icon map – covers most common tool types
+                const iconMap = {
+                    'calc': 'calculate', 'math': 'functions', 'love': 'favorite',
+                    'zodiac': 'auto_awesome', 'brick': 'grid_on', 'bmi': 'monitor_heart',
+                    'age': 'cake', 'loan': 'account_balance', 'emi': 'payments',
+                    'tip': 'restaurant', 'tax': 'receipt_long', 'currency': 'currency_exchange',
+                    'percent': 'percent', 'discount': 'local_offer', 'profit': 'trending_up',
+                    'date': 'calendar_month', 'time': 'schedule', 'speed': 'speed',
+                    'weight': 'fitness_center', 'height': 'straighten', 'temp': 'thermostat',
+                    'area': 'square_foot', 'volume': 'water_drop', 'energy': 'bolt',
+                    'data': 'storage', 'color': 'palette', 'code': 'code',
+                    'qr': 'qr_code_2', 'password': 'lock', 'random': 'casino',
+                    'gpa': 'school', 'grade': 'grade', 'word': 'article',
+                    'science': 'science', 'unit': 'swap_horiz'
+                };
+
+                const getIcon = (link) => {
+                    const l = link.toLowerCase();
+                    for (const [key, icon] of Object.entries(iconMap)) {
+                        if (l.includes(key)) return icon;
+                    }
+                    return 'build';
+                };
+
+                const formatName = (link) => {
+                    // Try to pull a nice name from CALCULATORS_DATA if loaded
+                    if (window.CALCULATORS_DATA) {
+                        for (const cat of window.CALCULATORS_DATA) {
+                            const found = cat.items.find(t => t.link === link || ('/' + t.link) === link);
+                            if (found) return found.name;
+                        }
+                    }
+                    // Fallback: derive from URL
+                    const parts = link.split('/');
+                    const last  = parts[parts.length - 1].replace(/\.html$/, '');
+                    return last.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                };
+
+                grid.innerHTML = favLinks.map(link => {
+                    const icon = getIcon(link);
+                    const name = formatName(link);
+                    const safeLink = link.startsWith('/') ? link : '/' + link;
+                    return `
+                        <div style="position:relative;">
+                            <a href="${safeLink}" class="fav-tool-card">
+                                <div class="fav-tool-icon">
+                                    <span class="material-symbols-outlined icon-fill">${icon}</span>
+                                </div>
+                                <span class="fav-tool-name">${name}</span>
+                                <span class="fav-tool-badge">Open →</span>
+                            </a>
+                            <button class="fav-remove-btn"
+                                    style="position:absolute;top:10px;right:10px;z-index:10;"
+                                    title="Remove from favourites"
+                                    onclick="event.preventDefault();event.stopPropagation();
+                                             removeFavHome('${link}')">
+                                <span class="material-symbols-outlined icon-fill" style="font-size:18px">star</span>
+                            </button>
+                        </div>`;
+                }).join('');
+            }
+
+            window.removeFavHome = function(link) {
+                let favs = JSON.parse(localStorage.getItem('favorites') || '[]');
+                favs = favs.filter(f => f !== link);
+                localStorage.setItem('favorites', JSON.stringify(favs));
+                // Sync with global toggleFavorite if available
+                if (typeof window.showGlobalToast === 'function') {
+                    window.showGlobalToast('Removed from Favourites', 'info');
+                }
+                loadHomeFavorites();
+            };
+
+            // Initial render + re-render on storage change (cross-tab sync)
+            loadHomeFavorites();
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'favorites') loadHomeFavorites();
+            });
     </script>
 </body>
 </html>

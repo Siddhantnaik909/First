@@ -210,7 +210,7 @@ connectWithRetry();
 
 // --- API Routes ---
 const authRoutes = require('./src/routes/authRoutes');
-const adminRoutes = require('./src/routes/adminRoutes'); 
+const adminRoutes = require('./routes/admin'); 
 const catalogRoutes = require('./src/routes/catalogRoutes'); 
 const historyRoutes = require('./src/routes/historyRoutes'); 
 const uiRoutes = require('./src/routes/uiRoutes');
@@ -268,7 +268,7 @@ app.get('/admin',    (req, res) => res.sendFile(path.join(publicPath, 'admin.htm
 app.get('/AdminDashboard', (req, res) => res.sendFile(path.join(publicPath, 'AdminDashboard.html')));
 app.get('/admin_mobile_trace', (req, res) => res.sendFile(path.join(publicPath, 'admin_mobile_trace.html')));
 app.get('/auth-callback', (req, res) => res.sendFile(path.join(publicPath, 'auth-callback.html')));
-app.get('/knowledge_base', (req, res) => res.sendFile(path.join(publicPath, 'knowledge_base.html')));
+
 app.get('/privacy', (req, res) => res.sendFile(path.join(publicPath, 'privacy.html')));
 app.get('/terms', (req, res) => res.sendFile(path.join(publicPath, 'terms.html')));
 

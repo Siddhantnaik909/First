@@ -341,15 +341,34 @@ window.restoreCalcHistoryItem = function (id) {
     }
     
     // Trigger calculation updates universally
+    // Construction calculators
     const updateFns = [
-        'updateFuel', 'calculateBricks', 'calculateConcrete', 'updatePaint', 
-        'calculateFlooring', 'updateLumber', 'calculateStuds', 'calculateRoof'
+        'updateFuel', 'calculateBricks', 'calculateConcrete', 'updatePaint',
+        'calculateFlooring', 'updateLumber', 'calculateStuds', 'calculateRoof',
+        // Electronics calculators
+        'calculateLED',       // LED Resistor
+        'calculateDivider',   // Voltage Lab (Voltage Divider)
+        'solvePower',         // Power Studio
+        'decodeCap',          // Capacitor Code Decoder
+        // Frequency/Wave — needs a source hint; fall back to 'f' if freq is filled
     ];
     updateFns.forEach(fnName => {
         if (typeof window[fnName] === 'function') {
             window[fnName]();
         }
     });
+
+    // Special case: Wave Metrics (Frequency Engine) — function requires a source param
+    if (typeof window.solveWave === 'function') {
+        const freqEl  = document.getElementById('freq');
+        const waveEl  = document.getElementById('wavelength');
+        const perEl   = document.getElementById('period');
+        const src = freqEl && freqEl.value ? 'f'
+                  : waveEl && waveEl.value ? 'w'
+                  : perEl  && perEl.value  ? 'p'
+                  : null;
+        if (src) window.solveWave(src);
+    }
 
     // Visual feedback
     if (typeof window.showAlert === 'function') {
@@ -358,6 +377,189 @@ window.restoreCalcHistoryItem = function (id) {
         alert('Estimate inputs loaded from history!');
     }
 };
+
+/* === BUILT-IN UI HELPERS ===
+ * showAlert, showConfirm, showToast — used throughout the calc suite.
+ * If the global app already registered fancier versions, those take priority.
+ * These are safe fallbacks that never rely on browser alert()/confirm().
+ */
+
+// ── showToast(message, type) ─────────────────────────────────────────────────
+// type: 'success' | 'error' | 'warning' | 'info'
+if (!window.showToast) {
+    (function () {
+        function injectToastCSS() {
+            if (document.getElementById('_calc-toast-css')) return;
+            const s = document.createElement('style');
+            s.id = '_calc-toast-css';
+            s.textContent = `
+                #_calc-toast-container {
+                    position: fixed;
+                    bottom: 24px;
+                    right: 24px;
+                    z-index: 99999;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    pointer-events: none;
+                }
+                .calc-toast {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    background: #1e293b;
+                    color: #f1f5f9;
+                    border-radius: 14px;
+                    padding: 14px 20px;
+                    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+                    font-size: 13px;
+                    font-weight: 700;
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+                    border-left: 4px solid #6366f1;
+                    opacity: 0;
+                    transform: translateY(16px);
+                    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+                    pointer-events: auto;
+                    max-width: 320px;
+                }
+                .calc-toast.visible  { opacity: 1; transform: translateY(0); }
+                .calc-toast.success  { border-color: #10b981; }
+                .calc-toast.error    { border-color: #ef4444; }
+                .calc-toast.warning  { border-color: #f59e0b; }
+                .calc-toast.info     { border-color: #6366f1; }
+                .calc-toast-icon { font-size: 18px; flex-shrink: 0; }
+            `;
+            document.head.appendChild(s);
+        }
+
+        window.showToast = function (message, type = 'info') {
+            injectToastCSS();
+            let container = document.getElementById('_calc-toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = '_calc-toast-container';
+                document.body.appendChild(container);
+            }
+            const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+            const toast = document.createElement('div');
+            toast.className = `calc-toast ${type}`;
+            toast.innerHTML = `<span class="calc-toast-icon">${icons[type] || icons.info}</span><span>${message}</span>`;
+            container.appendChild(toast);
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => toast.classList.add('visible'));
+            });
+            setTimeout(() => {
+                toast.classList.remove('visible');
+                setTimeout(() => toast.remove(), 400);
+            }, 3500);
+        };
+    })();
+}
+
+// ── showAlert(message, type) ─────────────────────────────────────────────────
+// Drop-in replacement for the global showAlert used in calc pages.
+if (!window.showAlert) {
+    window.showAlert = function (message, type = 'info') {
+        if (typeof window.showToast === 'function') {
+            window.showToast(message, type);
+        } else {
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+    };
+}
+
+// ── showConfirm(title, message) ──────────────────────────────────────────────
+// Returns a Promise<boolean> — used by clearSidebarHistory.
+// Shows a styled modal if possible, otherwise falls back to browser confirm().
+if (!window.showConfirm) {
+    (function () {
+        function injectConfirmCSS() {
+            if (document.getElementById('_calc-confirm-css')) return;
+            const s = document.createElement('style');
+            s.id = '_calc-confirm-css';
+            s.textContent = `
+                #_calc-confirm-backdrop {
+                    position: fixed; inset: 0; z-index: 100000;
+                    background: rgba(0,0,0,0.45);
+                    backdrop-filter: blur(4px);
+                    display: flex; align-items: center; justify-content: center;
+                    animation: calcFadeUp 0.2s ease;
+                }
+                #_calc-confirm-box {
+                    background: #fff;
+                    border-radius: 20px;
+                    padding: 32px 28px 24px;
+                    max-width: 380px; width: 90%;
+                    box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+                    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+                    text-align: center;
+                }
+                .dark #_calc-confirm-box, .dark-mode #_calc-confirm-box {
+                    background: #1e293b; color: #f1f5f9;
+                }
+                #_calc-confirm-box h4 {
+                    font-size: 16px; font-weight: 800;
+                    color: #0f172a; margin: 0 0 8px;
+                }
+                .dark #_calc-confirm-box h4, .dark-mode #_calc-confirm-box h4 { color: #f1f5f9; }
+                #_calc-confirm-box p {
+                    font-size: 13px; color: #475569;
+                    margin: 0 0 24px; line-height: 1.6;
+                }
+                .dark #_calc-confirm-box p, .dark-mode #_calc-confirm-box p { color: #94a3b8; }
+                #_calc-confirm-box .btn-row {
+                    display: flex; gap: 10px; justify-content: center;
+                }
+                #_calc-confirm-box button {
+                    flex: 1; padding: 12px 16px;
+                    border-radius: 12px; border: none; cursor: pointer;
+                    font-family: inherit; font-size: 12px; font-weight: 800;
+                    text-transform: uppercase; letter-spacing: 0.08em;
+                    transition: all 0.2s;
+                }
+                #_calc-confirm-cancel {
+                    background: #f1f5f9; color: #475569;
+                }
+                #_calc-confirm-cancel:hover { background: #e2e8f0; }
+                #_calc-confirm-ok {
+                    background: #ef4444; color: #fff;
+                }
+                #_calc-confirm-ok:hover { background: #dc2626; transform: scale(1.02); }
+            `;
+            document.head.appendChild(s);
+        }
+
+        window.showConfirm = function (title, message) {
+            return new Promise((resolve) => {
+                injectConfirmCSS();
+                const backdrop = document.createElement('div');
+                backdrop.id = '_calc-confirm-backdrop';
+                backdrop.innerHTML = `
+                    <div id="_calc-confirm-box">
+                        <h4>${title}</h4>
+                        <p>${message}</p>
+                        <div class="btn-row">
+                            <button id="_calc-confirm-cancel">Cancel</button>
+                            <button id="_calc-confirm-ok">Yes, Delete</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(backdrop);
+
+                function cleanup(result) {
+                    backdrop.remove();
+                    resolve(result);
+                }
+
+                document.getElementById('_calc-confirm-ok').addEventListener('click', () => cleanup(true));
+                document.getElementById('_calc-confirm-cancel').addEventListener('click', () => cleanup(false));
+                backdrop.addEventListener('click', (e) => {
+                    if (e.target === backdrop) cleanup(false);
+                });
+            });
+        };
+    })();
+}
 
 window.initSidebarHistory = function (toolName, containerId, partialMatch = false) {
     window.currentToolName = toolName;
@@ -970,3 +1172,178 @@ if (!inputs || !results) { showAlert('Calculate something first!', 'warning'); r
     }
 })();
 
+/* ============================================================
+   === 8. FAVORITE TOOL BUTTON — auto-injected on calc pages ===
+   ============================================================
+   Injects a floating ⭐ star FAB on every calculator page.
+   Clicking it pins/unpins the current URL in localStorage('favorites'),
+   which the Home page reads to build the "Your Favorite Tools" grid.
+   ============================================================ */
+(function () {
+    // Only run on calculator sub-pages, not the home page itself
+    var path = window.location.pathname;
+    var isCalcPage = path.indexOf('/calculators/') !== -1 || path.indexOf('/calc_') !== -1;
+    if (!isCalcPage) return;
+
+    // ── CSS ──────────────────────────────────────────────────────────────────
+    function injectFavCSS() {
+        if (document.getElementById('_fav-btn-css')) return;
+        var s = document.createElement('style');
+        s.id = '_fav-btn-css';
+        s.textContent = [
+            '#sh-fav-fab {',
+            '  position:fixed; bottom:90px; right:24px; z-index:9998;',
+            '  width:52px; height:52px; border-radius:50%;',
+            '  background:#fff; border:2px solid rgba(201,111,50,0.25);',
+            '  box-shadow:0 6px 24px rgba(0,0,0,0.12);',
+            '  cursor:pointer; display:flex; align-items:center; justify-content:center;',
+            '  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);',
+            '  font-size:24px; color:#94a3b8;',
+            '}',
+            '#sh-fav-fab:hover {',
+            '  transform:scale(1.12) rotate(-5deg);',
+            '  box-shadow:0 10px 32px rgba(201,111,50,0.22);',
+            '  border-color:#c96f32;',
+            '}',
+            '#sh-fav-fab.is-fav {',
+            '  background:linear-gradient(135deg,#c96f32,#e8953c);',
+            '  color:#fff; border-color:transparent;',
+            '  box-shadow:0 8px 28px rgba(201,111,50,0.40);',
+            '}',
+            '#sh-fav-fab.is-fav:hover { transform:scale(1.12) rotate(5deg); }',
+            '@keyframes favPop {',
+            '  0%  { transform:scale(1); }',
+            '  40% { transform:scale(1.32) rotate(-8deg); }',
+            '  70% { transform:scale(0.92) rotate(4deg); }',
+            '  100%{ transform:scale(1) rotate(0deg); }',
+            '}',
+            '#sh-fav-fab.pop { animation:favPop 0.45s cubic-bezier(0.4,0,0.2,1); }',
+            '#sh-fav-tooltip {',
+            '  position:fixed; bottom:100px; right:86px; z-index:9997;',
+            '  background:#1e293b; color:#f1f5f9;',
+            '  font-family:"Plus Jakarta Sans",system-ui,sans-serif;',
+            '  font-size:11px; font-weight:800; letter-spacing:0.04em;',
+            '  padding:7px 14px; border-radius:10px;',
+            '  pointer-events:none; opacity:0; transform:translateX(8px);',
+            '  transition:all 0.22s ease; white-space:nowrap;',
+            '  box-shadow:0 4px 16px rgba(0,0,0,0.15);',
+            '}',
+            '#sh-fav-tooltip::after {',
+            '  content:""; position:absolute; right:-6px; top:50%;',
+            '  transform:translateY(-50%);',
+            '  border:6px solid transparent; border-left-color:#1e293b; border-right:none;',
+            '}',
+            '#sh-fav-fab:hover + #sh-fav-tooltip { opacity:1; transform:translateX(0); }',
+            '.dark #sh-fav-fab:not(.is-fav), .dark-mode #sh-fav-fab:not(.is-fav) {',
+            '  background:#1e293b; border-color:rgba(255,255,255,0.12); color:#94a3b8;',
+            '}'
+        ].join('\n');
+        document.head.appendChild(s);
+    }
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+    function getFavs() {
+        try { return JSON.parse(localStorage.getItem('favorites') || '[]'); }
+        catch (e) { return []; }
+    }
+
+    function setFavs(arr) {
+        localStorage.setItem('favorites', JSON.stringify(arr));
+    }
+
+    function currentLink() {
+        return window.location.pathname;
+    }
+
+    function isFav() {
+        return getFavs().indexOf(currentLink()) !== -1;
+    }
+
+    var ICON_FILLED  = '<span class="material-symbols-outlined notranslate" style="font-variation-settings:\'FILL\' 1,\'wght\' 500,\'GRAD\' 0,\'opsz\' 24;font-size:22px">star</span>';
+    var ICON_OUTLINE = '<span class="material-symbols-outlined notranslate" style="font-size:22px">star</span>';
+
+    function syncFabState(fab, tooltip) {
+        var fav = isFav();
+        if (fav) {
+            fab.classList.add('is-fav');
+            fab.title = 'Remove from Favourites';
+            fab.innerHTML = ICON_FILLED;
+            if (tooltip) tooltip.textContent = '\u2B50 Pinned to Home!';
+        } else {
+            fab.classList.remove('is-fav');
+            fab.title = 'Add to Favourites';
+            fab.innerHTML = ICON_OUTLINE;
+            if (tooltip) tooltip.textContent = 'Add to Favourites';
+        }
+    }
+
+    function favToast(msg, type) {
+        if (typeof window.showToast === 'function') {
+            window.showToast(msg, type);
+        } else if (typeof window.showGlobalToast === 'function') {
+            window.showGlobalToast(msg, type);
+        }
+    }
+
+    // ── Main inject ──────────────────────────────────────────────────────────
+    function injectFavBtn() {
+        if (document.getElementById('sh-fav-fab')) return;
+        injectFavCSS();
+
+        var fab     = document.createElement('button');
+        fab.id      = 'sh-fav-fab';
+        fab.setAttribute('aria-label', 'Toggle Favourite');
+        fab.classList.add('notranslate');
+
+        var tooltip = document.createElement('div');
+        tooltip.id  = 'sh-fav-tooltip';
+
+        syncFabState(fab, tooltip);
+
+        document.body.appendChild(fab);
+        document.body.appendChild(tooltip);
+
+        fab.addEventListener('click', function () {
+            var link = currentLink();
+            var favs = getFavs();
+            var idx  = favs.indexOf(link);
+
+            if (idx !== -1) {
+                // Un-pin
+                favs.splice(idx, 1);
+                setFavs(favs);
+                syncFabState(fab, tooltip);
+                favToast('Removed from Favourites', 'info');
+            } else {
+                // Pin — cap at 12
+                if (favs.length >= 12) {
+                    favToast('Max 12 favourites! Remove one from the Home page first.', 'warning');
+                    return;
+                }
+                favs.unshift(link);
+                setFavs(favs);
+                syncFabState(fab, tooltip);
+                favToast('\u2B50 Added to Favourites! Check the Home page.', 'success');
+            }
+
+            // Pop animation
+            fab.classList.remove('pop');
+            void fab.offsetWidth;
+            fab.classList.add('pop');
+            fab.addEventListener('animationend', function () {
+                fab.classList.remove('pop');
+            }, { once: true });
+        });
+
+        // Cross-tab sync
+        window.addEventListener('storage', function (e) {
+            if (e.key === 'favorites') syncFabState(fab, tooltip);
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', injectFavBtn);
+    } else {
+        injectFavBtn();
+    }
+})();

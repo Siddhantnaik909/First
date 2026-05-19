@@ -86,7 +86,7 @@ const AuthSystem = {
             container.innerHTML = `
                 <div class="relative group" id="user-nav-dropdown">
                     <button class="flex items-center gap-3 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-all cursor-pointer" id="nav-profile-trigger">
-                        <div class="w-8 h-8 rounded-full bg-[#c96f32] flex items-center justify-center text-white font-bold text-xs">
+                        <div class="w-8 h-8 rounded-full bg-[#c96f32] flex items-center justify-center text-white font-black text-sm shadow-md">
                             ${(user.name || 'U').charAt(0).toUpperCase()}
                         </div>
                         <div class="text-left hidden sm:block">
