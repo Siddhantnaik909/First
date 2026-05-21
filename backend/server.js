@@ -46,6 +46,10 @@ const PORT = process.env.PORT || 3000;
 const LOCAL_IP = process.env.LOCAL_IP || '192.168.29.76';
 app.locals.io = io;
 
+// Socket event handler registration
+const initGameSockets = require('./src/sockets/gameSockets');
+initGameSockets(io);
+
 // Security Middleware
 app.use(require('helmet')({ contentSecurityPolicy: false }));
 
@@ -80,6 +84,10 @@ app.use(cors({
         const allowed = [
             'http://localhost:3000',
             'http://127.0.0.1:3000',
+            'http://localhost:5500',
+            'http://127.0.0.1:5500',
+            'http://localhost:5501',
+            'http://127.0.0.1:5501',
             `http://${LOCAL_IP}:3000`,
             process.env.FRONTEND_URL,
             process.env.RENDER_EXTERNAL_URL, // Live Render production URL
@@ -88,7 +96,7 @@ app.use(cors({
         ].filter(Boolean);
         
         // Allow same-origin requests, whitelisted origins, or any subdomain on Render
-        if (!origin || allowed.includes(origin) || origin.endsWith('.onrender.com')) {
+        if (!origin || allowed.includes(origin) || origin.endsWith('.onrender.com') || origin.startsWith('http://192.168.')) {
             return callback(null, true);
         }
         return callback(new Error(`CORS: origin '${origin}' not allowed`));
