@@ -366,7 +366,7 @@
                             </div>
                         </div>
                         <!-- Placeholder for a sleek line chart -->
-                        <div class="h-64 relative flex items-end gap-1">
+                        <div id="performance-chart-container" class="h-64 relative flex items-end gap-1">
                             <div class="absolute inset-0 flex flex-col justify-between py-2 pointer-events-none">
                                 <div class="w-full border-t border-slate-100"></div>
                                 <div class="w-full border-t border-slate-100"></div>
@@ -558,10 +558,20 @@
                     const statsData = await res.json();
 
                     // Populate Stats Cards
-                    document.getElementById('stat-total-users').innerText = (statsData.users || 0).toLocaleString();
-                    document.getElementById('stat-active-sessions').innerText = (statsData.activeSessions || 0).toLocaleString();
-                    document.getElementById('stat-latency').innerText = statsData.latency || '--';
-                    document.getElementById('stat-total-tools').innerText = (statsData.tools || 0).toLocaleString();
+                    const totalUsersEl = document.getElementById('stat-total-users');
+                    if (totalUsersEl) totalUsersEl.innerText = (statsData.users || 0).toLocaleString();
+                    
+                    const activeSessEl = document.getElementById('stat-active-sessions');
+                    if (activeSessEl) activeSessEl.innerText = (statsData.activeSessions || 0).toLocaleString();
+                    
+                    const mrrEl = document.getElementById('stat-mrr');
+                    if (mrrEl) mrrEl.innerText = `$${(statsData.mrr || 0).toLocaleString()}`;
+                    
+                    const proUsersEl = document.getElementById('stat-pro-users');
+                    if (proUsersEl) proUsersEl.innerText = (statsData.proUsers || statsData.premiumUsers || 0).toLocaleString();
+                    
+                    const tierDistEl = document.getElementById('stat-tier-dist');
+                    if (tierDistEl) tierDistEl.innerText = `Free: ${statsData.freeUsers || 0} | Pro: ${statsData.proUsers || 0} | Premium: ${statsData.premiumUsers || 0}`;
                     const heroUsers = document.getElementById('hero-users-online');
                     const heroTools = document.getElementById('hero-tool-count');
                     const heroRooms = document.getElementById('hero-room-count');
@@ -602,8 +612,10 @@
                     }
                 } catch (e) {
                     console.warn('Stats/Alerts offline:', e.message);
-                    ['stat-total-users','stat-active-sessions','stat-total-tools'].forEach(id => { const el = document.getElementById(id); if(el) el.innerText = '0'; });
-                    const lat = document.getElementById('stat-latency'); if(lat) lat.innerText = '--';
+                    ['stat-total-users','stat-active-sessions','stat-mrr','stat-pro-users','stat-tier-dist'].forEach(id => { 
+                        const el = document.getElementById(id); 
+                        if(el) el.innerText = id === 'stat-mrr' ? '$0' : (id === 'stat-tier-dist' ? 'Free: 0 | Pro: 0 | Premium: 0' : '0'); 
+                    });
                     const heroUsers = document.getElementById('hero-users-online');
                     const heroTools = document.getElementById('hero-tool-count');
                     const heroRooms = document.getElementById('hero-room-count');
@@ -615,24 +627,92 @@
                 }
 
                 // ===== 3. SYSTEM PERFORMANCE CHART =====
+                let currentMetricType = 'traffic'; // Default to traffic view
+                let performanceData = { traffic: [], cpu: [] };
+
                 const updatePerformance = async () => {
                    try {
                        const res = await fetch(`${API}/api/admin/performance`, { headers: { 'Authorization': `Bearer ${token}` } });
                         if (!res.ok) throw new Error('Performance API failed');
                        const data = await res.json();
-                       const chartContainer = document.querySelector('.lg\\:col-span-2 .relative.flex');
-                       if (chartContainer && data.traffic) {
-                           const points = data.traffic;
-                           chartContainer.innerHTML = `
-                               <div class="absolute inset-0 flex flex-col justify-between py-2 pointer-events-none">
-                                   ${[0,1,2,3].map(()=>'<div class="w-full border-t border-slate-100"></div>').join('')}
-                               </div>
-                               ${points.map(p => `<div class="flex-1 bg-primary/20 rounded-t-sm hover:bg-primary/40 transition-all cursor-pointer group relative" style="height: ${p}%; margin-top: auto;"><div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity z-10">${p}%</div></div>`).join('')}
-                           `;
+                       
+                       // Store both metrics
+                       if (data.traffic) performanceData.traffic = data.traffic;
+                       if (data.cpu) performanceData.cpu = data.cpu;
+                       
+                       // Render current metric
+                       renderPerformanceChart(currentMetricType);
+                   } catch (e) { 
+                       console.error('Perf sync failed:', e.message);
+                       // Use fallback data or keep existing
+                       if (performanceData.traffic.length === 0) {
+                           performanceData.traffic = Array(12).fill(0).map(() => Math.random() * 100);
                        }
-                   } catch (e) { console.error('Perf sync failed:', e.message); }
+                       if (performanceData.cpu.length === 0) {
+                           performanceData.cpu = Array(12).fill(0).map(() => Math.random() * 80);
+                       }
+                   }
                 };
+
+                const renderPerformanceChart = (metricType) => {
+                    const chartContainer = document.getElementById('performance-chart-container');
+                    if (!chartContainer) return;
+                    
+                    const points = performanceData[metricType] || [];
+                    if (points.length === 0) return;
+
+                    chartContainer.innerHTML = `
+                        <div class="absolute inset-0 flex flex-col justify-between py-2 pointer-events-none">
+                            ${[0,1,2,3].map(()=>'<div class="w-full border-t border-slate-100"></div>').join('')}
+                        </div>
+                        ${points.map((p, idx) => `
+                            <div class="flex-1 bg-primary/20 rounded-t-sm hover:bg-primary/40 transition-all cursor-pointer group relative" 
+                                 style="height: ${p}%; margin-top: auto;" 
+                                 title="${metricType === 'cpu' ? 'CPU Load' : 'Traffic'}: ${p.toFixed(1)}%">
+                                <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                    ${p.toFixed(1)}%
+                                </div>
+                            </div>
+                        `).join('')}
+                    `;
+                };
+
+                // Initial load
                 updatePerformance();
+                
+                // Real-time polling every 5 seconds
+                setInterval(updatePerformance, 5000);
+
+                // Performance metric toggle buttons
+                const allBtns = document.querySelectorAll('.dashboard-action-row button');
+                const trafficBtn = Array.from(allBtns).find(btn => btn.textContent.includes('Traffic'));
+                const cpuBtn = Array.from(allBtns).find(btn => btn.textContent.includes('CPU'));
+                
+                if (trafficBtn) {
+                    trafficBtn.onclick = () => {
+                        currentMetricType = 'traffic';
+                        trafficBtn.classList.add('dashboard-btn-primary');
+                        trafficBtn.classList.remove('dashboard-btn-secondary');
+                        if (cpuBtn) {
+                            cpuBtn.classList.remove('dashboard-btn-primary');
+                            cpuBtn.classList.add('dashboard-btn-secondary');
+                        }
+                        renderPerformanceChart('traffic');
+                    };
+                }
+                
+                if (cpuBtn) {
+                    cpuBtn.onclick = () => {
+                        currentMetricType = 'cpu';
+                        cpuBtn.classList.add('dashboard-btn-primary');
+                        cpuBtn.classList.remove('dashboard-btn-secondary');
+                        if (trafficBtn) {
+                            trafficBtn.classList.remove('dashboard-btn-primary');
+                            trafficBtn.classList.add('dashboard-btn-secondary');
+                        }
+                        renderPerformanceChart('cpu');
+                    };
+                }
  
                 // ===== 4. CALCULATOR TOOLS INVENTORY =====
                 window.loadToolsInventory = async () => {
