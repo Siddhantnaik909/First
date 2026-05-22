@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 
 <head>
@@ -6,15 +6,16 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Smart Hub | IP Locator</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/css/design-system.css">
     <link rel="stylesheet" href="/css/calc-responsive.css">
-        <script>
+    
+    <!-- Leaflet.js Mapping Library CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -35,7 +36,7 @@
     </script>
     <style>
         :root {
-            --primary-color: #3b82f6;
+            --primary-color: #c96f32;
         }
 
         body {
@@ -46,30 +47,29 @@
             font-family: 'Material Symbols Outlined';
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
+        
+        #map-container {
+            height: 400px;
+            width: 100%;
+            border-radius: 20px;
+            z-index: 1;
+        }
+        
+        .glass-badge {
+            background: rgba(201, 111, 50, 0.08);
+            border: 1px solid rgba(201, 111, 50, 0.15);
+            color: #c96f32;
+        }
     </style>
 </head>
 
 <body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
     <div id="header-placeholder"></div>
-    
-    
-    
 
-    
-
-    
-
-    
-
-    
-
-
-            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+    <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
         <div class="mb-12">
-            
-<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">IP Geo Lab.</h1>
-            <p class="text-on-surface-variant text-lg max-w-2xl">Locate any IP address globally. See where an IP is
-                located, its provider (ISP), and its coordinates on a map.</p>
+            <h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">IP Geo Lab.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Locate any IP address or domain globally. Get instant provider ISP details, connections parameters, and coordinates on an interactive map.</p>
         </div>
 
         <div class="grid grid-cols-12 gap-8 items-start">
@@ -77,56 +77,46 @@
             <div class="col-span-12 lg:col-span-4 space-y-8">
                 <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(59,130,246,0.06)]">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-blue-800">Search
-                            History</h3>
+                        <h3 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-blue-800">Search History</h3>
                         <span onclick="clearSidebarHistory()"
                             class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors"
                             title="Clear History">delete_sweep</span>
                     </div>
                     <div class="space-y-6" id="sidebar-history-container">
-                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent
-                            searches.</p>
+                        <p class="text-sm text-on-surface-variant font-medium opacity-60 text-center py-4">No recent searches.</p>
                     </div>
                 </div>
 
                 <div class="bg-blue-900 p-8 rounded-2xl text-white shadow-xl relative overflow-hidden group">
-                    <div
-                        class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
                         <span class="material-symbols-outlined text-[120px]">explore</span>
                     </div>
                     <h4 class="text-lg font-black mb-2 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-sm">public</span> IP Privacy
+                        <span class="material-symbols-outlined text-sm">public</span> IP Privacy & Info
                     </h4>
-                    <p class="text-blue-100 text-[11px] leading-relaxed mb-4 opacity-80">
-                        Your public IP address can reveal your city and ISP. Using a VPN is a great way to hide your
-                        actual location from websites.
+                    <p class="text-blue-100 text-[11px] leading-relaxed mb-4 opacity-80 font-medium">
+                        Smart Hub queries regional registries (RIPE, ARIN, APNIC) in real-time. Use a secure VPN or proxy configuration if you want to shield your physical client coordinates from third-party audits.
                     </p>
                 </div>
 
                 <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
-                    <h4
-                        class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">
-                        Quick Navigation</h4>
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6">Quick Navigation</h4>
                     <div class="space-y-4">
                         <a href="tool_dns_lookup.html"
                             class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
-                            <span
-                                class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
                             <div>
-                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back
-                                </div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Back</div>
                                 <div class="text-xs font-bold text-on-surface uppercase">DNS Hub</div>
                             </div>
                         </a>
                         <a href="calc_subnet.html"
                             class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group text-right justify-end">
                             <div>
-                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next
-                                </div>
+                                <div class="text-[10px] font-bold text-on-surface-variant uppercase opacity-60">Next</div>
                                 <div class="text-xs font-bold text-on-surface uppercase">Subnet Studio</div>
                             </div>
-                            <span
-                                class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
+                            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_forward</span>
                         </a>
                     </div>
                 </div>
@@ -135,53 +125,110 @@
             <!-- Content Area -->
             <div class="col-span-12 lg:col-span-8">
                 <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="space-y-6">
-                            <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">
-                                Search Parameters</h4>
-                            <div class="space-y-4">
-                                <div class="space-y-2">
-                                    <label
-                                        class="text-[9px] font-black text-on-surface-variant uppercase ml-1 block tracking-widest">Target
-                                        IP Address</label>
-                                    <input type="text" id="geoIP" placeholder="Leave empty for your IP"
-                                        class="w-full bg-white border border-slate-100 rounded-2xl px-6 py-4 font-mono font-bold text-xl outline-none focus:ring-2 focus:ring-primary shadow-sm">
-                                </div>
-                            </div>
-                            <div class="flex gap-4 pt-4">
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Search Parameters</h4>
+                            <span id="ip-indicator" class="hidden px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider glass-badge">Checking IP...</span>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <input type="text" id="geoIP" placeholder="Enter IP or hostname (e.g. google.com)"
+                                class="flex-grow bg-white border border-slate-100 rounded-2xl px-6 py-4 font-mono font-bold text-lg outline-none focus:ring-2 focus:ring-primary shadow-sm">
+                            <div class="flex gap-2">
                                 <button onclick="locateIP()" id="btn-geo"
-                                    class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Locate
-                                    Now</button>
+                                    class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Locate</button>
                                 <button onclick="clearData()"
                                     class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
                                     <span class="material-symbols-outlined">restart_alt</span>
                                 </button>
                             </div>
                         </div>
+                    </div>
 
-                        <div id="results-display" class="hidden space-y-6">
-                            <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">
-                                Location Details</h4>
-                            <div class="bg-white p-8 rounded-3xl border border-slate-50 shadow-sm space-y-6"
-                                id="geo-results-area">
-                                <!-- Results go here -->
+                    <!-- Loader -->
+                    <div id="loader" class="hidden py-12 flex flex-col items-center justify-center space-y-4">
+                        <span class="material-symbols-outlined text-5xl text-primary animate-spin">sync</span>
+                        <p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Resolving location details...</p>
+                    </div>
+
+                    <!-- Results Layout -->
+                    <div id="results-display" class="hidden space-y-6 animate-[calcFadeUp_0.4s_ease]">
+                        <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">IP Telemetry Report</h4>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Geography Card -->
+                            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                                <h5 class="text-xs font-black text-primary uppercase tracking-wider flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm">location_on</span> Geographical Info
+                                </h5>
+                                <div class="space-y-3 pt-2 text-xs font-medium">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-slate-400">Target IP</span>
+                                        <span id="res-ip" class="font-mono font-bold text-on-surface">--</span>
+                                    </div>
+                                    <div class="flex justify-between items-center border-t border-slate-50 pt-3">
+                                        <span class="text-slate-400">Country & Code</span>
+                                        <div class="flex items-center gap-2 font-bold text-on-surface">
+                                            <span id="res-country">--</span>
+                                            <span id="res-country-code" class="text-[9px] px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded uppercase font-black">--</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-center border-t border-slate-50 pt-3">
+                                        <span class="text-slate-400">Region & City</span>
+                                        <span id="res-region" class="font-bold text-on-surface">--</span>
+                                    </div>
+                                    <div class="flex justify-between items-center border-t border-slate-50 pt-3">
+                                        <span class="text-slate-400">Postal Zip Code</span>
+                                        <span id="res-postal" class="font-bold text-on-surface font-mono">--</span>
+                                    </div>
+                                </div>
                             </div>
+
+                            <!-- Connection Card -->
+                            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                                <h5 class="text-xs font-black text-primary uppercase tracking-wider flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm">settings_ethernet</span> Network Details
+                                </h5>
+                                <div class="space-y-3 pt-2 text-xs font-medium">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-slate-400">Internet Provider</span>
+                                        <span id="res-isp" class="font-bold text-on-surface max-w-[200px] truncate text-right">--</span>
+                                    </div>
+                                    <div class="flex justify-between items-center border-t border-slate-50 pt-3">
+                                        <span class="text-slate-400">ASN Code</span>
+                                        <span id="res-asn" class="font-mono font-bold text-on-surface">--</span>
+                                    </div>
+                                    <div class="flex justify-between items-center border-t border-slate-50 pt-3">
+                                        <span class="text-slate-400">Coordinates</span>
+                                        <span id="res-coords" class="font-mono font-bold text-on-surface">--</span>
+                                    </div>
+                                    <div class="flex justify-between items-center border-t border-slate-50 pt-3">
+                                        <span class="text-slate-400">Timezone / Current Time</span>
+                                        <span id="res-timezone" class="font-bold text-on-surface">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Map Block -->
+                        <div id="map-block" class="bg-slate-100 p-2 rounded-3xl border border-slate-200 shadow-inner overflow-hidden">
+                            <div id="map-container"></div>
                         </div>
                     </div>
 
-                    <div id="map-block"
-                        class="hidden mt-4 bg-slate-100 p-2 rounded-3xl border border-slate-200 shadow-inner overflow-hidden">
-                        <iframe id="map-frame" width="100%" height="400" frameborder="0" style="border:0"
-                            class="rounded-2xl contrast-75 brightness-95" allowfullscreen></iframe>
-                    </div>
-
                     <!-- Navigation Actions -->
-                    <div
-                        class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-end items-center gap-4">
+                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="flex gap-2">
+                            <button onclick="copyDataJSON()" class="p-4 bg-slate-100 rounded-xl text-[#7a614d] hover:text-primary transition-all font-bold text-xs uppercase flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">content_copy</span> Copy JSON
+                            </button>
+                            <button onclick="exportDataJSON()" class="p-4 bg-slate-100 rounded-xl text-[#7a614d] hover:text-primary transition-all font-bold text-xs uppercase flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">download</span> Export File
+                            </button>
+                        </div>
                         <div class="flex gap-3">
                             <button onclick="saveToHistory()"
-                                class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Save
-                                Result</button>
+                                class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Save Result</button>
                             <button onclick="window.print()"
                                 class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
                                 <span class="material-symbols-outlined">print</span>
@@ -195,97 +242,175 @@
 
     <div id="footer-placeholder"></div>
 
-    
-    
-
-
     <script src="/js/calc-utils.js"></script>
     <script>
         let lastGeo = null;
+        let map = null;
+        let marker = null;
 
-        async function locateIP() {
-            const ip = document.getElementById('geoIP').value.trim();
+        // Auto detect user location on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebarHistory('IP Geo Lab', 'sidebar-history-container');
+            locateIP(''); // Trigger auto detect
+        });
+
+        async function locateIP(customTarget) {
+            const ipInput = document.getElementById('geoIP');
+            let target = (customTarget !== undefined) ? customTarget : ipInput.value.trim();
+            
             const btn = document.getElementById('btn-geo');
-            const resArea = document.getElementById('geo-results-area');
-            const mapFrame = document.getElementById('map-frame');
+            const loader = document.getElementById('loader');
+            const results = document.getElementById('results-display');
+            const indicator = document.getElementById('ip-indicator');
 
-            btn.innerText = "Locating...";
+            btn.disabled = true;
+            loader.classList.remove('hidden');
+            results.classList.add('hidden');
+            
+            if (target === '') {
+                indicator.innerText = "Detecting Client IP...";
+                indicator.classList.remove('hidden');
+            } else {
+                indicator.classList.add('hidden');
+            }
 
             try {
-                const url = ip ? `https://ipapi.co/${ip}/json/` : `https://ipapi.co/json/`;
+                const url = target ? `/api/tools/ip-geo?target=${encodeURIComponent(target)}` : `/api/tools/ip-geo`;
                 const response = await fetch(url);
                 const data = await response.json();
 
-                if (data.error) throw new Error(data.reason || "Lookup failed");
+                if (!response.ok || data.error) {
+                    throw new Error(data.error || "Geolocation search request failed");
+                }
 
-                document.getElementById('results-display').classList.remove('hidden');
-                document.getElementById('map-block').classList.remove('hidden');
+                lastGeo = data;
+                
+                // Populate Geography Details
+                document.getElementById('res-ip').innerText = data.ip || '--';
+                document.getElementById('res-country').innerText = data.country_name || '--';
+                document.getElementById('res-country-code').innerText = data.country_code || '--';
+                document.getElementById('res-region').innerText = `${data.region || ''}, ${data.city || ''}`.trim() || '--';
+                document.getElementById('res-postal').innerText = data.postal || '--';
 
-                const flagUrl = data.country_code ? `https://flagcdn.com/24x18/${data.country_code.toLowerCase()}.png` : '';
+                // Populate Connection Details
+                document.getElementById('res-isp').innerText = data.org || data.asn || '--';
+                document.getElementById('res-asn').innerText = data.asn || '--';
+                document.getElementById('res-coords').innerText = `${data.latitude || '--'}, ${data.longitude || '--'}`;
 
-                resArea.innerHTML = `
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Internet Provider</span>
-                            <span class="text-sm font-black text-primary">${data.org}</span>
-                        </div>
-                        <div class="flex justify-between items-center border-t border-slate-50 pt-4">
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">City & Country</span>
-                            <div class="flex items-center gap-2">
-                                <span class="text-sm font-bold text-on-surface">${data.city}, ${data.country_name}</span>
-                                <img src="${flagUrl}" class="w-4 shadow-sm" alt="Flag">
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center border-t border-slate-50 pt-4">
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Coordinates</span>
-                            <span class="text-sm font-mono font-bold text-[#7a614d]">${data.latitude}, ${data.longitude}</span>
-                        </div>
-                    </div>
-                `;
+                // Calculate Live Target Time
+                if (data.timezone) {
+                    try {
+                        const localTime = new Date().toLocaleString("en-US", { timeZone: data.timezone });
+                        const timeString = new Date(localTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        document.getElementById('res-timezone').innerText = `${data.timezone} (${data.utc_offset || ''}) @ ${timeString}`;
+                    } catch (e) {
+                        document.getElementById('res-timezone').innerText = `${data.timezone} (${data.utc_offset || ''})`;
+                    }
+                } else {
+                    document.getElementById('res-timezone').innerText = '--';
+                }
 
-                const lat = parseFloat(data.latitude);
-                const lon = parseFloat(data.longitude);
-                const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${lon - 0.01},${lat - 0.01},${lon + 0.01},${lat + 0.01}&layer=mapnik&marker=${lat},${lon}`;
-                mapFrame.src = mapUrl;
+                // Render Map
+                results.classList.remove('hidden');
+                initLeafletMap(parseFloat(data.latitude), parseFloat(data.longitude), data.city || data.ip);
 
-                lastGeo = { ip: data.ip, country: data.country_name, isp: data.org };
+                if (target === '') {
+                    indicator.innerText = `Auto Detected: ${data.ip}`;
+                    indicator.classList.remove('hidden');
+                    ipInput.value = data.ip;
+                }
+
             } catch (err) {
-                resArea.innerHTML = `<div class="text-xs font-bold text-rose-500 uppercase py-4">Lookup Failed: ${err.message}</div>`;
+                if (typeof window.showAlert === 'function') {
+                    window.showAlert(err.message, 'error');
+                } else {
+                    alert("Lookup Failed: " + err.message);
+                }
             } finally {
-                btn.innerText = "Locate Now";
+                btn.disabled = false;
+                loader.classList.add('hidden');
             }
+        }
+
+        function initLeafletMap(lat, lon, label) {
+            if (!lat || !lon) return;
+
+            // Wait a brief tick for elements to render
+            setTimeout(() => {
+                const mapContainer = document.getElementById('map-container');
+                if (!mapContainer) return;
+
+                if (!map) {
+                    map = L.map('map-container', {
+                        center: [lat, lon],
+                        zoom: 12,
+                        zoomControl: true
+                    });
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+                } else {
+                    map.setView([lat, lon], 12);
+                }
+
+                if (marker) {
+                    marker.setLatLng([lat, lon]);
+                } else {
+                    marker = L.marker([lat, lon]).addTo(map);
+                }
+
+                marker.bindPopup(`<b>Target Node:</b> ${label}`).openPopup();
+                
+                // Force size recalculation
+                map.invalidateSize();
+            }, 50);
         }
 
         function clearData() {
             document.getElementById('geoIP').value = '';
             document.getElementById('results-display').classList.add('hidden');
-            document.getElementById('map-block').classList.add('hidden');
+            document.getElementById('ip-indicator').classList.add('hidden');
             lastGeo = null;
+        }
+
+        function copyDataJSON() {
+            if (!lastGeo) return;
+            navigator.clipboard.writeText(JSON.stringify(lastGeo, null, 4)).then(() => {
+                if (typeof window.showAlert === 'function') {
+                    window.showAlert('JSON telemetry copied to clipboard!', 'success');
+                } else {
+                    alert('Copied!');
+                }
+            });
+        }
+
+        function exportDataJSON() {
+            if (!lastGeo) return;
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(lastGeo, null, 4));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `smart-hub-geolocation-${lastGeo.ip}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
         }
 
         async function saveToHistory() {
             if (!lastGeo) return;
-            const inputs = [{ label: 'IP Address', val: lastGeo.ip }];
+            const inputs = [{ label: 'IP / Host', val: lastGeo.ip }];
             const results = [
-                { label: 'Provider', val: lastGeo.isp, highlight: true },
-                { label: 'Location', val: lastGeo.country }
+                { label: 'ISP Provider', val: lastGeo.org || lastGeo.asn, highlight: true },
+                { label: 'Location Code', val: `${lastGeo.city || ''}, ${lastGeo.country_name || ''}` }
             ];
             const ok = await window.saveCalcToHistory('IP Geo Lab', inputs, results);
             if (ok) initSidebarHistory('IP Geo Lab', 'sidebar-history-container');
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            initSidebarHistory('IP Geo Lab', 'sidebar-history-container');
-        });
     </script>
     <script type="module" src="/js/script.js"></script>
 
     <!-- Unified Footer -->
-    
-
     <script src="/js/app.js"></script>
-    
-
     <script src="/js/component-loader.js"></script>
 </body>
 

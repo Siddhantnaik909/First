@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -195,16 +195,6 @@
     <script src="/js/calc-utils.js"></script>
     <script>
         let lastTrace = null;
-        const HOPS = [
-            { label: 'Local Router', sub: '192.168.1.1', base: 1 },
-            { label: 'Gateway', sub: '172.20.0.10', base: 8 },
-            { label: 'ISP', sub: 'isp.net', base: 15 },
-            { label: 'Cloudflare', sub: '1.1.1.1', base: 22 },
-            { label: 'CDN', sub: 'cdn.net', base: 35 },
-            { label: 'Server', sub: 'network.net', base: 48 },
-            { label: 'Global Edge', sub: '8.8.8.8', base: 55 },
-            { label: 'Destination', sub: 'Target Website', base: 65 }
-        ];
 
         async function runTrace() {
             const host = document.getElementById('traceHost').value.trim();
@@ -215,57 +205,111 @@
             const btn = document.getElementById('btn-trace');
 
             document.getElementById('results-display').classList.remove('hidden');
-            resArea.innerHTML = '';
+            resArea.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-10 space-y-3">
+                    <div class="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+                    <p class="text-xs font-bold text-on-surface-variant animate-pulse tracking-widest uppercase">Probing route path via system terminal...</p>
+                </div>`;
             status.innerText = "TRACING...";
             btn.disabled = true;
 
-            let allLats = [];
+            document.getElementById('minLat').innerText = '--';
+            document.getElementById('maxLat').innerText = '--';
+            document.getElementById('avgLat').innerText = '--';
 
-            for (let i = 0; i < HOPS.length; i++) {
-                await new Promise(r => setTimeout(r, 400));
-                const hop = HOPS[i];
-                const jitter = Math.round(Math.random() * 8);
-                const lat = hop.base + jitter;
-                allLats.push(lat);
+            try {
+                const response = await fetch(`/api/tools/traceroute?target=${encodeURIComponent(host)}`);
+                const data = await response.json();
 
-                const html = `
-                    <div class="hop-bridge flex items-center justify-between p-3 bg-white/50 rounded-lg border border-slate-100 transition-all hover:bg-slate-50">
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 rounded-full border-2 border-primary/20 bg-blue-50 flex items-center justify-center text-[10px] font-black text-primary">
-                                ${i + 1}
+                if (!response.ok) {
+                    throw new Error(data.error || "Failed to trace route to target");
+                }
+
+                const hops = data.hops || [];
+                resArea.innerHTML = '';
+
+                if (hops.length === 0) {
+                    resArea.innerHTML = `<div class="text-xs font-bold text-rose-500 py-4 text-center">No hops detected or trace failed.</div>`;
+                    status.innerText = "FAILED";
+                    btn.disabled = false;
+                    return;
+                }
+
+                let allLats = [];
+
+                for (let i = 0; i < hops.length; i++) {
+                    // Premium progressive reveal feel - 250ms delay per hop card
+                    await new Promise(r => setTimeout(r, 250));
+                    const hop = hops[i];
+                    
+                    let latVal = 0;
+                    let latencyStr = hop.latency || '*';
+                    if (latencyStr !== 'Timed Out' && latencyStr !== '*') {
+                        const match = latencyStr.match(/(\d+)/);
+                        if (match) {
+                            latVal = parseInt(match[1]);
+                            allLats.push(latVal);
+                        }
+                    }
+
+                    const displayLat = latVal > 0 ? `${latVal} ms` : 'Timed Out';
+                    const displayPercent = latVal > 0 ? Math.min(100, (latVal / 120) * 100) : 0;
+                    
+                    // Style differently for timed-out hops
+                    const cardBg = latVal > 0 ? 'bg-white/50 hover:bg-white' : 'bg-rose-50/30 border-rose-100/50';
+                    const latColor = latVal > 0 ? 'text-primary' : 'text-rose-500 font-bold';
+
+                    const html = `
+                        <div class="hop-bridge flex items-center justify-between p-4 ${cardBg} rounded-xl border border-slate-100/80 transition-all shadow-sm relative animate-[fadeIn_0.3s_ease-out]">
+                            <div class="flex items-center gap-4">
+                                <div class="w-8 h-8 rounded-full border-2 border-primary/20 bg-blue-50/50 dark:bg-slate-800 flex items-center justify-center text-[10px] font-black text-primary">
+                                    ${hop.hop}
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-xs font-black text-on-surface">${hop.label || 'Internet Node'}</span>
+                                    <span class="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-wider">${hop.ip}</span>
+                                </div>
                             </div>
-                            <div class="flex flex-col">
-                                <span class="text-xs font-black text-on-surface">${hop.label}</span>
-                                <span class="text-[8px] font-mono font-bold text-slate-400 uppercase">${hop.sub}</span>
+                            <div class="flex flex-col items-end">
+                                <span class="text-xs font-mono font-black ${latColor}">${displayLat}</span>
+                                ${latVal > 0 ? `
+                                <div class="w-16 h-1 bg-slate-100 rounded-full overflow-hidden mt-1">
+                                    <div class="h-full bg-primary/60" style="width: ${displayPercent}%"></div>
+                                </div>` : `
+                                <span class="text-[8px] font-bold text-rose-400 uppercase mt-0.5 tracking-wider">No Reply</span>
+                                `}
                             </div>
-                        </div>
-                        <div class="flex flex-col items-end">
-                            <span class="text-xs font-mono font-black text-primary">${lat} ms</span>
-                            <div class="w-16 h-1 bg-slate-100 rounded-full overflow-hidden mt-1">
-                                <div class="h-full bg-primary/40" style="width: ${Math.min(100, (lat/100)*100)}%"></div>
-                            </div>
-                        </div>
-                    </div>`;
+                        </div>`;
+                    
+                    resArea.insertAdjacentHTML('beforeend', html);
+                    resArea.scrollTop = resArea.scrollHeight;
+
+                    if (allLats.length > 0) {
+                        const min = Math.min(...allLats);
+                        const max = Math.max(...allLats);
+                        const avg = Math.round(allLats.reduce((a, b) => a + b, 0) / allLats.length);
+
+                        document.getElementById('minLat').innerText = min + ' ms';
+                        document.getElementById('maxLat').innerText = max + ' ms';
+                        document.getElementById('avgLat').innerText = avg + ' ms';
+                    }
+                }
+
+                status.innerText = "TRACE COMPLETE";
                 
-                resArea.insertAdjacentHTML('beforeend', html);
-                resArea.scrollTop = resArea.scrollHeight;
+                const finalAvg = allLats.length > 0 ? Math.round(allLats.reduce((a, b) => a + b, 0) / allLats.length) : 0;
+                lastTrace = { 
+                    host: data.host || host, 
+                    hops: hops.length, 
+                    avg: finalAvg 
+                };
 
-                const min = Math.min(...allLats);
-                const max = Math.max(...allLats);
-                const avg = Math.round(allLats.reduce((a, b) => a + b, 0) / allLats.length);
-
-                document.getElementById('minLat').innerText = min + 'ms';
-                document.getElementById('maxLat').innerText = max + 'ms';
-                document.getElementById('avgLat').innerText = avg + 'ms';
+            } catch (err) {
+                resArea.innerHTML = `<div class="text-xs font-bold text-rose-500 py-4 text-center">Traceroute error: ${err.message}</div>`;
+                status.innerText = "ERROR";
+            } finally {
+                btn.disabled = false;
             }
-
-            status.innerText = "TRACE COMPLETE";
-            btn.disabled = false;
-            lastTrace = { 
-                host, 
-                hops: HOPS.length, 
-                avg: Math.round(allLats.reduce((a, b) => a + b, 0) / allLats.length) 
-            };
         }
 
         function clearData() {

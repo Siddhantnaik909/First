@@ -226,6 +226,7 @@ const connectorRoutes = require('./src/routes/connectorRoutes');
 const gameRoutes = require('./src/routes/gameRoutes');
 const contactRoutes = require('./src/routes/contactRoutes');
 const saasRoutes = require('./src/routes/saasRoutes');
+const toolRoutes = require('./src/routes/toolRoutes');
 
 // Public API for sidebar features (Fixes the ERR_CONNECTION_REFUSED)
 app.get('/api/admin/client/features', (req, res) => {
@@ -241,6 +242,7 @@ app.use('/api/connectors', connectorRoutes);
 app.use('/api/games', gameRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/saas', saasRoutes);
+app.use('/api/tools', toolRoutes);
 
 // ── Clean URL routes (no .html extension needed) ─────────────────────────────
 // Calculators hub — /calculators and /calculators/ both serve calculators.html

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="/css/design-system.css">
     <link rel="stylesheet" href="/css/calc-responsive.css">
-        <script>
+    <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -29,34 +29,28 @@
         }
     </script>
     <style>
-        :root { --primary-color: #3b82f6; }
+        :root { --primary-color: #c96f32; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .material-symbols-outlined {
             font-family: 'Material Symbols Outlined';
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
+        
+        .record-tag {
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
     <div id="header-placeholder"></div>
-    
-    
-    
 
-    
-
-    
-
-    
-
-    
-
-
-            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+    <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
         <div class="mb-12">
-            
-<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">DNS Hub.</h1>
-            <p class="text-on-surface-variant text-lg max-w-2xl">Find the IP address and mail server records for any website. Useful for setting up domains or troubleshooting email issues.</p>
+            <h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">DNS Hub.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Find official IP routing, mail systems, nameservers, and configuration details for any web domain instantly.</p>
         </div>
 
         <div class="grid grid-cols-12 gap-8 items-start">
@@ -77,15 +71,15 @@
                         <span class="material-symbols-outlined text-[120px]">dns</span>
                      </div>
                      <h4 class="text-lg font-black mb-2 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-sm">language</span> What is DNS?
+                        <span class="material-symbols-outlined text-sm">language</span> Native Resolution
                      </h4>
-                     <p class="text-blue-100 text-[11px] leading-relaxed mb-4 opacity-80">
-                        DNS acts like a phonebook for the internet. It translates website names (like google.com) into IP addresses (like 142.250.190.46) that computers understand.
+                     <p class="text-blue-100 text-[11px] leading-relaxed mb-4 opacity-80 font-medium">
+                        Unlike basic scrapers, Smart Hub queries root authoritative DNS servers to obtain fresh records, helping domain administrators verify zone updates, SPF verifications, and CNAME setups instantly.
                      </p>
                 </div>
             
                 <div class="bg-surface-container-high p-8 rounded-xl shadow-lg border border-primary/10">
-                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6 uppercase">Quick Navigation</h4>
+                    <h4 class="text-sm font-bold tracking-[0.03em] text-on-surface uppercase text-purple-800 mb-6">Quick Navigation</h4>
                     <div class="space-y-4">
                         <a href="calc_subnet.html" class="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20 group">
                             <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">arrow_back</span>
@@ -108,40 +102,53 @@
             <!-- Content Area -->
             <div class="col-span-12 lg:col-span-8">
                 <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="space-y-6">
-                            <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Lookup target</h4>
-                            <div class="space-y-4">
-                                <div class="space-y-2">
-                                    <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Domain name</label>
-                                    <input type="text" id="dnsDomain" placeholder="e.g. google.com" class="w-full bg-white border border-slate-100 rounded-2xl px-6 py-4 font-mono font-bold text-lg outline-none focus:ring-2 focus:ring-primary shadow-sm">
-                                </div>
-                                <div class="flex gap-4 pt-2">
-                                    <button onclick="lookupDNS()" id="btn-dns-lookup" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Start search</button>
-                                    <button onclick="clearData()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
-                                        <span class="material-symbols-outlined">restart_alt</span>
-                                    </button>
-                                </div>
+                    
+                    <div class="space-y-6">
+                        <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Domain target</h4>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <input type="text" id="dnsDomain" placeholder="Enter domain name (e.g. github.com)" 
+                                class="flex-grow bg-white border border-slate-100 rounded-2xl px-6 py-4 font-mono font-bold text-lg outline-none focus:ring-2 focus:ring-primary shadow-sm">
+                            <div class="flex gap-2">
+                                <button onclick="lookupDNS()" id="btn-dns-lookup" 
+                                    class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Resolve</button>
+                                <button onclick="clearData()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined">restart_alt</span>
+                                </button>
                             </div>
                         </div>
+                    </div>
 
-                        <div id="results-display" class="hidden space-y-6">
-                            <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Website Records</h4>
-                            <div class="bg-white p-8 rounded-3xl border border-slate-50 shadow-sm space-y-4" id="dns-results-area">
-                                <!-- Results go here -->
-                            </div>
+                    <!-- Loader -->
+                    <div id="loader" class="hidden py-12 flex flex-col items-center justify-center space-y-4">
+                        <span class="material-symbols-outlined text-5xl text-primary animate-spin">sync</span>
+                        <p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Querying authoritative nameservers...</p>
+                    </div>
+
+                    <!-- Output Results -->
+                    <div id="results-display" class="hidden space-y-6 animate-[calcFadeUp_0.4s_ease]">
+                        <div class="flex items-center justify-between ml-1">
+                            <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Domain Zone File records</h4>
+                            <span id="dns-record-count" class="px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider bg-primary/10 text-primary">0 Records Found</span>
+                        </div>
+                        <div class="space-y-4 max-h-[500px] overflow-y-auto pr-1" id="dns-results-area">
+                            <!-- Populated categories -->
                         </div>
                     </div>
 
                     <div class="bg-blue-50/50 p-6 rounded-2xl border border-blue-100/50 flex items-start gap-4">
                         <span class="material-symbols-outlined text-blue-400">info</span>
                         <p class="text-[11px] text-blue-800 leading-relaxed font-medium">
-                            This tool searches for common DNS records like 'A' (Website IP) and 'MX' (Mail Servers) using the Google Public DNS service.
+                            Authority nameserver responses are cached regionally. Zones configuration updates might take up to 24-48 hours to propagate fully worldwide (based on TTL profiles).
                         </p>
                     </div>
 
                     <!-- Navigation Actions -->
-                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-end items-center gap-4">
+                    <div class="pt-10 border-t border-slate-200/50 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="flex gap-2">
+                            <button onclick="copyDataJSON()" class="p-4 bg-slate-100 rounded-xl text-[#7a614d] hover:text-primary transition-all font-bold text-xs uppercase flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">content_copy</span> Copy JSON
+                            </button>
+                        </div>
                         <div class="flex gap-3">
                             <button onclick="saveToHistory()" class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest uppercase hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all">Save Result</button>
                             <button onclick="window.print()" class="p-4 bg-slate-100 dark:bg-slate-800 rounded-xl text-[#7a614d] dark:text-[#94a3b8] hover:text-primary dark:hover:text-primary transition-colors">
@@ -156,66 +163,180 @@
 
     <div id="footer-placeholder"></div>
 
-    
-    
-
-
     <script src="/js/calc-utils.js"></script>
     <script>
         let lastProbe = null;
 
         async function lookupDNS() {
-            const domain = document.getElementById('dnsDomain').value.trim();
+            const domainInput = document.getElementById('dnsDomain');
+            const domain = domainInput.value.trim();
             if (!domain) return alert("Please enter a domain name.");
 
             const btn = document.getElementById('btn-dns-lookup');
+            const loader = document.getElementById('loader');
+            const results = document.getElementById('results-display');
             const resArea = document.getElementById('dns-results-area');
+            const recordCount = document.getElementById('dns-record-count');
             
-            btn.innerText = "Looking up...";
-            resArea.innerHTML = '<div class="space-y-3"><div class="h-4 bg-slate-100 rounded animate-pulse"></div><div class="h-4 bg-slate-100 rounded w-5/6 animate-pulse"></div></div>';
+            btn.disabled = true;
+            loader.classList.remove('hidden');
+            results.classList.add('hidden');
+            resArea.innerHTML = '';
             
             try {
-                // Fetch A records and MX records in parallel
-                const [resA, resMX] = await Promise.all([
-                    fetch(`https://dns.google/resolve?name=${domain}&type=A`).then(r => r.json()),
-                    fetch(`https://dns.google/resolve?name=${domain}&type=MX`).then(r => r.json())
-                ]);
+                const response = await fetch(`/api/tools/dns-lookup?domain=${encodeURIComponent(domain)}`);
+                const data = await response.json();
 
-                document.getElementById('results-display').classList.remove('hidden');
+                if (!response.ok || data.error) throw new Error(data.error || "DNS query failed");
+
+                lastProbe = data;
+                recordCount.innerText = `${data.count} Zone Records`;
+
                 let html = '';
+                const { records } = data;
 
-                if (resA.Answer) {
-                    resA.Answer.forEach(rec => {
-                        html += `
-                            <div class="p-3 bg-white/50 rounded-lg border border-slate-100 flex justify-between items-center">
-                                <span class="text-[9px] font-black text-primary px-2 py-0.5 bg-blue-50 rounded">IP</span>
-                                <span class="text-xs font-mono font-bold text-on-surface truncate ml-4">${rec.data}</span>
-                            </div>`;
-                    });
+                // 1. A Records
+                if (records.A && records.A.length > 0) {
+                    html += renderRecordSection('A', 'IPv4 Addresses', records.A.map(ip => `
+                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
+                            <span class="font-mono text-xs font-bold text-on-surface">${ip}</span>
+                            <button onclick="copyToClipboard('${ip}')" class="text-slate-400 hover:text-primary transition-colors"><span class="material-symbols-outlined text-sm">content_copy</span></button>
+                        </div>
+                    `).join(''));
                 }
 
-                if (resMX.Answer) {
-                    resMX.Answer.forEach(rec => {
-                        html += `
-                            <div class="p-3 bg-white/50 rounded-lg border border-slate-100 flex justify-between items-center">
-                                <span class="text-[9px] font-black text-emerald-600 px-2 py-0.5 bg-emerald-50 rounded uppercase">MAIL</span>
-                                <span class="text-xs font-mono font-bold text-on-surface truncate ml-4">${rec.data.split(' ').slice(1).join(' ')}</span>
-                            </div>`;
-                    });
+                // 2. AAAA Records
+                if (records.AAAA && records.AAAA.length > 0) {
+                    html += renderRecordSection('AAAA', 'IPv6 Routing', records.AAAA.map(ip => `
+                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
+                            <span class="font-mono text-[11px] font-bold text-on-surface break-all mr-4">${ip}</span>
+                            <button onclick="copyToClipboard('${ip}')" class="text-slate-400 hover:text-primary transition-colors flex-shrink-0"><span class="material-symbols-outlined text-sm">content_copy</span></button>
+                        </div>
+                    `).join(''));
                 }
 
-                if (!html) html = '<div class="text-center py-8 text-xs font-bold text-slate-400 uppercase tracking-widest">No Records Found</div>';
+                // 3. CNAME
+                if (records.CNAME && records.CNAME.length > 0) {
+                    html += renderRecordSection('CNAME', 'Canonical Alias', records.CNAME.map(cname => `
+                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
+                            <span class="font-mono text-xs font-bold text-primary truncate mr-4">${cname}</span>
+                            <button onclick="copyToClipboard('${cname}')" class="text-slate-400 hover:text-primary transition-colors flex-shrink-0"><span class="material-symbols-outlined text-sm">content_copy</span></button>
+                        </div>
+                    `).join(''));
+                }
+
+                // 4. MX
+                if (records.MX && records.MX.length > 0) {
+                    html += renderRecordSection('MX', 'Mail Servers', records.MX.map(mx => `
+                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <span class="text-[9px] font-black bg-emerald-50 text-emerald-600 px-1.5 py-0.5 rounded font-mono">PRIO ${mx.priority}</span>
+                                <span class="font-mono text-xs font-bold text-on-surface truncate">${mx.exchange}</span>
+                            </div>
+                            <button onclick="copyToClipboard('${mx.exchange}')" class="text-slate-400 hover:text-primary transition-colors"><span class="material-symbols-outlined text-sm">content_copy</span></button>
+                        </div>
+                    `).join(''));
+                }
+
+                // 5. NS Records
+                if (records.NS && records.NS.length > 0) {
+                    html += renderRecordSection('NS', 'Zone Nameservers', records.NS.map(ns => `
+                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
+                            <span class="font-mono text-xs font-bold text-on-surface">${ns}</span>
+                            <button onclick="copyToClipboard('${ns}')" class="text-slate-400 hover:text-primary transition-colors"><span class="material-symbols-outlined text-sm">content_copy</span></button>
+                        </div>
+                    `).join(''));
+                }
+
+                // 6. TXT Records
+                if (records.TXT && records.TXT.length > 0) {
+                    html += renderRecordSection('TXT', 'Verifications & SPF', records.TXT.map(txtArr => {
+                        const txt = txtArr.join(' ');
+                        return `
+                            <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
+                                <span class="font-mono text-[11px] font-semibold text-on-surface-variant truncate pr-4 max-w-[90%]">${txt}</span>
+                                <button onclick="copyToClipboard('${txt.replace(/'/g, "\\'")}')" class="text-slate-400 hover:text-primary transition-colors"><span class="material-symbols-outlined text-sm">content_copy</span></button>
+                            </div>`;
+                    }).join(''));
+                }
+
+                // 7. SOA Record
+                if (records.SOA) {
+                    const soaStr = `${records.SOA.nsname} | Admin: ${records.SOA.hostmaster} (Serial: ${records.SOA.serial})`;
+                    html += renderRecordSection('SOA', 'Start of Authority Zone', `
+                        <div class="p-4 bg-slate-50 rounded-lg space-y-2 text-xs font-semibold">
+                            <div class="flex justify-between"><span class="text-slate-400">Primary NS</span><span class="font-bold font-mono text-on-surface">${records.SOA.nsname}</span></div>
+                            <div class="flex justify-between border-t border-slate-100 pt-2"><span class="text-slate-400">Hostmaster Admin</span><span class="font-bold font-mono text-on-surface">${records.SOA.hostmaster}</span></div>
+                            <div class="flex justify-between border-t border-slate-100 pt-2"><span class="text-slate-400">Serial Key</span><span class="font-bold font-mono text-on-surface">${records.SOA.serial}</span></div>
+                            <div class="flex justify-between border-t border-slate-100 pt-2"><span class="text-slate-400">Refresh TTL</span><span class="font-bold font-mono text-on-surface">${records.SOA.refresh}s</span></div>
+                        </div>
+                    `);
+                }
+
+                if (!html) {
+                    html = '<div class="text-center py-12 text-sm font-bold text-slate-400 uppercase tracking-widest">No DNS Records Found</div>';
+                }
+
                 resArea.innerHTML = html;
-                
-                lastProbe = { 
-                    domain, 
-                    records: (resA.Answer ? resA.Answer.length : 0) + (resMX.Answer ? resMX.Answer.length : 0) 
-                };
+                results.classList.remove('hidden');
+
             } catch (err) {
-                resArea.innerHTML = '<div class="text-[10px] font-bold text-rose-500 uppercase py-4">Search Failed: Please check your connection.</div>';
+                if (typeof window.showAlert === 'function') {
+                    window.showAlert(err.message, 'error');
+                } else {
+                    alert("Lookup Failed: " + err.message);
+                }
             } finally {
-                btn.innerText = "Start Search";
+                btn.disabled = false;
+                loader.classList.add('hidden');
             }
+        }
+
+        function renderRecordSection(type, name, contentHtml) {
+            return `
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-50 pb-2">
+                        <h5 class="text-xs font-black text-on-surface uppercase tracking-wider flex items-center gap-2">
+                            <span class="record-tag px-2 py-0.5 rounded font-black ${getBadgeColor(type)}">${type}</span>
+                            <span class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest">${name}</span>
+                        </h5>
+                    </div>
+                    <div class="space-y-2">
+                        ${contentHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        function getBadgeColor(type) {
+            switch (type) {
+                case 'A': return 'bg-orange-50 text-[#c96f32]';
+                case 'AAAA': return 'bg-purple-50 text-purple-600';
+                case 'CNAME': return 'bg-blue-50 text-blue-600';
+                case 'MX': return 'bg-emerald-50 text-emerald-600';
+                case 'NS': return 'bg-indigo-50 text-indigo-600';
+                case 'TXT': return 'bg-amber-50 text-amber-600';
+                default: return 'bg-slate-50 text-slate-600';
+            }
+        }
+
+        function copyToClipboard(val) {
+            navigator.clipboard.writeText(val).then(() => {
+                if (typeof window.showAlert === 'function') {
+                    window.showAlert('Record copied to clipboard!', 'success');
+                } else {
+                    alert('Copied!');
+                }
+            });
+        }
+
+        function copyDataJSON() {
+            if (!lastProbe) return;
+            navigator.clipboard.writeText(JSON.stringify(lastProbe, null, 4)).then(() => {
+                if (typeof window.showAlert === 'function') {
+                    window.showAlert('DNS JSON configuration copied!', 'success');
+                }
+            });
         }
 
         function clearData() {
@@ -225,11 +346,11 @@
         }
 
         async function saveToHistory() {
-            if (!lastProbe) return alert("Run a search first!");
+            if (!lastProbe) return alert("Run a lookup first!");
             const inputs = [{ label: 'Domain', val: lastProbe.domain }];
             const results = [
-                { label: 'Records Found', val: lastProbe.records, highlight: true },
-                { label: 'Status', val: 'Resolved' }
+                { label: 'Total Records', val: lastProbe.count, highlight: true },
+                { label: 'Resolver Status', val: 'DNS Zone Resolved' }
             ];
             const ok = await window.saveCalcToHistory('DNS Hub', inputs, results);
             if (ok) initSidebarHistory('DNS Hub', 'sidebar-history-container');
@@ -242,12 +363,7 @@
     <script type="module" src="/js/script.js"></script>
 
     <!-- Unified Footer -->
-    
-
     <script src="/js/app.js"></script>
-    
-
     <script src="/js/component-loader.js"></script>
 </body>
 </html>
-

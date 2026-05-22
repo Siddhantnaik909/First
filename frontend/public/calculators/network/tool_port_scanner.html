@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="/css/design-system.css">
     <link rel="stylesheet" href="/css/calc-responsive.css">
-        <script>
+    <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -29,7 +29,7 @@
         }
     </script>
     <style>
-        :root { --primary-color: #3b82f6; }
+        :root { --primary-color: #c96f32; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .material-symbols-outlined {
             font-family: 'Material Symbols Outlined';
@@ -42,24 +42,11 @@
 </head>
 <body class="bg-surface text-on-surface selection:bg-primary/20 transition-colors duration-300">
     <div id="header-placeholder"></div>
-    
-    
-    
 
-    
-
-    
-
-    
-
-    
-
-
-            <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
+    <main class="main-content-wrapper px-4 sm:px-6 lg:px-10 max-w-[1440px] mx-auto min-h-screen">
         <div class="mb-12">
-            
-<h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Network Shield.</h1>
-            <p class="text-on-surface-variant text-lg max-w-2xl">Check which ports are open on your website or router. Help secure your network by identifying exposed services.</p>
+            <h1 class="text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-['Plus_Jakarta_Sans']">Network Shield.</h1>
+            <p class="text-on-surface-variant text-lg max-w-2xl">Audit which communication ports are open on your local system or web servers. Verify exposed connections to seal security loopholes.</p>
         </div>
 
         <div class="grid grid-cols-12 gap-8 items-start">
@@ -80,10 +67,10 @@
                         <span class="material-symbols-outlined text-[120px]">lock_open</span>
                      </div>
                      <h4 class="text-lg font-black mb-2 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-sm">security</span> Stay Safe
+                        <span class="material-symbols-outlined text-sm">security</span> Port Security Audit
                      </h4>
-                     <p class="text-blue-100 text-[11px] leading-relaxed mb-4 opacity-80">
-                        Unnecessary open ports can be a security risk. If you see a port like 3389 (RDP) open and you don't use it, consider closing it in your firewall!
+                     <p class="text-blue-100 text-[11px] leading-relaxed mb-4 opacity-80 font-medium">
+                        Unnecessary open ports (like databases `3306` or remote shell `22`) can expose your networks to brute force attempts. Only leave essential standard ports open, and guard others behind firewalls.
                      </p>
                 </div>
             
@@ -111,20 +98,21 @@
             <!-- Content Area -->
             <div class="col-span-12 lg:col-span-8">
                 <div class="bg-surface-container-low rounded-3xl p-6 shadow-2xl space-y-8">
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-6">
                             <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1">Scan Configuration</h4>
                             <div class="space-y-4">
                                 <div class="space-y-2">
                                     <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Target Website or IP</label>
-                                    <input type="text" id="portHost" placeholder="e.g. google.com" class="w-full bg-white border border-slate-100 rounded-2xl px-6 py-4 font-mono font-bold text-lg outline-none focus:ring-2 focus:ring-primary shadow-sm">
+                                    <input type="text" id="portHost" placeholder="e.g. localhost or 127.0.0.1" class="w-full bg-white border border-slate-100 rounded-2xl px-6 py-4 font-mono font-bold text-lg outline-none focus:ring-2 focus:ring-primary shadow-sm">
                                 </div>
                                 <div class="space-y-2">
-                                    <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Scan Complexity</label>
+                                    <label class="text-[10px] font-black text-on-surface-variant uppercase ml-1 block">Scan Range Profile</label>
                                     <select id="scanRange" class="w-full bg-white border border-slate-100 rounded-2xl px-6 py-4 font-bold text-sm outline-none focus:ring-2 focus:ring-primary shadow-sm appearance-none">
-                                        <option value="common">Common Ports (Top 10)</option>
+                                        <option value="common">Common Ports (Top 10 Admin Services)</option>
                                         <option value="web">Web Services Only (80, 443)</option>
-                                        <option value="custom">Basic Check (20-100)</option>
+                                        <option value="custom">Standard Services (Top 10 Basic)</option>
                                     </select>
                                 </div>
                                 <div class="flex gap-4 pt-2">
@@ -136,13 +124,29 @@
                             </div>
                         </div>
 
+                        <!-- Scan Status / Output -->
                         <div id="results-display" class="hidden space-y-6">
                             <div class="flex items-center justify-between ml-1">
-                                <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Scan Status</h4>
+                                <h4 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest">Active Audit</h4>
                                 <span id="scan-status" class="text-[8px] font-black text-primary animate-pulse tracking-widest uppercase">SCANNING...</span>
                             </div>
+
+                            <!-- Progress bar -->
+                            <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                <div id="scan-progress-bar" class="bg-primary h-1.5 transition-all duration-200" style="width: 0%"></div>
+                            </div>
+
+                            <!-- Risk Metric Summary -->
+                            <div id="scan-summary-card" class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between">
+                                <div>
+                                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Security Risk Rating</span>
+                                    <span id="scan-risk-text" class="text-xs font-bold text-on-surface">Estimating...</span>
+                                </div>
+                                <span id="scan-risk-badge" class="px-2.5 py-1 rounded-full text-[9px] font-black tracking-widest uppercase">--</span>
+                            </div>
+
                             <div class="bg-white p-4 rounded-3xl border border-slate-50 shadow-sm space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar" id="port-results-area">
-                                <!-- Results go here -->
+                                <!-- Results populate sequentially -->
                             </div>
                         </div>
                     </div>
@@ -150,7 +154,7 @@
                     <div class="bg-blue-50/50 p-6 rounded-2xl border border-blue-100/50 flex items-start gap-4">
                         <span class="material-symbols-outlined text-blue-400">shield_with_heart</span>
                         <p class="text-[11px] text-blue-800 leading-relaxed font-medium">
-                            This scanner simulates a basic connection test. "Exposed" means the port might be open, while "Shielded" means it appears closed or blocked by a firewall.
+                            This port scanner connects actively using a secure TCP Socket handshake. Closed connections ("Shielded") are secure and drop packet transmissions automatically.
                         </p>
                     </div>
 
@@ -170,60 +174,98 @@
 
     <div id="footer-placeholder"></div>
 
-    
-    
-
-
     <script src="/js/calc-utils.js"></script>
     <script>
         let lastAudit = null;
-        const COMMON_PORTS = {
-            21: "FTP", 22: "SSH", 23: "TEL", 25: "SMTP", 53: "DNS",
-            80: "HTTP", 443: "HTTPS", 3306: "SQL", 3389: "RDP", 8080: "PROXY"
-        };
 
         async function runAudit() {
             const host = document.getElementById('portHost').value.trim();
-            if (!host) return alert("Please enter a target address.");
+            if (!host) return alert("Please enter a target website address or IP.");
 
             const resArea = document.getElementById('port-results-area');
             const status = document.getElementById('scan-status');
             const btn = document.getElementById('btn-scan');
+            const resultsDiv = document.getElementById('results-display');
+            const progressBar = document.getElementById('scan-progress-bar');
+            const riskText = document.getElementById('scan-risk-text');
+            const riskBadge = document.getElementById('scan-risk-badge');
+            const selectRange = document.getElementById('scanRange').value;
 
-            document.getElementById('results-display').classList.remove('hidden');
+            resultsDiv.classList.remove('hidden');
             resArea.innerHTML = '';
-            status.innerText = "SCANNING...";
+            status.innerText = "Audit running...";
+            progressBar.style.width = '5%';
             btn.disabled = true;
 
-            let ports = Object.keys(COMMON_PORTS);
-            let openCount = 0;
+            try {
+                // Fetch from active Express backend socket scanner!
+                const response = await fetch(`/api/tools/port-scanner?target=${encodeURIComponent(host)}&range=${selectRange}`);
+                const data = await response.json();
 
-            for (const port of ports) {
-                // Simulation delay
-                await new Promise(r => setTimeout(r, 150));
-                
-                // Actual browser port scan is limited by CORS/Fetch, we use a simulation logic for educational purposes
-                const isOpen = Math.random() > 0.8; 
-                if (isOpen) openCount++;
+                if (!response.ok || data.error) throw new Error(data.error || "Active socket scanner connection dropped");
 
-                const html = `
-                    <div class="p-3 bg-white/50 rounded-lg border border-slate-100 flex justify-between items-center transition-all hover:bg-slate-50">
-                        <div class="flex items-center gap-3">
-                            <span class="text-[9px] font-black text-slate-400 font-mono">PORT ${port}</span>
-                            <span class="text-[10px] font-black text-on-surface">${COMMON_PORTS[port]}</span>
-                        </div>
-                        <span class="text-[8px] font-black ${isOpen ? 'text-emerald-600 bg-emerald-50' : 'text-slate-400 bg-slate-50'} px-2 py-0.5 rounded uppercase tracking-widest">
-                            ${isOpen ? 'EXPOSED' : 'SHIELDED'}
-                        </span>
-                    </div>`;
-                
-                resArea.insertAdjacentHTML('beforeend', html);
-                resArea.scrollTop = resArea.scrollHeight;
+                progressBar.style.width = '30%';
+
+                const ports = data.results;
+                let openCount = 0;
+
+                // Sequentially render ports with incremental micro-animation delays to create premium, responsive feel!
+                for (let i = 0; i < ports.length; i++) {
+                    await new Promise(r => setTimeout(r, 120));
+                    const item = ports[i];
+                    
+                    const isOpen = (item.status === 'open');
+                    if (isOpen) openCount++;
+
+                    progressBar.style.width = `${30 + Math.round(((i + 1) / ports.length) * 70)}%`;
+
+                    const html = `
+                        <div class="p-3 bg-white/50 rounded-lg border border-slate-100 flex justify-between items-center transition-all hover:bg-slate-50 animate-[calcFadeUp_0.2s_ease]">
+                            <div class="flex items-center gap-3">
+                                <span class="text-[9px] font-black ${isOpen ? 'text-[#c96f32]' : 'text-slate-400'} font-mono">PORT ${item.port}</span>
+                                <span class="text-[10px] font-bold text-on-surface">${item.service}</span>
+                            </div>
+                            <span class="text-[8px] font-black ${isOpen ? 'text-[#c96f32] bg-orange-50' : 'text-slate-400 bg-slate-50'} px-2 py-0.5 rounded uppercase tracking-widest font-black">
+                                ${isOpen ? 'EXPOSED (OPEN)' : 'SHIELDED (CLOSED)'}
+                            </span>
+                        </div>`;
+                    
+                    resArea.insertAdjacentHTML('beforeend', html);
+                    resArea.scrollTop = resArea.scrollHeight;
+                }
+
+                // Analyze Network Security Risk Profile
+                let rating = 'EXCELLENT';
+                let ratingClass = 'bg-emerald-50 text-emerald-600';
+                let desc = 'Zero vulnerable administrative connections exposed.';
+
+                if (openCount > 2) {
+                    rating = 'CRITICAL';
+                    ratingClass = 'bg-rose-50 text-rose-600 font-bold';
+                    desc = 'Multiple standard service listeners found listening publicly!';
+                } else if (openCount > 0) {
+                    rating = 'WARNING';
+                    ratingClass = 'bg-amber-50 text-amber-600 font-bold';
+                    desc = 'Active endpoints detected. Please seal if unused.';
+                }
+
+                riskText.innerText = desc;
+                riskBadge.innerText = rating;
+                riskBadge.className = `px-2.5 py-1 rounded-full text-[9px] font-black tracking-widest uppercase ${ratingClass}`;
+
+                status.innerText = "Audit Finished";
+                lastAudit = { host, open: openCount, total: ports.length, resolved: data.target };
+
+            } catch (err) {
+                status.innerText = "PROBE FAILURE";
+                progressBar.style.width = '0%';
+                resArea.innerHTML = `<div class="text-[10px] font-bold text-rose-500 uppercase py-4">Audit Failed: ${err.message}</div>`;
+                riskText.innerText = 'Could not establish connection to the backend service.';
+                riskBadge.innerText = 'ERROR';
+                riskBadge.className = 'px-2.5 py-1 rounded-full text-[9px] font-black tracking-widest uppercase bg-rose-50 text-rose-600';
+            } finally {
+                btn.disabled = false;
             }
-
-            status.innerText = "SCAN COMPLETE";
-            btn.disabled = false;
-            lastAudit = { host, open: openCount, total: ports.length };
         }
 
         function clearData() {
@@ -236,8 +278,8 @@
             if (!lastAudit) return alert("Run a scan first!");
             const inputs = [{ label: 'Target', val: lastAudit.host }];
             const results = [
-                { label: 'Exposed', val: lastAudit.open + '/' + lastAudit.total, highlight: true },
-                { label: 'Status', val: 'Scanned' }
+                { label: 'Exposed Ports', val: `${lastAudit.open} / ${lastAudit.total} Open`, highlight: true },
+                { label: 'IP Address', val: lastAudit.resolved }
             ];
             const ok = await window.saveCalcToHistory('Port Scanner', inputs, results);
             if (ok) initSidebarHistory('Port Scanner', 'sidebar-history-container');
@@ -250,12 +292,7 @@
     <script type="module" src="/js/script.js"></script>
 
     <!-- Unified Footer -->
-    
-
     <script src="/js/app.js"></script>
-    
-
     <script src="/js/component-loader.js"></script>
 </body>
 </html>
-
